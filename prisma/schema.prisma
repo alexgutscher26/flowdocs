@@ -40,6 +40,10 @@ model User {
   defaultWorkspaceId String?
   defaultWorkspace   Workspace? @relation("UserDefaultWorkspace", fields: [defaultWorkspaceId], references: [id], onDelete: SetNull)
 
+  // Chat relations
+  channelMemberships ChannelMember[]
+  messages           Message[]
+
   @@map("user")
 }
 
@@ -109,6 +113,7 @@ model Workspace {
   invitations WorkspaceInvitation[]
   sessions    Session[]
   defaultForUsers User[] @relation("UserDefaultWorkspace")
+  channels    Channel[]
 
   @@map("workspace")
 }
@@ -171,4 +176,97 @@ enum UserStatus {
   ACTIVE
   SUSPENDED
   DELETED
+}
+
+// Chat & Wiki Models
+
+model Channel {
+  id          String    @id @default(cuid())
+  name        String
+  description String?
+  type        ChannelType @default(PUBLIC)
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  members     ChannelMember[]
+  messages    Message[]
+
+  @@index([workspaceId])
+  @@map("channel")
+}
+
+model ChannelMember {
+  id        String      @id @default(cuid())
+  channelId String
+  userId    String
+  role      ChannelRole @default(MEMBER)
+  joinedAt  DateTime    @default(now())
+
+  channel   Channel     @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([channelId, userId])
+  @@index([userId])
+  @@map("channel_member")
+}
+
+model Message {
+  id          String      @id @default(cuid())
+  content     String
+  type        MessageType @default(TEXT)
+  channelId   String
+  userId      String
+  threadId    String?     // For threading support
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  isEdited    Boolean     @default(false)
+
+  channel     Channel     @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parent      Message?    @relation("Thread", fields: [threadId], references: [id], onDelete: SetNull)
+  replies     Message[]   @relation("Thread")
+  
+  // Relationship to WikiPage conversion
+  wikiPage    WikiPage?
+
+  @@index([channelId])
+  @@index([userId])
+  @@index([threadId])
+  @@map("message")
+}
+
+// Minimal WikiPage for relationship
+model WikiPage {
+  id          String   @id @default(cuid())
+  title       String
+  content     String   // Markdown content
+  messageId   String?  @unique // Source message if converted from chat
+  
+  message     Message? @relation(fields: [messageId], references: [id])
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("wiki_page")
+}
+
+enum ChannelType {
+  PUBLIC
+  PRIVATE
+  DM
+}
+
+enum ChannelRole {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+enum MessageType {
+  TEXT
+  IMAGE
+  FILE
+  SYSTEM
 }

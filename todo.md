@@ -11,13 +11,13 @@
 ### Epic 1: Real-time Chat Infrastructure
 
 #### Database Schema Extensions
-- [ ] **File**: `prisma/schema.prisma`
-  - [ ] Add `Channel` model with workspace relationship
-  - [ ] Add `Message` model with threading support
-  - [ ] Add `ChannelMember` model for permissions
-  - [ ] Add enums: `ChannelType`, `MessageType`, `ChannelRole`
-  - [ ] Add relationship: Message → WikiPage conversion
-  - [ ] Generate and run Prisma migration
+- [x] **File**: `prisma/schema.prisma`
+  - [x] Add `Channel` model with workspace relationship
+  - [x] Add `Message` model with threading support
+  - [x] Add `ChannelMember` model for permissions
+  - [x] Add enums: `ChannelType`, `MessageType`, `ChannelRole`
+  - [x] Add relationship: Message → WikiPage conversion
+  - [x] Generate and run Prisma migration
   - **Acceptance**: Database can store channels, messages, threads, and members
 
 #### WebSocket Infrastructure
