@@ -39,6 +39,22 @@ interface ConvertToWikiButtonProps {
 
 type ConversionStep = "initial" | "preview" | "edit" | "converting" | "success" | "error";
 
+/**
+ * Convert a thread into a wiki page with customizable content and metadata.
+ *
+ * This function manages the conversion process through various steps, including opening a dialog for previewing the generated wiki content, allowing edits, and handling the conversion to a wiki page via an API call. It also manages state for the conversion process, including error handling and user notifications. The function ensures that only authorized users can initiate the conversion.
+ *
+ * @param messages - An array of messages from the thread to be converted.
+ * @param threadTitle - The title of the thread being converted.
+ * @param channelId - The ID of the channel where the thread resides.
+ * @param channelName - The name of the channel where the thread resides.
+ * @param workspaceId - The ID of the workspace containing the channel.
+ * @param currentUserId - The ID of the current user attempting the conversion.
+ * @param threadStarterId - The ID of the user who started the thread.
+ * @param isAdmin - A boolean indicating if the current user has admin privileges (default is false).
+ * @param onConversionComplete - A callback function to be executed upon successful conversion.
+ * @param className - An optional class name for styling the button.
+ */
 export function ConvertToWikiButton({
   messages,
   threadTitle,
@@ -93,6 +109,25 @@ export function ConvertToWikiButton({
     setStep("edit");
   };
 
+  /**
+   * Handles the conversion of a thread into a wiki page.
+   *
+   * This function sets the conversion step, clears any previous errors, and attempts to create a wiki page by calling an API.
+   * If successful, it updates the original thread with the wiki link and triggers a callback if provided.
+   * In case of an error, it sets an error message and updates the step to indicate failure.
+   *
+   * @param {string} editedTitle - The title of the wiki page to be created.
+   * @param {string} editedContent - The content of the wiki page to be created.
+   * @param {string} editedExcerpt - The excerpt for the wiki page.
+   * @param {Array<string>} editedTags - The tags associated with the wiki page.
+   * @param {Array<Object>} messages - The messages from the original thread.
+   * @param {string} channelId - The ID of the channel where the original thread exists.
+   * @param {string} workspaceId - The ID of the workspace.
+   * @param {Object} conversionResult - The result of the conversion process.
+   * @param {Function} onConversionComplete - A callback function to be called upon successful conversion.
+   * @returns {Promise<void>} A promise that resolves when the conversion process is complete.
+   * @throws Error If the API call fails or if the response is not ok.
+   */
   const handleConvert = async () => {
     setStep("converting");
     setError("");
