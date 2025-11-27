@@ -74,7 +74,7 @@ export default async function WikiHomePage({ params }: WikiHomeProps) {
   const pages = await getWikiPages(workspaceId);
 
   return (
-    <div className="container max-w-7xl py-8">
+    <div className="p-6">
       <div className="mb-8 flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Wiki</h1>

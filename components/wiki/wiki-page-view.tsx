@@ -91,6 +91,7 @@ export interface WikiPageData {
 
 interface WikiPageViewProps {
   page: WikiPageData;
+  workspaceName?: string;
   currentUserId?: string;
   onEdit?: () => void;
   onVersionRestore?: (versionId: string) => void;
@@ -118,6 +119,7 @@ function generateGradient(str: string) {
 
 export function WikiPageView({
   page,
+  workspaceName,
   currentUserId,
   onEdit,
   onVersionRestore,
@@ -193,7 +195,7 @@ export function WikiPageView({
   };
 
   return (
-    <div className={cn("relative min-h-screen pb-20", className)}>
+    <div className={cn("relative min-h-screen p-6 pb-20", className)}>
       {/* Cover Banner */}
       <div
         className="absolute top-0 right-0 left-0 -z-10 h-48 w-full opacity-30 dark:opacity-10"
@@ -210,6 +212,14 @@ export function WikiPageView({
                 <BreadcrumbItem>
                   <BreadcrumbLink href="/dashboard/wiki">Wiki</BreadcrumbLink>
                 </BreadcrumbItem>
+                {workspaceName && (
+                  <>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                      <BreadcrumbLink href="/dashboard/wiki">{workspaceName}</BreadcrumbLink>
+                    </BreadcrumbItem>
+                  </>
+                )}
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
                   <BreadcrumbPage>{page.title}</BreadcrumbPage>

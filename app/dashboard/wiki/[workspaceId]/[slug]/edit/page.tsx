@@ -115,7 +115,7 @@ export default function EditWikiPage({ params }: EditWikiPageProps) {
   const tags = page.tags?.map((t: any) => t.tag?.name || t.name) || [];
 
   return (
-    <div className="container max-w-5xl py-8">
+    <div className="p-6">
       <div className="mb-6">
         <Button variant="ghost" asChild>
           <Link href={`/dashboard/wiki/${workspaceId}/${slug}`}>

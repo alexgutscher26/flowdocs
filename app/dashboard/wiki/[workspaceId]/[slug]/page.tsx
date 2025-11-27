@@ -177,11 +177,18 @@ export default async function WikiPage({ params }: WikiPageProps) {
     redirect("/sign-in");
   }
 
-  // Verify workspace access
+  // Verify workspace access and get workspace info
   const workspaceMember = await prisma.workspaceMember.findFirst({
     where: {
       workspaceId,
       userId: session.user.id,
+    },
+    include: {
+      workspace: {
+        select: {
+          name: true,
+        },
+      },
     },
   });
 
@@ -275,12 +282,11 @@ export default async function WikiPage({ params }: WikiPageProps) {
   };
 
   return (
-    <div className="container max-w-7xl py-8">
-      <WikiPageView
-        page={page}
-        currentUserId={session.user.id}
-        onVersionRestore={handleVersionRestore}
-      />
-    </div>
+    <WikiPageView
+      page={page}
+      workspaceName={workspaceMember.workspace.name}
+      currentUserId={session.user.id}
+      onVersionRestore={handleVersionRestore}
+    />
   );
 }

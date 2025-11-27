@@ -66,7 +66,7 @@ export default function NewWikiPage({ params }: NewWikiPageProps) {
   };
 
   return (
-    <div className="container max-w-5xl py-8">
+    <div className="p-6">
       <div className="mb-6">
         <Button variant="ghost" asChild>
           <Link href={`/dashboard/wiki/${workspaceId}`}>
