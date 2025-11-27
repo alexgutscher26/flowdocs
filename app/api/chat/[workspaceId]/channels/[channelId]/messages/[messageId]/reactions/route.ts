@@ -4,6 +4,19 @@ import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
 
 // POST /api/chat/[workspaceId]/channels/[channelId]/messages/[messageId]/reactions - Add reaction
+/**
+ * Handles the POST request to add a reaction to a message.
+ *
+ * This function retrieves the workspaceId, channelId, and messageId from the request parameters,
+ * checks the user's session for authorization, and validates the presence of an emoji.
+ * It also verifies that the user is a member of the specified channel before creating a reaction object
+ * and returning it as a JSON response. If any checks fail, appropriate error responses are returned.
+ *
+ * @param request - The NextRequest object containing the request data.
+ * @param params - An object containing a Promise that resolves to an object with workspaceId, channelId, and messageId.
+ * @returns A JSON response containing the created reaction or an error message.
+ * @throws Error If an internal server error occurs during processing.
+ */
 export async function POST(
     request: NextRequest,
     { params }: { params: Promise<{ workspaceId: string; channelId: string; messageId: string }> }
