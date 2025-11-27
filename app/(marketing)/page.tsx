@@ -31,7 +31,7 @@ export default function Home() {
           </div> */}
           <div className="relative mx-auto max-w-5xl px-6 pt-32 text-center sm:pt-44">
             <div className="relative mx-auto max-w-3xl text-center">
-              <h1 className="text-foreground text-balance text-5xl font-semibold sm:text-6xl">
+              <h1 className="text-foreground text-5xl font-semibold text-balance sm:text-6xl">
                 The Modern Way to Build{" "}
                 <span className="relative text-indigo-500">
                   <svg
@@ -63,8 +63,9 @@ export default function Home() {
                   <span className="relative">SaaS</span>
                 </span>
               </h1>
-              <p className="text-muted-foreground mb-9 mt-7 text-balance text-lg">
-                Enterprise-ready Next.js boilerplate with authentication, database, payments, and beautiful UI components. Ship production-grade SaaS applications faster.
+              <p className="text-muted-foreground mt-7 mb-9 text-lg text-balance">
+                Enterprise-ready Next.js boilerplate with authentication, database, payments, and
+                beautiful UI components. Ship production-grade SaaS applications faster.
               </p>
               <Button
                 asChild
@@ -78,16 +79,16 @@ export default function Home() {
               </span>
             </div>
           </div>
-          <Container className="bg-background **:data-[slot=content]:py-0 mt-8 sm:mt-16">
+          <Container className="bg-background mt-8 **:data-[slot=content]:py-0 sm:mt-16">
             <div
               aria-hidden
               className="h-3 w-full bg-[repeating-linear-gradient(-45deg,var(--color-foreground),var(--color-foreground)_1px,transparent_1px,transparent_4px)] opacity-5"
             />
             <div className="-mx-12 -mt-4 px-12 pt-4">
-              <div className="bg-background ring-foreground/5 p-1 shadow-2xl shadow-indigo-900/35 ring-1">
-                <div className="bg-background sm:aspect-3/2 relative origin-top overflow-hidden border-l-8 border-t-4 border-transparent">
+              <div className="bg-background ring-foreground/5 p-1 shadow-2xl ring-1 shadow-indigo-900/35">
+                <div className="bg-background relative origin-top overflow-hidden border-t-4 border-l-8 border-transparent sm:aspect-3/2">
                   <Image
-                    className="object-top-left min-w-xl size-full object-cover"
+                    className="size-full min-w-xl object-cover object-top-left"
                     src="/hero.png"
                     alt="Oxymor overview"
                     width={1152}

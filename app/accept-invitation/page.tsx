@@ -6,9 +6,7 @@ interface AcceptInvitationPageProps {
   searchParams: Promise<{ token?: string }>;
 }
 
-export default async function AcceptInvitationPage({
-  searchParams,
-}: AcceptInvitationPageProps) {
+export default async function AcceptInvitationPage({ searchParams }: AcceptInvitationPageProps) {
   const params = await searchParams;
   const token = params.token;
 

@@ -15,9 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning={true}>
-      <body
-        className={`${GeistSans.variable} ${GeistMono.variable} antialiased font-sans`}
-      >
+      <body className={`${GeistSans.variable} ${GeistMono.variable} font-sans antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
@@ -25,7 +23,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <NuqsAdapter>
-            <div className="min-h-screen bg-background">
+            <div className="bg-background min-h-screen">
               <main>{children}</main>
             </div>
             <Toaster />

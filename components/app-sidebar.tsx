@@ -18,6 +18,7 @@ import {
   IconSettings,
   IconUsers,
   IconMessageCircle,
+  IconBook,
 } from "@tabler/icons-react";
 import type { SidebarUser } from "@/types/user";
 
@@ -163,6 +164,11 @@ export function AppSidebar({
       url: `/dashboard/chat/${user?.defaultWorkspaceSlug || user?.defaultWorkspaceId || "default"}`,
       icon: IconMessageCircle,
     },
+    {
+      title: "Wiki",
+      url: `/dashboard/wiki/${user?.defaultWorkspaceId || "default"}`,
+      icon: IconBook,
+    },
   ];
 
   return (
@@ -170,10 +176,7 @@ export function AppSidebar({
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              className="data-[slot=sidebar-menu-button]:!p-1.5"
-            >
+            <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:!p-1.5">
               <a href="/" aria-label="HagenKit home">
                 <IconInnerShadowTop className="!size-5" />
                 <span className="text-base font-semibold">HagenKit</span>

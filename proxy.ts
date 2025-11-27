@@ -22,9 +22,7 @@ export async function proxy(request: NextRequest) {
     // Protected routes that require authentication
     const protectedPaths = ["/dashboard", "/admin", "/onboarding"];
 
-    const isProtectedPath = protectedPaths.some((path) =>
-      pathname.startsWith(path)
-    );
+    const isProtectedPath = protectedPaths.some((path) => pathname.startsWith(path));
 
     if (isProtectedPath) {
       return NextResponse.redirect(new URL("/sign-in", request.url));

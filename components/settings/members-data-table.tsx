@@ -43,11 +43,7 @@ interface MembersDataTableProps {
   onUpdate?: () => void;
 }
 
-export function MembersDataTable({
-  members,
-  currentUserId,
-  onUpdate,
-}: MembersDataTableProps) {
+export function MembersDataTable({ members, currentUserId, onUpdate }: MembersDataTableProps) {
   const [updatingMemberId, setUpdatingMemberId] = useState<string | null>(null);
   const [removingMemberId, setRemovingMemberId] = useState<string | null>(null);
 
@@ -133,7 +129,7 @@ export function MembersDataTable({
         <TableBody>
           {members.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={4} className="text-center text-muted-foreground">
+              <TableCell colSpan={4} className="text-muted-foreground text-center">
                 No members found
               </TableCell>
             </TableRow>
@@ -167,9 +163,7 @@ export function MembersDataTable({
                           )}
                         </span>
                         {member.user.name && (
-                          <span className="text-xs text-muted-foreground">
-                            {member.user.email}
-                          </span>
+                          <span className="text-muted-foreground text-xs">{member.user.email}</span>
                         )}
                       </div>
                     </div>
@@ -178,9 +172,7 @@ export function MembersDataTable({
                   {/* Role */}
                   <TableCell>
                     {isCurrentUser ? (
-                      <Badge variant={getRoleBadgeVariant(member.role)}>
-                        {member.role}
-                      </Badge>
+                      <Badge variant={getRoleBadgeVariant(member.role)}>{member.role}</Badge>
                     ) : (
                       <Select
                         value={member.role}
@@ -204,7 +196,7 @@ export function MembersDataTable({
 
                   {/* Joined Date */}
                   <TableCell>
-                    <span className="text-sm text-muted-foreground">
+                    <span className="text-muted-foreground text-sm">
                       {formatDate(member.joinedAt)}
                     </span>
                   </TableCell>
@@ -222,7 +214,7 @@ export function MembersDataTable({
                             {isRemoving ? (
                               <Loader2 className="h-4 w-4 animate-spin" />
                             ) : (
-                              <IconTrash className="h-4 w-4 text-destructive" />
+                              <IconTrash className="text-destructive h-4 w-4" />
                             )}
                           </Button>
                         </AlertDialogTrigger>
@@ -234,18 +226,14 @@ export function MembersDataTable({
                               <span className="font-semibold">
                                 {member.user.name || member.user.email}
                               </span>{" "}
-                              from this workspace? They will lose access to all workspace
-                              resources.
+                              from this workspace? They will lose access to all workspace resources.
                             </AlertDialogDescription>
                           </AlertDialogHeader>
                           <AlertDialogFooter>
                             <AlertDialogCancel>Cancel</AlertDialogCancel>
                             <AlertDialogAction
                               onClick={() =>
-                                handleRemoveMember(
-                                  member.id,
-                                  member.user.name || member.user.email
-                                )
+                                handleRemoveMember(member.id, member.user.name || member.user.email)
                               }
                               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                             >

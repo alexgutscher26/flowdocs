@@ -15,13 +15,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
+import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import {
   Select,
   SelectContent,
@@ -137,14 +131,12 @@ export function MemberInviteDialog({ workspaceId, onInviteSent }: MemberInviteDi
                   <SelectItem value="OWNER">Owner - Full control</SelectItem>
                 </SelectContent>
               </Select>
-              <FieldDescription>
-                Defines what this member can do in the workspace.
-              </FieldDescription>
+              <FieldDescription>Defines what this member can do in the workspace.</FieldDescription>
             </Field>
 
             {/* Action Buttons */}
             <Field orientation="horizontal">
-              <div className="flex justify-end gap-3 w-full">
+              <div className="flex w-full justify-end gap-3">
                 <Button
                   type="button"
                   variant="outline"

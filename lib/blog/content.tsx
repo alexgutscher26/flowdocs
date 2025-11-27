@@ -48,21 +48,11 @@ export const BLOG_CATEGORIES = [
   },
 ];
 
-export const POPULAR_ARTICLES = [
-  "what-is-hagenkit",
-  "organize-with-labels",
-  "azure-saml-sso",
-];
+export const POPULAR_ARTICLES = ["what-is-hagenkit", "organize-with-labels", "azure-saml-sso"];
 
 export const HELP_CATEGORIES: {
   title: string;
-  slug:
-    | "overview"
-    | "getting-started"
-    | "terms"
-    | "for-investors"
-    | "analysis"
-    | "valuation";
+  slug: "overview" | "getting-started" | "terms" | "for-investors" | "analysis" | "valuation";
   description: string;
   icon: React.ReactNode;
 }[] = [

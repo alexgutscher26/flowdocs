@@ -7,27 +7,12 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { updateUserProfile } from "@/app/actions/user-settings";
-import {
-  updateProfileSchema,
-  type UpdateProfileInput,
-} from "@/lib/validations/user-settings";
+import { updateProfileSchema, type UpdateProfileInput } from "@/lib/validations/user-settings";
 
 interface ProfileTabProps {
   user: {
@@ -86,9 +71,7 @@ export function ProfileTab({ user }: ProfileTabProps) {
     <Card>
       <CardHeader>
         <CardTitle>Profile Settings</CardTitle>
-        <CardDescription>
-          Update your personal information and profile details
-        </CardDescription>
+        <CardDescription>Update your personal information and profile details</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Avatar Display */}
@@ -101,7 +84,7 @@ export function ProfileTab({ user }: ProfileTabProps) {
           </Avatar>
           <div>
             <p className="text-sm font-medium">Profile Picture</p>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               Your avatar is provided by your Google account
             </p>
           </div>
@@ -120,8 +103,7 @@ export function ProfileTab({ user }: ProfileTabProps) {
                 {...form.register("name")}
               />
               <FieldDescription>
-                This is your public display name. It can be your real name or a
-                pseudonym.
+                This is your public display name. It can be your real name or a pseudonym.
               </FieldDescription>
               <FieldError errors={[form.formState.errors.name]} />
             </Field>
@@ -129,15 +111,8 @@ export function ProfileTab({ user }: ProfileTabProps) {
             {/* Email Field (Read-only) */}
             <Field>
               <FieldLabel htmlFor="profile-email">Email</FieldLabel>
-              <Input
-                id="profile-email"
-                value={user.email}
-                disabled
-                className="bg-muted"
-              />
-              <FieldDescription>
-                Your email address cannot be changed.
-              </FieldDescription>
+              <Input id="profile-email" value={user.email} disabled className="bg-muted" />
+              <FieldDescription>Your email address cannot be changed.</FieldDescription>
             </Field>
 
             {/* Phone Field */}

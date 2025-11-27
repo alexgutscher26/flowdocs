@@ -7,9 +7,7 @@ import { siteConfig } from "@/lib/config";
 export function buildDashboardUrl(path: string = ""): string {
   const baseUrl =
     process.env.NEXT_PUBLIC_APP_URL ||
-    (process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}`
-      : siteConfig.url);
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : siteConfig.url);
 
   return `${baseUrl}${path.startsWith("/") ? path : `/${path}`}`;
 }
@@ -91,10 +89,7 @@ export function extractFirstName(fullName: string | null | undefined): string {
  * Format email address for display
  * Masks the local part for privacy if requested
  */
-export function formatEmailAddress(
-  email: string,
-  maskLocalPart: boolean = false
-): string {
+export function formatEmailAddress(email: string, maskLocalPart: boolean = false): string {
   if (!maskLocalPart) return email;
 
   const [localPart, domain] = email.split("@");
@@ -128,11 +123,8 @@ export function createEmailTags(tags: Record<string, string>): Array<{
 /**
  * Get environment-specific email sender
  */
-export function getEmailSender(
-  customSender?: string
-): { email: string; name: string } {
-  const defaultEmail =
-    process.env.EMAIL_FROM || siteConfig.email.fromEmail;
+export function getEmailSender(customSender?: string): { email: string; name: string } {
+  const defaultEmail = process.env.EMAIL_FROM || siteConfig.email.fromEmail;
   const defaultName = process.env.EMAIL_FROM_NAME || siteConfig.email.fromName;
 
   if (customSender) {

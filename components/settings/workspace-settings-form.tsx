@@ -7,13 +7,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
+import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { updateWorkspace } from "@/app/actions/workspace-settings";
 import { updateWorkspaceSchema } from "@/lib/validations/workspace";
@@ -22,18 +16,12 @@ import { z } from "zod";
 
 // Schema for the form (subset of updateWorkspaceSchema)
 const workspaceFormSchema = z.object({
-  name: z
-    .string()
-    .min(1, "Workspace name is required")
-    .max(100, "Name is too long"),
+  name: z.string().min(1, "Workspace name is required").max(100, "Name is too long"),
   slug: z
     .string()
     .min(1, "Slug is required")
     .max(50, "Slug is too long")
-    .regex(
-      /^[a-z0-9-]+$/,
-      "Slug can only contain lowercase letters, numbers, and hyphens"
-    )
+    .regex(/^[a-z0-9-]+$/, "Slug can only contain lowercase letters, numbers, and hyphens")
     .regex(/^[a-z0-9]/, "Slug must start with a letter or number")
     .regex(/[a-z0-9]$/, "Slug must end with a letter or number"),
 });
@@ -91,9 +79,7 @@ export function WorkspaceSettingsForm({ workspace }: WorkspaceSettingsFormProps)
             disabled={isLoading}
             {...form.register("name")}
           />
-          <FieldDescription>
-            The name of your workspace as it appears to members.
-          </FieldDescription>
+          <FieldDescription>The name of your workspace as it appears to members.</FieldDescription>
           <FieldError errors={[form.formState.errors.name]} />
         </Field>
 
@@ -107,8 +93,8 @@ export function WorkspaceSettingsForm({ workspace }: WorkspaceSettingsFormProps)
             {...form.register("slug")}
           />
           <FieldDescription>
-            URL-friendly identifier for your workspace. Only lowercase letters,
-            numbers, and hyphens allowed.
+            URL-friendly identifier for your workspace. Only lowercase letters, numbers, and hyphens
+            allowed.
           </FieldDescription>
           <FieldError errors={[form.formState.errors.slug]} />
         </Field>

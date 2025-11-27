@@ -17,7 +17,7 @@ export default async function Testimonials() {
   return (
     <MaxWidthWrapper className="pt-20">
       <div className="mx-auto max-w-md text-center sm:max-w-xl">
-        <h2 className="font-display text-4xl font-extrabold leading-tight text-black sm:text-5xl sm:leading-tight">
+        <h2 className="font-display text-4xl leading-tight font-extrabold text-black sm:text-5xl sm:leading-tight">
           Elsket av{" "}
           <span className="bg-gradient-to-r from-red-600 to-amber-600 bg-clip-text text-transparent">
             {nFormatter(userCount)} brukere
@@ -32,9 +32,7 @@ export default async function Testimonials() {
         {testimonials.map((testimonial, idx) => (
           <div
             key={testimonial.id}
-            className={`rounded-lg border p-4 ${
-              idx <= 5 || idx >= 13 ? "relative lg:top-12" : ""
-            }`}
+            className={`rounded-lg border p-4 ${idx <= 5 || idx >= 13 ? "relative lg:top-12" : ""}`}
           >
             <p>{testimonial.content}</p>
           </div>

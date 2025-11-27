@@ -49,7 +49,7 @@ export function UserCreateDialog({ children }: UserCreateDialogProps) {
     defaultValues: {
       email: "",
       name: "",
-      role: "admin" as const,  // WARNING: Change to "user" after creating first admin
+      role: "admin" as const, // WARNING: Change to "user" after creating first admin
       status: "ACTIVE" as const,
       phone: "",
       image: "",
@@ -127,9 +127,7 @@ export function UserCreateDialog({ children }: UserCreateDialogProps) {
                   <FormControl>
                     <Input placeholder="https://example.com/avatar.jpg" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    Provide a URL to the user's profile image
-                  </FormDescription>
+                  <FormDescription>Provide a URL to the user's profile image</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -169,9 +167,7 @@ export function UserCreateDialog({ children }: UserCreateDialogProps) {
                       <SelectItem value="admin">Admin</SelectItem>
                     </SelectContent>
                   </Select>
-                  <FormDescription>
-                    User role determines access permissions
-                  </FormDescription>
+                  <FormDescription>User role determines access permissions</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -194,9 +190,7 @@ export function UserCreateDialog({ children }: UserCreateDialogProps) {
                       <SelectItem value="SUSPENDED">Suspended</SelectItem>
                     </SelectContent>
                   </Select>
-                  <FormDescription>
-                    Account status controls user access
-                  </FormDescription>
+                  <FormDescription>Account status controls user access</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

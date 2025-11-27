@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import * as React from "react"
-import { type Icon } from "@tabler/icons-react"
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import * as React from "react";
+import { type Icon } from "@tabler/icons-react";
 
 import {
   SidebarGroup,
@@ -11,33 +11,33 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 
 type SecondaryNavItem = {
-  title: string
-  url: string
-  icon: Icon
-}
+  title: string;
+  url: string;
+  icon: Icon;
+};
 
 const isActiveSecondaryPath = (currentPath: string, itemPath: string) => {
-  if (!itemPath || itemPath === "#") return false
-  return currentPath === itemPath
-}
+  if (!itemPath || itemPath === "#") return false;
+  return currentPath === itemPath;
+};
 
 export function NavSecondary({
   items,
   ...props
 }: {
-  items: SecondaryNavItem[]
+  items: SecondaryNavItem[];
 } & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   return (
     <SidebarGroup {...props}>
       <SidebarGroupContent>
         <SidebarMenu>
           {items.map((item) => {
-            const active = isActiveSecondaryPath(pathname, item.url)
+            const active = isActiveSecondaryPath(pathname, item.url);
 
             return (
               <SidebarMenuItem key={item.title}>
@@ -53,10 +53,10 @@ export function NavSecondary({
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-            )
+            );
           })}
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>
-  )
+  );
 }

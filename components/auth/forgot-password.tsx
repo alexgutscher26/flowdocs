@@ -39,17 +39,17 @@ export default function ForgotPasswordAuth() {
 
   return (
     <>
-      <div className="container relative hidden h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
+      <div className="relative container hidden h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
         <Link
           href="/sign-in"
           className={cn(
             buttonVariants({ variant: "ghost" }),
-            "absolute right-4 top-4 md:right-8 md:top-8"
+            "absolute top-4 right-4 md:top-8 md:right-8"
           )}
         >
           Back to Sign In
         </Link>
-        <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
+        <div className="bg-muted relative hidden h-full flex-col p-10 text-white lg:flex dark:border-r">
           <div className="absolute inset-0 bg-zinc-900" />
           <div className="relative z-20 flex items-center text-lg font-medium">
             <IconInnerShadowTop className="mr-2 h-6 w-6" />
@@ -58,8 +58,8 @@ export default function ForgotPasswordAuth() {
           <div className="relative z-20 mt-auto">
             <blockquote className="space-y-2">
               <p className="text-lg">
-                &ldquo;Password recovery made simple. Get back to building your
-                product in seconds, not hours.&rdquo;
+                &ldquo;Password recovery made simple. Get back to building your product in seconds,
+                not hours.&rdquo;
               </p>
               <footer className="text-sm">Security Team</footer>
             </blockquote>
@@ -68,26 +68,23 @@ export default function ForgotPasswordAuth() {
         <div className="lg:p-8">
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
             <div className="flex flex-col space-y-2 text-center">
-              <h1 className="text-2xl font-semibold tracking-tight">
-                Reset your password
-              </h1>
-              <p className="text-sm text-muted-foreground">
-                Enter your email address and we'll send you a link to reset your
-                password
+              <h1 className="text-2xl font-semibold tracking-tight">Reset your password</h1>
+              <p className="text-muted-foreground text-sm">
+                Enter your email address and we'll send you a link to reset your password
               </p>
             </div>
 
             {success ? (
               <div className="rounded-lg border border-green-500/50 bg-green-500/10 p-4">
                 <div className="flex items-start gap-3">
-                  <IconCheck className="h-5 w-5 text-green-500 mt-0.5" />
+                  <IconCheck className="mt-0.5 h-5 w-5 text-green-500" />
                   <div className="flex-1">
                     <h3 className="font-semibold text-green-500">Check your email</h3>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      We've sent a password reset link to <strong>{email}</strong>.
-                      The link will expire in 1 hour.
+                    <p className="text-muted-foreground mt-1 text-sm">
+                      We've sent a password reset link to <strong>{email}</strong>. The link will
+                      expire in 1 hour.
                     </p>
-                    <p className="text-sm text-muted-foreground mt-2">
+                    <p className="text-muted-foreground mt-2 text-sm">
                       Didn't receive the email? Check your spam folder or{" "}
                       <button
                         onClick={() => {
@@ -143,12 +140,9 @@ export default function ForgotPasswordAuth() {
                   </div>
                 </form>
 
-                <div className="text-center text-sm text-muted-foreground">
+                <div className="text-muted-foreground text-center text-sm">
                   Remember your password?{" "}
-                  <Link
-                    href="/sign-in"
-                    className="underline underline-offset-4 hover:text-primary"
-                  >
+                  <Link href="/sign-in" className="hover:text-primary underline underline-offset-4">
                     Sign in
                   </Link>
                 </div>
@@ -160,33 +154,30 @@ export default function ForgotPasswordAuth() {
 
       {/* Mobile view */}
       <div className="flex min-h-screen flex-col items-center justify-center p-6 md:hidden">
-        <div className="flex items-center text-lg font-medium mb-8">
+        <div className="mb-8 flex items-center text-lg font-medium">
           <IconInnerShadowTop className="mr-2 h-6 w-6" />
           HagenKit
         </div>
 
         <div className="w-full max-w-sm space-y-6">
           <div className="flex flex-col space-y-2 text-center">
-            <h1 className="text-2xl font-semibold tracking-tight">
-              Reset your password
-            </h1>
-            <p className="text-sm text-muted-foreground">
-              Enter your email address and we'll send you a link to reset your
-              password
+            <h1 className="text-2xl font-semibold tracking-tight">Reset your password</h1>
+            <p className="text-muted-foreground text-sm">
+              Enter your email address and we'll send you a link to reset your password
             </p>
           </div>
 
           {success ? (
             <div className="rounded-lg border border-green-500/50 bg-green-500/10 p-4">
               <div className="flex items-start gap-3">
-                <IconCheck className="h-5 w-5 text-green-500 mt-0.5" />
+                <IconCheck className="mt-0.5 h-5 w-5 text-green-500" />
                 <div className="flex-1">
                   <h3 className="font-semibold text-green-500">Check your email</h3>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    We've sent a password reset link to <strong>{email}</strong>.
-                    The link will expire in 1 hour.
+                  <p className="text-muted-foreground mt-1 text-sm">
+                    We've sent a password reset link to <strong>{email}</strong>. The link will
+                    expire in 1 hour.
                   </p>
-                  <p className="text-sm text-muted-foreground mt-2">
+                  <p className="text-muted-foreground mt-2 text-sm">
                     Didn't receive the email? Check your spam folder or{" "}
                     <button
                       onClick={() => {
@@ -242,12 +233,9 @@ export default function ForgotPasswordAuth() {
                 </div>
               </form>
 
-              <div className="text-center text-sm text-muted-foreground">
+              <div className="text-muted-foreground text-center text-sm">
                 Remember your password?{" "}
-                <Link
-                  href="/sign-in"
-                  className="underline underline-offset-4 hover:text-primary"
-                >
+                <Link href="/sign-in" className="hover:text-primary underline underline-offset-4">
                   Sign in
                 </Link>
               </div>
@@ -255,10 +243,7 @@ export default function ForgotPasswordAuth() {
           )}
 
           <div className="mt-8 text-center">
-            <Link
-              href="/sign-in"
-              className={cn(buttonVariants({ variant: "ghost" }), "w-full")}
-            >
+            <Link href="/sign-in" className={cn(buttonVariants({ variant: "ghost" }), "w-full")}>
               Back to Sign In
             </Link>
           </div>

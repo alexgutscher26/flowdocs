@@ -4,10 +4,7 @@ import { revalidatePath } from "next/cache";
 import prisma from "@/lib/prisma";
 import { getCurrentUser } from "./user";
 import type { ActionResult } from "@/types/actions";
-import {
-  updateProfileSchema,
-  type UpdateProfileInput,
-} from "@/lib/validations/user-settings";
+import { updateProfileSchema, type UpdateProfileInput } from "@/lib/validations/user-settings";
 
 /**
  * Update the current user's profile settings

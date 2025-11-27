@@ -29,10 +29,7 @@ export const timeAgo = (
     return new Date(timestamp).toLocaleDateString("en-US", {
       month: "short",
       day: "numeric",
-      year:
-        new Date(timestamp).getFullYear() !== new Date().getFullYear()
-          ? "numeric"
-          : undefined,
+      year: new Date(timestamp).getFullYear() !== new Date().getFullYear() ? "numeric" : undefined,
     });
   }
   return `${ms(diff)}${withAgo ? " ago" : ""}`;
@@ -56,9 +53,7 @@ export function nFormatter(num: number, digits?: number) {
     .find(function (item) {
       return num >= item.value;
     });
-  return item
-    ? (num / item.value).toFixed(digits || 1).replace(rx, "$1") + item.symbol
-    : "0";
+  return item ? (num / item.value).toFixed(digits || 1).replace(rx, "$1") + item.symbol : "0";
 }
 
 export function formatDate(date: string) {

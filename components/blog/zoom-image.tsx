@@ -33,9 +33,7 @@ export default function ZoomImage(
         />
       </Zoom>
       {!props?.hideCaption && (
-        <figcaption className="text-center text-sm italic text-gray-500">
-          {props.alt}
-        </figcaption>
+        <figcaption className="text-center text-sm text-gray-500 italic">{props.alt}</figcaption>
       )}
     </figure>
   );

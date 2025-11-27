@@ -48,11 +48,7 @@ export async function sendWelcomeEmail(
   }
 
   try {
-    const result = await sendTemplateEmail(
-      EmailTemplateId.WORKSPACE_WELCOME,
-      data,
-      { to }
-    );
+    const result = await sendTemplateEmail(EmailTemplateId.WORKSPACE_WELCOME, data, { to });
 
     if (!result.success) {
       return { success: false, error: result.error };
@@ -92,11 +88,7 @@ export async function sendWorkspaceInvitationEmail(
   }
 
   try {
-    const result = await sendTemplateEmail(
-      EmailTemplateId.WORKSPACE_INVITATION,
-      data,
-      { to }
-    );
+    const result = await sendTemplateEmail(EmailTemplateId.WORKSPACE_INVITATION, data, { to });
 
     if (!result.success) {
       return { success: false, error: result.error };
@@ -110,10 +102,7 @@ export async function sendWorkspaceInvitationEmail(
     console.error("Failed to send workspace invitation email:", error);
     return {
       success: false,
-      error:
-        error instanceof Error
-          ? error.message
-          : "Failed to send workspace invitation email",
+      error: error instanceof Error ? error.message : "Failed to send workspace invitation email",
     };
   }
 }
@@ -136,11 +125,7 @@ export async function sendEmailVerification(
   }
 
   try {
-    const result = await sendTemplateEmail(
-      EmailTemplateId.EMAIL_VERIFICATION,
-      data,
-      { to }
-    );
+    const result = await sendTemplateEmail(EmailTemplateId.EMAIL_VERIFICATION, data, { to });
 
     if (!result.success) {
       return { success: false, error: result.error };
@@ -154,10 +139,7 @@ export async function sendEmailVerification(
     console.error("Failed to send email verification:", error);
     return {
       success: false,
-      error:
-        error instanceof Error
-          ? error.message
-          : "Failed to send email verification",
+      error: error instanceof Error ? error.message : "Failed to send email verification",
     };
   }
 }
@@ -180,11 +162,7 @@ export async function sendPasswordResetEmail(
   }
 
   try {
-    const result = await sendTemplateEmail(
-      EmailTemplateId.PASSWORD_RESET,
-      data,
-      { to }
-    );
+    const result = await sendTemplateEmail(EmailTemplateId.PASSWORD_RESET, data, { to });
 
     if (!result.success) {
       return { success: false, error: result.error };
@@ -198,8 +176,7 @@ export async function sendPasswordResetEmail(
     console.error("Failed to send password reset email:", error);
     return {
       success: false,
-      error:
-        error instanceof Error ? error.message : "Failed to send password reset email",
+      error: error instanceof Error ? error.message : "Failed to send password reset email",
     };
   }
 }
@@ -222,11 +199,7 @@ export async function sendMagicLinkEmail(
   }
 
   try {
-    const result = await sendTemplateEmail(
-      EmailTemplateId.MAGIC_LINK,
-      data,
-      { to }
-    );
+    const result = await sendTemplateEmail(EmailTemplateId.MAGIC_LINK, data, { to });
 
     if (!result.success) {
       return { success: false, error: result.error };
@@ -240,8 +213,7 @@ export async function sendMagicLinkEmail(
     console.error("Failed to send magic link email:", error);
     return {
       success: false,
-      error:
-        error instanceof Error ? error.message : "Failed to send magic link email",
+      error: error instanceof Error ? error.message : "Failed to send magic link email",
     };
   }
 }

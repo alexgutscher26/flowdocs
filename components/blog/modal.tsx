@@ -55,16 +55,16 @@ export default function Modal({
           }
         }}
       >
-        <Drawer.Overlay className="fixed inset-0 z-40 bg-warm-grey-2/5 backdrop-blur" />
+        <Drawer.Overlay className="bg-warm-grey-2/5 fixed inset-0 z-40 backdrop-blur" />
         <Drawer.Portal>
           <Drawer.Content
             className={cn(
-              "fixed bottom-0 left-0 right-0 z-50 mt-24 rounded-t-[10px] border-t border-warm-grey-2/20 bg-warm-white dark:bg-warm-grey",
+              "border-warm-grey-2/20 bg-warm-white dark:bg-warm-grey fixed right-0 bottom-0 left-0 z-50 mt-24 rounded-t-[10px] border-t",
               className
             )}
           >
             <div className="sticky top-0 z-20 flex w-full items-center justify-center rounded-t-[10px] bg-inherit">
-              <div className="my-3 h-1 w-12 rounded-full bg-warm-grey-2/20" />
+              <div className="bg-warm-grey-2/20 my-3 h-1 w-12 rounded-full" />
             </div>
             {children}
           </Drawer.Content>
@@ -86,7 +86,7 @@ export default function Modal({
         <Dialog.Overlay
           // for detecting when there's an active opened modal
           id="modal-backdrop"
-          className="animate-fade-in fixed inset-0 z-40 bg-warm-grey-2/5 backdrop-blur-md"
+          className="animate-fade-in bg-warm-grey-2/5 fixed inset-0 z-40 backdrop-blur-md"
         />
         <Dialog.Content
           onOpenAutoFocus={(e) => e.preventDefault()}

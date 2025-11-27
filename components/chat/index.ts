@@ -4,5 +4,6 @@ export { MessageList } from "./message-list";
 export { MessageItem } from "./message-item";
 export { MessageInput } from "./message-input";
 export { ThreadView } from "./thread-view";
-export { UserPresence } from "./user-presence";
 export { CreateChannelDialog } from "./create-channel-dialog";
+export { ConvertToWikiButton } from "./convert-to-wiki-button";
+export { UserPresence } from "./user-presence";

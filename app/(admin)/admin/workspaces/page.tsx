@@ -58,18 +58,16 @@ async function WorkspacesContent({ searchParams }: PageProps) {
 
 export default function WorkspacesPage(props: PageProps) {
   return (
-    <div className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
+    <div className="container mx-auto px-4 py-8 sm:px-6 lg:px-8">
       <div className="flex flex-col gap-6">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Workspace Management</h1>
-            <p className="text-muted-foreground mt-1">
-              Manage workspaces and their members
-            </p>
+            <p className="text-muted-foreground mt-1">Manage workspaces and their members</p>
           </div>
           <WorkspaceCreateDialog>
             <Button>
-              <Plus className="h-4 w-4 mr-2" />
+              <Plus className="mr-2 h-4 w-4" />
               Add Workspace
             </Button>
           </WorkspaceCreateDialog>

@@ -1,172 +1,193 @@
-import { Server as SocketIOServer } from 'socket.io'
-import { createAdapter } from '@socket.io/redis-adapter'
-import Redis from 'ioredis'
-import { Server as HttpServer } from 'http'
-import { WebSocketEvent } from '@/types/chat'
+import { Server as SocketIOServer } from "socket.io";
+import { createAdapter } from "@socket.io/redis-adapter";
+import Redis from "ioredis";
+import { Server as HttpServer } from "http";
+import { WebSocketEvent } from "@/types/chat";
 
 // Define types for our socket events
 export interface ServerToClientEvents {
-    [WebSocketEvent.MESSAGE_RECEIVED]: (data: any) => void
-    [WebSocketEvent.USER_TYPING]: (data: { userId: string; channelId: string; userName: string }) => void
-    [WebSocketEvent.PRESENCE_UPDATE]: (data: { userId: string; status: string; lastSeen?: Date }) => void
-    [WebSocketEvent.USER_ONLINE]: (data: { userId: string; status: string }) => void
-    [WebSocketEvent.USER_OFFLINE]: (data: { userId: string; status: string; lastSeen?: Date }) => void
+  [WebSocketEvent.MESSAGE_RECEIVED]: (data: any) => void;
+  [WebSocketEvent.USER_TYPING]: (data: {
+    userId: string;
+    channelId: string;
+    userName: string;
+  }) => void;
+  [WebSocketEvent.PRESENCE_UPDATE]: (data: {
+    userId: string;
+    status: string;
+    lastSeen?: Date;
+  }) => void;
+  [WebSocketEvent.USER_ONLINE]: (data: { userId: string; status: string }) => void;
+  [WebSocketEvent.USER_OFFLINE]: (data: {
+    userId: string;
+    status: string;
+    lastSeen?: Date;
+  }) => void;
 }
 
 export interface ClientToServerEvents {
-    [WebSocketEvent.JOIN_CHANNEL]: (data: { channelId: string }) => void
-    [WebSocketEvent.LEAVE_CHANNEL]: (data: { channelId: string }) => void
-    [WebSocketEvent.MESSAGE_SENT]: (data: { channelId: string; message: any }) => void
-    [WebSocketEvent.TYPING_START]: (data: { channelId: string; userId: string; userName: string }) => void
-    [WebSocketEvent.TYPING_STOP]: (data: { channelId: string; userId: string }) => void
-    [WebSocketEvent.PRESENCE_UPDATE]: (data: { userId: string; status: string }) => void
+  [WebSocketEvent.JOIN_CHANNEL]: (data: { channelId: string }) => void;
+  [WebSocketEvent.LEAVE_CHANNEL]: (data: { channelId: string }) => void;
+  [WebSocketEvent.MESSAGE_SENT]: (data: { channelId: string; message: any }) => void;
+  [WebSocketEvent.TYPING_START]: (data: {
+    channelId: string;
+    userId: string;
+    userName: string;
+  }) => void;
+  [WebSocketEvent.TYPING_STOP]: (data: { channelId: string; userId: string }) => void;
+  [WebSocketEvent.PRESENCE_UPDATE]: (data: { userId: string; status: string }) => void;
 }
 
 export interface InterServerEvents {
-    ping: () => void
+  ping: () => void;
 }
 
 export interface SocketData {
-    userId: string
-    workspaceId: string
+  userId: string;
+  workspaceId: string;
 }
 
-let io: SocketIOServer<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData> | null = null
+let io: SocketIOServer<
+  ClientToServerEvents,
+  ServerToClientEvents,
+  InterServerEvents,
+  SocketData
+> | null = null;
 
 export const initSocketServer = (httpServer: HttpServer) => {
-    if (io) return io
+  if (io) return io;
 
-    io = new SocketIOServer(httpServer, {
-        path: '/api/socket',
-        cors: {
-            origin: process.env.NEXT_PUBLIC_APP_URL || '*',
-            methods: ['GET', 'POST']
-        }
-    })
+  io = new SocketIOServer(httpServer, {
+    path: "/api/socket",
+    cors: {
+      origin: process.env.NEXT_PUBLIC_APP_URL || "*",
+      methods: ["GET", "POST"],
+    },
+  });
 
-    // Setup Redis Adapter if REDIS_URL is present
-    if (process.env.REDIS_URL) {
-        const pubClient = new Redis(process.env.REDIS_URL)
-        const subClient = pubClient.duplicate()
+  // Setup Redis Adapter if REDIS_URL is present
+  if (process.env.REDIS_URL) {
+    const pubClient = new Redis(process.env.REDIS_URL);
+    const subClient = pubClient.duplicate();
 
-        io.adapter(createAdapter(pubClient, subClient))
-        console.log('Socket.IO Redis adapter configured')
-    } else {
-        console.warn('REDIS_URL not found, falling back to in-memory adapter')
+    io.adapter(createAdapter(pubClient, subClient));
+    console.log("Socket.IO Redis adapter configured");
+  } else {
+    console.warn("REDIS_URL not found, falling back to in-memory adapter");
+  }
+
+  io.on("connection", (socket) => {
+    console.log("Client connected:", socket.id);
+
+    const { workspaceId, userId } = socket.handshake.query;
+
+    if (!workspaceId || !userId || typeof workspaceId !== "string" || typeof userId !== "string") {
+      console.error("Missing workspaceId or userId in connection");
+      socket.disconnect();
+      return;
     }
 
-    io.on('connection', (socket) => {
-        console.log('Client connected:', socket.id)
+    socket.data.userId = userId;
+    socket.data.workspaceId = workspaceId;
 
-        const { workspaceId, userId } = socket.handshake.query
+    // Join workspace room
+    socket.join(`workspace:${workspaceId}`);
+    console.log(`User ${userId} joined workspace ${workspaceId}`);
 
-        if (!workspaceId || !userId || typeof workspaceId !== 'string' || typeof userId !== 'string') {
-            console.error('Missing workspaceId or userId in connection')
-            socket.disconnect()
-            return
-        }
+    // Handle channel join
+    socket.on(WebSocketEvent.JOIN_CHANNEL, ({ channelId }) => {
+      console.log(`User ${userId} joining channel ${channelId}`);
+      socket.join(`channel:${channelId}`);
 
-        socket.data.userId = userId
-        socket.data.workspaceId = workspaceId
+      // Notify others in the channel
+      socket.to(`channel:${channelId}`).emit(WebSocketEvent.USER_ONLINE, {
+        userId,
+        status: "online",
+      });
+    });
 
-        // Join workspace room
-        socket.join(`workspace:${workspaceId}`)
-        console.log(`User ${userId} joined workspace ${workspaceId}`)
+    // Handle channel leave
+    socket.on(WebSocketEvent.LEAVE_CHANNEL, ({ channelId }) => {
+      console.log(`User ${userId} leaving channel ${channelId}`);
+      socket.leave(`channel:${channelId}`);
 
-        // Handle channel join
-        socket.on(WebSocketEvent.JOIN_CHANNEL, ({ channelId }) => {
-            console.log(`User ${userId} joining channel ${channelId}`)
-            socket.join(`channel:${channelId}`)
+      // Notify others in the channel
+      socket.to(`channel:${channelId}`).emit(WebSocketEvent.USER_OFFLINE, {
+        userId,
+        status: "offline",
+      });
+    });
 
-            // Notify others in the channel
-            socket.to(`channel:${channelId}`).emit(WebSocketEvent.USER_ONLINE, {
-                userId,
-                status: 'online',
-            })
-        })
+    // Handle message sent
+    socket.on(WebSocketEvent.MESSAGE_SENT, ({ channelId, message }) => {
+      console.log(`Message sent to channel ${channelId}`);
 
-        // Handle channel leave
-        socket.on(WebSocketEvent.LEAVE_CHANNEL, ({ channelId }) => {
-            console.log(`User ${userId} leaving channel ${channelId}`)
-            socket.leave(`channel:${channelId}`)
+      // Broadcast to all clients in the channel except sender
+      socket.to(`channel:${channelId}`).emit(WebSocketEvent.MESSAGE_RECEIVED, {
+        channelId,
+        message,
+      });
+    });
 
-            // Notify others in the channel
-            socket.to(`channel:${channelId}`).emit(WebSocketEvent.USER_OFFLINE, {
-                userId,
-                status: 'offline',
-            })
-        })
+    // Handle typing start
+    socket.on(WebSocketEvent.TYPING_START, ({ channelId, userId, userName }) => {
+      socket.to(`channel:${channelId}`).emit(WebSocketEvent.USER_TYPING, {
+        channelId,
+        userId,
+        userName,
+      });
+    });
 
-        // Handle message sent
-        socket.on(WebSocketEvent.MESSAGE_SENT, ({ channelId, message }) => {
-            console.log(`Message sent to channel ${channelId}`)
+    // Handle typing stop
+    socket.on(WebSocketEvent.TYPING_STOP, ({ channelId, userId }) => {
+      socket.to(`channel:${channelId}`).emit(WebSocketEvent.USER_TYPING, {
+        channelId,
+        userId,
+        userName: "",
+      });
+    });
 
-            // Broadcast to all clients in the channel except sender
-            socket.to(`channel:${channelId}`).emit(WebSocketEvent.MESSAGE_RECEIVED, {
-                channelId,
-                message,
-            })
-        })
+    // Handle presence update
+    socket.on(WebSocketEvent.PRESENCE_UPDATE, ({ userId, status }) => {
+      socket.to(`workspace:${workspaceId}`).emit(WebSocketEvent.PRESENCE_UPDATE, {
+        userId,
+        status,
+        lastSeen: new Date(),
+      });
+    });
 
-        // Handle typing start
-        socket.on(WebSocketEvent.TYPING_START, ({ channelId, userId, userName }) => {
-            socket.to(`channel:${channelId}`).emit(WebSocketEvent.USER_TYPING, {
-                channelId,
-                userId,
-                userName,
-            })
-        })
+    // Handle disconnect
+    socket.on("disconnect", () => {
+      console.log("Client disconnected:", socket.id);
 
-        // Handle typing stop
-        socket.on(WebSocketEvent.TYPING_STOP, ({ channelId, userId }) => {
-            socket.to(`channel:${channelId}`).emit(WebSocketEvent.USER_TYPING, {
-                channelId,
-                userId,
-                userName: '',
-            })
-        })
+      // Notify workspace of offline status
+      socket.to(`workspace:${workspaceId}`).emit(WebSocketEvent.USER_OFFLINE, {
+        userId,
+        status: "offline",
+        lastSeen: new Date(),
+      });
+    });
+  });
 
-        // Handle presence update
-        socket.on(WebSocketEvent.PRESENCE_UPDATE, ({ userId, status }) => {
-            socket.to(`workspace:${workspaceId}`).emit(WebSocketEvent.PRESENCE_UPDATE, {
-                userId,
-                status,
-                lastSeen: new Date(),
-            })
-        })
-
-        // Handle disconnect
-        socket.on('disconnect', () => {
-            console.log('Client disconnected:', socket.id)
-
-            // Notify workspace of offline status
-            socket.to(`workspace:${workspaceId}`).emit(WebSocketEvent.USER_OFFLINE, {
-                userId,
-                status: 'offline',
-                lastSeen: new Date(),
-            })
-        })
-    })
-
-    console.log('Socket.IO server initialized')
-    return io
-}
+  console.log("Socket.IO server initialized");
+  return io;
+};
 
 export const getIO = () => {
-    if (!io) {
-        throw new Error('Socket.IO not initialized!')
-    }
-    return io
-}
+  if (!io) {
+    throw new Error("Socket.IO not initialized!");
+  }
+  return io;
+};
 
 export function broadcastToChannel(channelId: string, event: string, data: any) {
-    if (io) {
-        io.to(`channel:${channelId}`).emit(event as any, data)
-    }
+  if (io) {
+    io.to(`channel:${channelId}`).emit(event as any, data);
+  }
 }
 
 export function broadcastToWorkspace(workspaceId: string, event: string, data: any) {
-    if (io) {
-        io.to(`workspace:${workspaceId}`).emit(event as any, data)
-    }
+  if (io) {
+    io.to(`workspace:${workspaceId}`).emit(event as any, data);
+  }
 }

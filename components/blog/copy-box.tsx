@@ -11,9 +11,7 @@ export default function CopyBox(props: { title: string; copy: string }) {
       <p>{props.title}</p>
       <div className="mt-1 flex w-full items-center justify-between rounded-md bg-gray-100 p-1.5 pl-3">
         <div className="scrollbar-hide overflow-auto">
-          <p className="whitespace-nowrap text-gray-600 sm:text-sm">
-            {props.copy}
-          </p>
+          <p className="whitespace-nowrap text-gray-600 sm:text-sm">{props.copy}</p>
         </div>
         <button
           type="button"

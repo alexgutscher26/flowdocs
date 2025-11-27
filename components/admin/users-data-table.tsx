@@ -40,9 +40,7 @@ export function UsersDataTable({ data, pageCount, total }: UsersDataTableProps) 
       {
         id: "name",
         accessorKey: "name",
-        header: ({ column }) => (
-          <DataTableColumnHeader column={column} label="User" />
-        ),
+        header: ({ column }) => <DataTableColumnHeader column={column} label="User" />,
         cell: ({ row }) => {
           const user = row.original;
           const initials = user.name
@@ -61,7 +59,7 @@ export function UsersDataTable({ data, pageCount, total }: UsersDataTableProps) 
               </Avatar>
               <div className="flex flex-col">
                 <span className="font-medium">{user.name || "No name"}</span>
-                <span className="text-sm text-muted-foreground">{user.email}</span>
+                <span className="text-muted-foreground text-sm">{user.email}</span>
               </div>
             </div>
           );
@@ -76,20 +74,13 @@ export function UsersDataTable({ data, pageCount, total }: UsersDataTableProps) 
       {
         id: "role",
         accessorKey: "role",
-        header: ({ column }) => (
-          <DataTableColumnHeader column={column} label="Role" />
-        ),
+        header: ({ column }) => <DataTableColumnHeader column={column} label="Role" />,
         cell: ({ row }) => {
           const role = row.getValue("role") as string;
           return (
-            <Badge
-              variant={
-                role === "admin" ? "destructive" :
-                "secondary"
-              }
-            >
-              {role === "admin" && <Shield className="h-3 w-3 mr-1" />}
-              {role === "user" && <UserCheck className="h-3 w-3 mr-1" />}
+            <Badge variant={role === "admin" ? "destructive" : "secondary"}>
+              {role === "admin" && <Shield className="mr-1 h-3 w-3" />}
+              {role === "user" && <UserCheck className="mr-1 h-3 w-3" />}
               {role}
             </Badge>
           );
@@ -108,17 +99,13 @@ export function UsersDataTable({ data, pageCount, total }: UsersDataTableProps) 
       {
         id: "status",
         accessorKey: "status",
-        header: ({ column }) => (
-          <DataTableColumnHeader column={column} label="Status" />
-        ),
+        header: ({ column }) => <DataTableColumnHeader column={column} label="Status" />,
         cell: ({ row }) => {
           const status = row.getValue("status") as string;
           return (
             <Badge
               variant={
-                status === "ACTIVE" ? "default" :
-                status === "SUSPENDED" ? "outline" :
-                "secondary"
+                status === "ACTIVE" ? "default" : status === "SUSPENDED" ? "outline" : "secondary"
               }
             >
               {status}
@@ -140,14 +127,12 @@ export function UsersDataTable({ data, pageCount, total }: UsersDataTableProps) 
       {
         id: "phone",
         accessorKey: "phone",
-        header: ({ column }) => (
-          <DataTableColumnHeader column={column} label="Phone" />
-        ),
+        header: ({ column }) => <DataTableColumnHeader column={column} label="Phone" />,
         cell: ({ row }) => {
           const phone = row.getValue("phone") as string | null;
           return phone ? (
             <div className="flex items-center gap-1">
-              <Phone className="h-3 w-3 text-muted-foreground" />
+              <Phone className="text-muted-foreground h-3 w-3" />
               <span className="text-sm">{phone}</span>
             </div>
           ) : (
@@ -159,9 +144,7 @@ export function UsersDataTable({ data, pageCount, total }: UsersDataTableProps) 
       {
         id: "workspaces",
         accessorFn: (row) => row._count?.workspaces ?? 0,
-        header: ({ column }) => (
-          <DataTableColumnHeader column={column} label="Workspaces" />
-        ),
+        header: ({ column }) => <DataTableColumnHeader column={column} label="Workspaces" />,
         cell: ({ row }) => {
           const count = row.original._count?.workspaces ?? 0;
           return <span className="text-sm">{count}</span>;
@@ -171,9 +154,7 @@ export function UsersDataTable({ data, pageCount, total }: UsersDataTableProps) 
       {
         id: "emailVerified",
         accessorKey: "emailVerified",
-        header: ({ column }) => (
-          <DataTableColumnHeader column={column} label="Verified" />
-        ),
+        header: ({ column }) => <DataTableColumnHeader column={column} label="Verified" />,
         cell: ({ row }) => {
           const isVerified = row.getValue("emailVerified") as boolean;
           return (
@@ -187,13 +168,13 @@ export function UsersDataTable({ data, pageCount, total }: UsersDataTableProps) 
       {
         id: "lastLoginAt",
         accessorKey: "lastLoginAt",
-        header: ({ column }) => (
-          <DataTableColumnHeader column={column} label="Last Login" />
-        ),
+        header: ({ column }) => <DataTableColumnHeader column={column} label="Last Login" />,
         cell: ({ row }) => {
           const date = row.getValue("lastLoginAt") as Date | null;
           return date ? (
-            <span className="text-sm">{formatDistanceToNow(new Date(date), { addSuffix: true })}</span>
+            <span className="text-sm">
+              {formatDistanceToNow(new Date(date), { addSuffix: true })}
+            </span>
           ) : (
             <span className="text-muted-foreground text-sm">Never</span>
           );
@@ -203,9 +184,7 @@ export function UsersDataTable({ data, pageCount, total }: UsersDataTableProps) 
       {
         id: "createdAt",
         accessorKey: "createdAt",
-        header: ({ column }) => (
-          <DataTableColumnHeader column={column} label="Created" />
-        ),
+        header: ({ column }) => <DataTableColumnHeader column={column} label="Created" />,
         cell: ({ row }) => {
           const date = row.getValue("createdAt") as Date;
           return <span className="text-sm">{format(new Date(date), "MMM d, yyyy")}</span>;
@@ -234,7 +213,7 @@ export function UsersDataTable({ data, pageCount, total }: UsersDataTableProps) 
                     setEditDialogOpen(true);
                   }}
                 >
-                  <Pencil className="h-4 w-4 mr-2" />
+                  <Pencil className="mr-2 h-4 w-4" />
                   Edit user
                 </DropdownMenuItem>
                 <DropdownMenuItem
@@ -244,7 +223,7 @@ export function UsersDataTable({ data, pageCount, total }: UsersDataTableProps) 
                   }}
                   className="text-destructive"
                 >
-                  <Trash2 className="h-4 w-4 mr-2" />
+                  <Trash2 className="mr-2 h-4 w-4" />
                   Delete user
                 </DropdownMenuItem>
               </DropdownMenuContent>

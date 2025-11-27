@@ -1,6 +1,6 @@
-import Link from "next/link"
+import Link from "next/link";
 
-import BlurImage from "@/lib/blog/blur-image"
+import BlurImage from "@/lib/blog/blur-image";
 
 const logos = [
   "vercel",
@@ -15,18 +15,16 @@ const logos = [
   "attio",
   "crowd",
   "checkly",
-]
+];
 
 export default function Logos({
   copy = "Giving superpowers to marketing teams at world-class companies",
 }: {
-  copy?: string
+  copy?: string;
 }) {
   return (
     <div className="my-10">
-      <p className="mx-auto max-w-sm text-center text-gray-600 sm:max-w-xl sm:text-lg">
-        {copy}
-      </p>
+      <p className="mx-auto max-w-sm text-center text-gray-600 sm:max-w-xl sm:text-lg">{copy}</p>
       <Link
         href="/kunder"
         className="mx-auto mt-8 grid w-full max-w-screen-lg grid-cols-2 items-center px-5 md:grid-cols-6 md:px-0"
@@ -58,5 +56,5 @@ export default function Logos({
         ))}
       </Link>
     </div>
-  )
+  );
 }

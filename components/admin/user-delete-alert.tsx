@@ -55,13 +55,13 @@ export function UserDeleteAlert({ user, open, onOpenChange }: UserDeleteAlertPro
           <AlertDialogDescription className="space-y-2">
             <p>
               This will permanently delete the user{" "}
-              <span className="font-semibold">{user.name || user.email}</span> and all
-              associated data.
+              <span className="font-semibold">{user.name || user.email}</span> and all associated
+              data.
             </p>
             <p className="text-destructive">
               This action cannot be undone. The following will also be deleted:
             </p>
-            <ul className="list-disc list-inside space-y-1 text-sm">
+            <ul className="list-inside list-disc space-y-1 text-sm">
               <li>All user sessions</li>
               <li>Workspace memberships</li>
               <li>Account connections</li>

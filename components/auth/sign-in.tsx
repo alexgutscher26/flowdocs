@@ -64,17 +64,17 @@ export default function SignInAuth() {
 
   return (
     <>
-      <div className="container relative hidden h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
+      <div className="relative container hidden h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
         <Link
           href={signUpUrl}
           className={cn(
             buttonVariants({ variant: "ghost" }),
-            "absolute right-4 top-4 md:right-8 md:top-8"
+            "absolute top-4 right-4 md:top-8 md:right-8"
           )}
         >
           Sign Up
         </Link>
-        <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
+        <div className="bg-muted relative hidden h-full flex-col p-10 text-white lg:flex dark:border-r">
           <div className="absolute inset-0 bg-zinc-900" />
           <div className="relative z-20 flex items-center text-lg font-medium">
             <IconInnerShadowTop className="mr-2 h-6 w-6" />
@@ -83,32 +83,25 @@ export default function SignInAuth() {
           <div className="relative z-20 mt-auto">
             <blockquote className="space-y-2">
               <p className="text-lg">
-                &ldquo;HagenKit gave us launch-ready auth, billing, and UI in a
-                single weekend. Our team shipped features instead of scaffolding
-                infrastructure.&rdquo;
+                &ldquo;HagenKit gave us launch-ready auth, billing, and UI in a single weekend. Our
+                team shipped features instead of scaffolding infrastructure.&rdquo;
               </p>
-              <footer className="text-sm">
-                — Sarah Mitchell, Principal Product Designer
-              </footer>
+              <footer className="text-sm">— Sarah Mitchell, Principal Product Designer</footer>
             </blockquote>
           </div>
         </div>
         <div className="lg:p-8">
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
             <div className="flex flex-col space-y-2 text-center">
-              <h1 className="text-2xl font-semibold tracking-tight">
-                Sign in to your account
-              </h1>
-              <p className="text-sm text-muted-foreground">
-                Enter your email below to sign in
-              </p>
+              <h1 className="text-2xl font-semibold tracking-tight">Sign in to your account</h1>
+              <p className="text-muted-foreground text-sm">Enter your email below to sign in</p>
               {isInvitation && (
                 <div className="rounded-md bg-blue-50 p-3 text-sm text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
                   Please sign in to accept your invitation.
                 </div>
               )}
               {formattedMethod && !isInvitation && (
-                <p className="text-xs text-muted-foreground" aria-live="polite">
+                <p className="text-muted-foreground text-xs" aria-live="polite">
                   Last signed in with {formattedMethod}.
                 </p>
               )}
@@ -139,16 +132,19 @@ export default function SignInAuth() {
                           },
                           onError: (ctx) => {
                             setLoading(false);
-                            if (ctx.error.message.includes("User not found") || ctx.error.status === 401) {
-                                toast.error("Account not found", {
-                                    description: "We couldn't find an account with that email.",
-                                    action: {
-                                        label: "Sign Up",
-                                        onClick: () => router.push("/sign-up"),
-                                    },
-                                });
+                            if (
+                              ctx.error.message.includes("User not found") ||
+                              ctx.error.status === 401
+                            ) {
+                              toast.error("Account not found", {
+                                description: "We couldn't find an account with that email.",
+                                action: {
+                                  label: "Sign Up",
+                                  onClick: () => router.push("/sign-up"),
+                                },
+                              });
                             } else {
-                                toast.error(ctx.error.message);
+                              toast.error(ctx.error.message);
                             }
                           },
                         }
@@ -193,13 +189,11 @@ export default function SignInAuth() {
                         <Checkbox
                           id="remember"
                           checked={rememberMe}
-                          onCheckedChange={(checked) =>
-                            setRememberMe(checked as boolean)
-                          }
+                          onCheckedChange={(checked) => setRememberMe(checked as boolean)}
                         />
                         <label
                           htmlFor="remember"
-                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                          className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                         >
                           Remember me
                         </label>
@@ -210,9 +204,7 @@ export default function SignInAuth() {
                         variant={emailVariant}
                         disabled={loading}
                       >
-                        {loading && (
-                          <Spinner className="mr-2 size-4" aria-hidden="true" />
-                        )}
+                        {loading && <Spinner className="mr-2 size-4" aria-hidden="true" />}
                         <span>Sign in with Password</span>
                         {emailIsLast && (
                           <>
@@ -273,9 +265,7 @@ export default function SignInAuth() {
                         variant={emailVariant}
                         disabled={loading}
                       >
-                        {loading && (
-                          <Spinner className="mr-2 size-4" aria-hidden="true" />
-                        )}
+                        {loading && <Spinner className="mr-2 size-4" aria-hidden="true" />}
                         <span>Sign in with Magic Link</span>
                         {emailIsLast && (
                           <>
@@ -295,9 +285,7 @@ export default function SignInAuth() {
                   <span className="w-full border-t" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-background px-2 text-muted-foreground">
-                    Or continue with
-                  </span>
+                  <span className="bg-background text-muted-foreground px-2">Or continue with</span>
                 </div>
               </div>
               <Button
@@ -359,19 +347,13 @@ export default function SignInAuth() {
                 )}
               </Button>
             </div>
-            <p className="px-8 text-center text-sm text-muted-foreground">
+            <p className="text-muted-foreground px-8 text-center text-sm">
               By continuing, you agree to our{" "}
-              <Link
-                href="/terms"
-                className="underline underline-offset-4 hover:text-primary"
-              >
+              <Link href="/terms" className="hover:text-primary underline underline-offset-4">
                 Terms of Service
               </Link>{" "}
               and{" "}
-              <Link
-                href="/privacy"
-                className="underline underline-offset-4 hover:text-primary"
-              >
+              <Link href="/privacy" className="hover:text-primary underline underline-offset-4">
                 Privacy Policy
               </Link>
               .

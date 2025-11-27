@@ -56,13 +56,12 @@ export function WorkspaceDeleteAlert({ workspace, open, onOpenChange }: Workspac
             <p>
               This will permanently delete the workspace{" "}
               <span className="font-semibold">{workspace.name}</span> (
-              <span className="font-mono text-sm">{workspace.slug}</span>) and all
-              associated data.
+              <span className="font-mono text-sm">{workspace.slug}</span>) and all associated data.
             </p>
             <p className="text-destructive">
               This action cannot be undone. The following will also be deleted:
             </p>
-            <ul className="list-disc list-inside space-y-1 text-sm">
+            <ul className="list-inside list-disc space-y-1 text-sm">
               <li>All workspace members</li>
               <li>Pending invitations</li>
               <li>Workspace sessions</li>

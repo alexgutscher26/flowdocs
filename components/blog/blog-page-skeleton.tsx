@@ -2,7 +2,7 @@ import BlogCardSkeleton from "@/components/blog/blog-card-skeleton";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function BlogPageSkeleton() {
-  const filters = ['all', 'company', 'marketing', 'newsroom', 'partners', 'engineering', 'press'];
+  const filters = ["all", "company", "marketing", "newsroom", "partners", "engineering", "press"];
 
   return (
     <section className="bg-background">
@@ -18,7 +18,7 @@ export default function BlogPageSkeleton() {
           </div>
 
           {/* Category filter skeleton */}
-          <div className="-ml-0.5 mb-6 mt-12 flex gap-4 max-md:-mx-6 md:mt-16">
+          <div className="mt-12 mb-6 -ml-0.5 flex gap-4 max-md:-mx-6 md:mt-16">
             <div className="flex gap-2 overflow-x-auto py-3 max-md:px-6">
               {filters.map((_, index) => (
                 <Skeleton key={index} className="h-8 w-24 shrink-0" />

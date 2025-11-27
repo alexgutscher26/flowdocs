@@ -6,13 +6,7 @@ import { toast } from "sonner";
 import { IconTrash } from "@tabler/icons-react";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -65,16 +59,13 @@ export function AccountTab() {
     <Card>
       <CardHeader>
         <CardTitle className="text-destructive">Danger Zone</CardTitle>
-        <CardDescription>
-          Irreversible actions that will affect your account
-        </CardDescription>
+        <CardDescription>Irreversible actions that will affect your account</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div>
           <h3 className="text-base font-semibold">Delete Account</h3>
-          <p className="text-sm text-muted-foreground mt-1">
-            Permanently delete your account and all associated data. This action
-            cannot be undone.
+          <p className="text-muted-foreground mt-1 text-sm">
+            Permanently delete your account and all associated data. This action cannot be undone.
           </p>
         </div>
 
@@ -90,10 +81,10 @@ export function AccountTab() {
               <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
               <AlertDialogDescription className="space-y-2">
                 <p>
-                  This action cannot be undone. This will permanently delete your
-                  account and remove all your data from our servers.
+                  This action cannot be undone. This will permanently delete your account and remove
+                  all your data from our servers.
                 </p>
-                <p className="font-semibold text-destructive">
+                <p className="text-destructive font-semibold">
                   All of your workspaces and data will be lost.
                 </p>
               </AlertDialogDescription>

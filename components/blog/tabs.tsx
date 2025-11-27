@@ -1,22 +1,22 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { cn } from "@/lib/utils"
+import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 interface Tab {
-  label: string
-  value: string
-  content: React.ReactNode
+  label: string;
+  value: string;
+  content: React.ReactNode;
 }
 
 interface TabsProps {
-  tabs: Tab[]
-  defaultValue?: string
-  className?: string
+  tabs: Tab[];
+  defaultValue?: string;
+  className?: string;
 }
 
 export function Tabs({ tabs, defaultValue, className }: TabsProps) {
-  const [activeTab, setActiveTab] = useState(defaultValue || tabs[0]?.value)
+  const [activeTab, setActiveTab] = useState(defaultValue || tabs[0]?.value);
 
   return (
     <div className={cn("my-6 w-full", className)}>
@@ -38,29 +38,26 @@ export function Tabs({ tabs, defaultValue, className }: TabsProps) {
       </div>
       <div className="rounded-b-lg border border-t-0 border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
         {tabs.map((tab) => (
-          <div
-            key={tab.value}
-            className={cn(activeTab === tab.value ? "block" : "hidden")}
-          >
+          <div key={tab.value} className={cn(activeTab === tab.value ? "block" : "hidden")}>
             {tab.content}
           </div>
         ))}
       </div>
     </div>
-  )
+  );
 }
 
 // Simple wrapper for code tabs
 interface CodeTabsProps {
-  children: React.ReactNode
-  defaultValue?: string
+  children: React.ReactNode;
+  defaultValue?: string;
 }
 
 export function CodeTabs({ children, defaultValue }: CodeTabsProps) {
-  const tabs: Tab[] = []
+  const tabs: Tab[] = [];
 
   // Parse children to extract tab content
-  const childArray = Array.isArray(children) ? children : [children]
+  const childArray = Array.isArray(children) ? children : [children];
 
   childArray.forEach((child: any) => {
     if (child?.props?.["data-language"]) {
@@ -68,13 +65,13 @@ export function CodeTabs({ children, defaultValue }: CodeTabsProps) {
         label: child.props["data-language"],
         value: child.props["data-language"].toLowerCase(),
         content: child,
-      })
+      });
     }
-  })
+  });
 
   if (tabs.length === 0) {
-    return <div>{children}</div>
+    return <div>{children}</div>;
   }
 
-  return <Tabs tabs={tabs} defaultValue={defaultValue} />
+  return <Tabs tabs={tabs} defaultValue={defaultValue} />;
 }

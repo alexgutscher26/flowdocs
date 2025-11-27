@@ -1,19 +1,15 @@
-"use client"
+"use client";
 
-import { useRef, useState } from "react"
+import { useRef, useState } from "react";
 
 interface Testimonial {
-  id: number
-  content: string
+  id: number;
+  content: string;
 }
 
-export default function TestimonialsMobile({
-  testimonials,
-}: {
-  testimonials: Testimonial[]
-}) {
-  const ref = useRef<HTMLDivElement>(null)
-  const [expanded, setExpanded] = useState(false)
+export default function TestimonialsMobile({ testimonials }: { testimonials: Testimonial[] }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [expanded, setExpanded] = useState(false);
 
   return (
     <div className="flex flex-col justify-center space-y-4 pt-8 sm:hidden">
@@ -41,5 +37,5 @@ export default function TestimonialsMobile({
         </button>
       )}
     </div>
-  )
+  );
 }

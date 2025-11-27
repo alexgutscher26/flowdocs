@@ -96,9 +96,7 @@ export function UserEditDialog({ user, open, onOpenChange }: UserEditDialogProps
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Edit User</DialogTitle>
-          <DialogDescription>
-            Update user information and permissions
-          </DialogDescription>
+          <DialogDescription>Update user information and permissions</DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
@@ -140,9 +138,7 @@ export function UserEditDialog({ user, open, onOpenChange }: UserEditDialogProps
                   <FormControl>
                     <Input placeholder="https://example.com/avatar.jpg" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    Provide a URL to the user's profile image
-                  </FormDescription>
+                  <FormDescription>Provide a URL to the user's profile image</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -182,9 +178,7 @@ export function UserEditDialog({ user, open, onOpenChange }: UserEditDialogProps
                       <SelectItem value="admin">Admin</SelectItem>
                     </SelectContent>
                   </Select>
-                  <FormDescription>
-                    User role determines access permissions
-                  </FormDescription>
+                  <FormDescription>User role determines access permissions</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -208,9 +202,7 @@ export function UserEditDialog({ user, open, onOpenChange }: UserEditDialogProps
                       <SelectItem value="DELETED">Deleted</SelectItem>
                     </SelectContent>
                   </Select>
-                  <FormDescription>
-                    Account status controls user access
-                  </FormDescription>
+                  <FormDescription>Account status controls user access</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

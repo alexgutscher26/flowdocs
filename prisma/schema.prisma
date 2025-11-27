@@ -44,6 +44,10 @@ model User {
   channelMemberships ChannelMember[]
   messages           Message[]
 
+  // Wiki relations
+  wikiPages          WikiPage[]
+  wikiVersions       WikiVersion[]
+
   @@map("user")
 }
 
@@ -114,6 +118,8 @@ model Workspace {
   sessions    Session[]
   defaultForUsers User[] @relation("UserDefaultWorkspace")
   channels    Channel[]
+  wikiPages   WikiPage[]
+  wikiTags    WikiTag[]
 
   @@map("workspace")
 }
@@ -237,20 +243,108 @@ model Message {
   @@map("message")
 }
 
-// Minimal WikiPage for relationship
+// Wiki Models
+
 model WikiPage {
   id          String   @id @default(cuid())
   title       String
-  content     String   // Markdown content
+  slug        String   // URL-friendly identifier
+  content     String   @db.Text // Markdown content
+  excerpt     String?  // Short description
+  
+  // Source tracking
   messageId   String?  @unique // Source message if converted from chat
+  message     Message? @relation(fields: [messageId], references: [id], onDelete: SetNull)
   
-  message     Message? @relation(fields: [messageId], references: [id])
+  // Workspace and user
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  authorId    String
+  author      User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
+  // Nested pages support (tree structure)
+  parentId    String?
+  parent      WikiPage?   @relation("WikiPageNesting", fields: [parentId], references: [id], onDelete: SetNull)
+  children    WikiPage[]  @relation("WikiPageNesting")
+  
+  // Metadata
+  published   Boolean   @default(false)
+  viewCount   Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  publishedAt DateTime?
+  
+  // Relations
+  versions    WikiVersion[]
+  tags        WikiPageTag[]
+  
+  @@unique([workspaceId, slug])
+  @@index([workspaceId])
+  @@index([authorId])
+  @@index([parentId])
+  @@index([messageId])
   @@map("wiki_page")
 }
+
+model WikiVersion {
+  id        String   @id @default(cuid())
+  
+  // Content snapshot
+  title     String
+  content   String   @db.Text
+  excerpt   String?
+  
+  // Version metadata
+  changeNote String? // Description of what changed
+  version   Int      // Sequential version number
+  
+  // Relations
+  pageId    String
+  page      WikiPage @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime @default(now())
+  
+  @@index([pageId])
+  @@index([authorId])
+  @@map("wiki_version")
+}
+
+model WikiTag {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String
+  color       String?  // Hex color for UI display
+  
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  
+  pages       WikiPageTag[]
+  
+  createdAt   DateTime @default(now())
+  
+  @@unique([workspaceId, slug])
+  @@index([workspaceId])
+  @@map("wiki_tag")
+}
+
+// Junction table for WikiPage and WikiTag many-to-many relationship
+model WikiPageTag {
+  id     String   @id @default(cuid())
+  
+  pageId String
+  page   WikiPage @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  
+  tagId  String
+  tag    WikiTag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  
+  @@unique([pageId, tagId])
+  @@index([pageId])
+  @@index([tagId])
+  @@map("wiki_page_tag")
+}
+
 
 enum ChannelType {
   PUBLIC

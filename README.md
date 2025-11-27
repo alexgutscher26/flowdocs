@@ -31,6 +31,7 @@
 HagenKit is a batteries-included SaaS boilerplate that combines modern product design with production-ready infrastructure. Built on Next.js 16 and the App Router, it delivers authentication, multi-tenant workspaces, dashboards, and a marketing site so you can focus on customer value instead of scaffolding.
 
 **Highlights**
+
 - **Multi-tenant SaaS foundations** – Workspace model with owner/admin/member/viewer roles, invitations, and default workspace management.
 - **Authentication that scales** – Better Auth with email/password, Google OAuth, session management, and client helpers for hydration-safe flows.
 - **Responsive UI system** – Shadcn UI + Tailwind CSS components, marketing sections, and dashboard primitives tuned for accessibility.
@@ -81,6 +82,7 @@ pnpm dev
 HagenKit supports Magic Link authentication out of the box.
 
 ### Development
+
 For a seamless developer experience, if you do not provide a `RESEND_API_KEY` in your `.env.local` file while in development mode, **emails will be logged to your terminal console**.
 
 1.  Go to the Sign In page.
@@ -89,6 +91,7 @@ For a seamless developer experience, if you do not provide a `RESEND_API_KEY` in
 4.  Click the link printed in the console to sign in.
 
 ### Production
+
 For production, you must set up Resend:
 
 1.  Create an account at [Resend](https://resend.com).
@@ -109,18 +112,21 @@ HagenKit automatically assigns the `admin` role to the **first user** who signs 
 ## Tech Stack + Features
 
 ### Frameworks & Platforms
+
 - **Next.js 16** – App Router, Server Actions, and edge-ready rendering.
 - **Prisma ORM v7 + PostgreSQL** – Type-safe ORM with `@prisma/adapter-pg` driver for direct TCP connections. Generated client in `app/generated/prisma`.
 - **Better Auth** – Composable auth with cookie/session helpers and social providers.
 - **Vercel** – First-class deployment target with optimized build output.
 
 ### UI & UX
+
 - **Shadcn UI & Tailwind CSS** – Component library with design tokens and Radix primitives.
 - **Framer Motion (via `motion`)** – Micro-interactions and animation choreography.
 - **Lucide & Tabler Icons** – Consistent iconography across marketing and product surfaces.
 - **Responsive marketing shell** – Polished landing page in `app/(marketing)` with reusable layout primitives.
 
 ### Application Capabilities
+
 - **Dashboard modules** – Team, analytics, lifecycle, and settings routes ready for data wiring.
 - **Workspace management** – Invitations, member role updates, and ownership safeguards.
 - **Settings UI** – Account, profile, and workspace panels using configurable data tables (`@tanstack/react-table`).
@@ -128,6 +134,7 @@ HagenKit automatically assigns the `admin` role to the **first user** who signs 
 - **Productivity hooks** – Debounced callbacks, media queries, and mobile detection helpers.
 
 ### Communications
+
 - **React Email** templates in `emails/` ready for transactional flows.
 - **Resend** integration glue for real email delivery.
 

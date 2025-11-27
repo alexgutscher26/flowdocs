@@ -137,10 +137,7 @@ export async function updateMemberRole(
     }
 
     // Check workspace admin permission
-    const adminCheck = await checkWorkspaceAdmin(
-      session.user.id,
-      member.workspaceId
-    );
+    const adminCheck = await checkWorkspaceAdmin(session.user.id, member.workspaceId);
     if (!adminCheck.success) {
       return { success: false, error: adminCheck.error };
     }
@@ -210,9 +207,7 @@ export async function updateMemberRole(
  * Remove a member from the workspace
  * Requires OWNER or ADMIN permission
  */
-export async function removeMember(
-  input: RemoveMemberInput
-): Promise<ActionResult<void>> {
+export async function removeMember(input: RemoveMemberInput): Promise<ActionResult<void>> {
   try {
     const session = await auth.api.getSession({
       headers: await headers(),
@@ -241,10 +236,7 @@ export async function removeMember(
     }
 
     // Check workspace admin permission
-    const adminCheck = await checkWorkspaceAdmin(
-      session.user.id,
-      member.workspaceId
-    );
+    const adminCheck = await checkWorkspaceAdmin(session.user.id, member.workspaceId);
     if (!adminCheck.success) {
       return { success: false, error: adminCheck.error };
     }

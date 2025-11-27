@@ -1,45 +1,49 @@
-import { defineCollection, defineConfig } from "@content-collections/core"
-import { compileMDX } from "@content-collections/mdx"
-import { remarkGfm } from "fumadocs-core/mdx-plugins"
-import GithubSlugger from "github-slugger"
-import rehypeAutolinkHeadings from "rehype-autolink-headings"
-import rehypeSlug from "rehype-slug"
-import { z } from "zod"
+import { defineCollection, defineConfig } from "@content-collections/core";
+import { compileMDX } from "@content-collections/mdx";
+import { remarkGfm } from "fumadocs-core/mdx-plugins";
+import GithubSlugger from "github-slugger";
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import rehypeSlug from "rehype-slug";
+import { z } from "zod";
 
 function generateSlug(title: string, customSlug?: string): string {
-  if (customSlug) return customSlug
-  const slugger = new GithubSlugger()
-  return slugger.slug(title)
+  if (customSlug) return customSlug;
+  const slugger = new GithubSlugger();
+  return slugger.slug(title);
 }
 
 function extractTableOfContents(content: string): Array<{ title: string; slug: string }> {
-  const headings = content.match(/^##\s(.+)$/gm)
-  const slugger = new GithubSlugger()
+  const headings = content.match(/^##\s(.+)$/gm);
+  const slugger = new GithubSlugger();
   return (
     headings?.map((heading: string) => {
-      const title = heading.replace(/^##\s/, "")
+      const title = heading.replace(/^##\s/, "");
       return {
         title,
         slug: slugger.slug(title),
-      }
+      };
     }) || []
-  )
+  );
 }
 
 function extractImages(content: string): string[] {
-  return content.match(/(?<=<Image[^>]*\bsrc=")[^"]+(?="[^>]*\/>)/g) || []
+  return content.match(/(?<=<Image[^>]*\bsrc=")[^"]+(?="[^>]*\/>)/g) || [];
 }
 
 function extractTweetIds(content: string): string[] {
-  const tweetMatches = content.match(/<Tweet\sid="[0-9]+"\s\/>/g)
-  return tweetMatches?.map((tweet: string) => {
-    const match = tweet.match(/[0-9]+/g)
-    return match ? match[0] : ""
-  }).filter(Boolean) || []
+  const tweetMatches = content.match(/<Tweet\sid="[0-9]+"\s\/>/g);
+  return (
+    tweetMatches
+      ?.map((tweet: string) => {
+        const match = tweet.match(/[0-9]+/g);
+        return match ? match[0] : "";
+      })
+      .filter(Boolean) || []
+  );
 }
 
 function extractGithubRepos(content: string): string[] {
-  return content.match(/(?<=<GithubRepo[^>]*\burl=")[^"]+(?="[^>]*\/>)/g) || []
+  return content.match(/(?<=<GithubRepo[^>]*\burl=")[^"]+(?="[^>]*\/>)/g) || [];
 }
 
 function calculateReadingTime(content: string): number {
@@ -49,13 +53,13 @@ function calculateReadingTime(content: string): number {
     .replace(/[#*`_~\[\]]/g, "") // Remove markdown syntax
     .replace(/!\[.*?\]\(.*?\)/g, "") // Remove images
     .replace(/\[.*?\]\(.*?\)/g, "") // Remove links
-    .trim()
+    .trim();
 
-  const words = cleanContent.split(/\s+/).length
-  const wordsPerMinute = 200
-  const readingTime = Math.ceil(words / wordsPerMinute)
+  const words = cleanContent.split(/\s+/).length;
+  const wordsPerMinute = 200;
+  const readingTime = Math.ceil(words / wordsPerMinute);
 
-  return readingTime
+  return readingTime;
 }
 
 const BlogPost = defineCollection({
@@ -83,11 +87,11 @@ const BlogPost = defineCollection({
     content: z.string(),
   }),
   transform: async (document, context) => {
-    const rawContent = document.content as string
+    const rawContent = document.content as string;
     const mdx = await compileMDX(context, document, {
       rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings],
       remarkPlugins: [remarkGfm],
-    })
+    });
 
     return {
       ...document,
@@ -102,9 +106,9 @@ const BlogPost = defineCollection({
       tweetIds: extractTweetIds(rawContent),
       githubRepos: extractGithubRepos(rawContent),
       readingTime: calculateReadingTime(rawContent),
-    }
+    };
   },
-})
+});
 
 const ChangelogPost = defineCollection({
   name: "ChangelogPost",
@@ -123,11 +127,11 @@ const ChangelogPost = defineCollection({
     content: z.string(),
   }),
   transform: async (document, context) => {
-    const rawContent = document.content as string
+    const rawContent = document.content as string;
     const mdx = await compileMDX(context, document, {
       rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings],
       remarkPlugins: [remarkGfm],
-    })
+    });
 
     return {
       ...document,
@@ -141,9 +145,9 @@ const ChangelogPost = defineCollection({
       tweetIds: extractTweetIds(rawContent),
       githubRepos: extractGithubRepos(rawContent),
       readingTime: calculateReadingTime(rawContent),
-    }
+    };
   },
-})
+});
 
 export const CustomersPost = defineCollection({
   name: "CustomersPost",
@@ -169,11 +173,11 @@ export const CustomersPost = defineCollection({
     content: z.string(),
   }),
   transform: async (document, context) => {
-    const rawContent = document.content as string
+    const rawContent = document.content as string;
     const mdx = await compileMDX(context, document, {
       rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings],
       remarkPlugins: [remarkGfm],
-    })
+    });
 
     return {
       ...document,
@@ -187,9 +191,9 @@ export const CustomersPost = defineCollection({
       tweetIds: extractTweetIds(rawContent),
       githubRepos: extractGithubRepos(rawContent),
       readingTime: calculateReadingTime(rawContent),
-    }
+    };
   },
-})
+});
 
 export const HelpPost = defineCollection({
   name: "HelpPost",
@@ -202,14 +206,7 @@ export const HelpPost = defineCollection({
     author: z.string(),
     categories: z
       .array(
-        z.enum([
-          "overview",
-          "getting-started",
-          "terms",
-          "for-investors",
-          "analysis",
-          "valuation",
-        ]),
+        z.enum(["overview", "getting-started", "terms", "for-investors", "analysis", "valuation"])
       )
       .default(["overview"]),
     related: z.array(z.string()).optional(),
@@ -221,11 +218,11 @@ export const HelpPost = defineCollection({
     content: z.string(),
   }),
   transform: async (document, context) => {
-    const rawContent = document.content as string
+    const rawContent = document.content as string;
     const mdx = await compileMDX(context, document, {
       rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings],
       remarkPlugins: [remarkGfm],
-    })
+    });
 
     return {
       ...document,
@@ -239,9 +236,9 @@ export const HelpPost = defineCollection({
       tweetIds: extractTweetIds(rawContent),
       githubRepos: extractGithubRepos(rawContent),
       readingTime: calculateReadingTime(rawContent),
-    }
+    };
   },
-})
+});
 
 export const LegalPost = defineCollection({
   name: "LegalPost",
@@ -257,11 +254,11 @@ export const LegalPost = defineCollection({
     content: z.string(),
   }),
   transform: async (document, context) => {
-    const rawContent = document.content as string
+    const rawContent = document.content as string;
     const mdx = await compileMDX(context, document, {
       rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings],
       remarkPlugins: [remarkGfm],
-    })
+    });
 
     return {
       ...document,
@@ -275,9 +272,9 @@ export const LegalPost = defineCollection({
       tweetIds: extractTweetIds(rawContent),
       githubRepos: extractGithubRepos(rawContent),
       readingTime: calculateReadingTime(rawContent),
-    }
+    };
   },
-})
+});
 
 export const IntegrationsPost = defineCollection({
   name: "IntegrationsPost",
@@ -302,11 +299,11 @@ export const IntegrationsPost = defineCollection({
     content: z.string(),
   }),
   transform: async (document, context) => {
-    const rawContent = document.content as string
+    const rawContent = document.content as string;
     const mdx = await compileMDX(context, document, {
       rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings],
       remarkPlugins: [remarkGfm],
-    })
+    });
 
     return {
       ...document,
@@ -314,18 +311,16 @@ export const IntegrationsPost = defineCollection({
       mdx,
       seoTitle: document.seoTitle || document.title,
       seoDescription:
-        document.seoDescription ||
-        document.summary ||
-        document.integrationDescription,
+        document.seoDescription || document.summary || document.integrationDescription,
       seoKeywords: document.seoKeywords || [],
       tableOfContents: extractTableOfContents(rawContent),
       images: extractImages(rawContent),
       tweetIds: extractTweetIds(rawContent),
       githubRepos: extractGithubRepos(rawContent),
       readingTime: calculateReadingTime(rawContent),
-    }
+    };
   },
-})
+});
 
 const Author = defineCollection({
   name: "Author",
@@ -344,20 +339,20 @@ const Author = defineCollection({
     content: z.string(),
   }),
   transform: async (document, context) => {
-    const rawContent = document.content as string
+    const rawContent = document.content as string;
     const mdx = await compileMDX(context, document, {
       rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings],
       remarkPlugins: [remarkGfm],
-    })
+    });
 
     return {
       ...document,
       slug: generateSlug(document.name as string, document.slug as string | undefined),
       mdx,
       readingTime: calculateReadingTime(rawContent),
-    }
+    };
   },
-})
+});
 
 const TeamMember = defineCollection({
   name: "TeamMember",
@@ -378,20 +373,20 @@ const TeamMember = defineCollection({
     content: z.string(),
   }),
   transform: async (document, context) => {
-    const rawContent = document.content as string
+    const rawContent = document.content as string;
     const mdx = await compileMDX(context, document, {
       rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings],
       remarkPlugins: [remarkGfm],
-    })
+    });
 
     return {
       ...document,
       slug: generateSlug(document.name as string, document.slug as string | undefined),
       mdx,
       readingTime: calculateReadingTime(rawContent),
-    }
+    };
   },
-})
+});
 
 export default defineConfig({
   collections: [
@@ -404,4 +399,4 @@ export default defineConfig({
     Author,
     TeamMember,
   ],
-})
+});

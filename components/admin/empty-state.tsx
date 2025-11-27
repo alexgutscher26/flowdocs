@@ -1,6 +1,6 @@
-import { ShieldCheckIcon, ArrowUpRightIcon } from "lucide-react"
+import { ShieldCheckIcon, ArrowUpRightIcon } from "lucide-react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Empty,
   EmptyContent,
@@ -8,7 +8,7 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@/components/ui/empty"
+} from "@/components/ui/empty";
 
 export function AdminEmptyState() {
   return (
@@ -19,8 +19,8 @@ export function AdminEmptyState() {
         </EmptyMedia>
         <EmptyTitle>Admin Panel</EmptyTitle>
         <EmptyDescription>
-          Manage users, configure system settings, and oversee platform
-          operations. Use the sidebar to navigate to different admin sections.
+          Manage users, configure system settings, and oversee platform operations. Use the sidebar
+          to navigate to different admin sections.
         </EmptyDescription>
       </EmptyHeader>
       <EmptyContent>
@@ -33,16 +33,11 @@ export function AdminEmptyState() {
           </Button>
         </div>
       </EmptyContent>
-      <Button
-        variant="link"
-        asChild
-        className="text-muted-foreground"
-        size="sm"
-      >
+      <Button variant="link" asChild className="text-muted-foreground" size="sm">
         <a href="#">
           Admin Documentation <ArrowUpRightIcon className="ml-1 h-4 w-4" />
         </a>
       </Button>
     </Empty>
-  )
+  );
 }

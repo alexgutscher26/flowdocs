@@ -3,10 +3,7 @@
 import { parseAsStringEnum, useQueryState } from "nuqs";
 import { IconBuilding, IconUsers } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Empty,
   EmptyContent,
@@ -61,8 +58,9 @@ export function SettingsContent({ user, workspace, isAdmin }: SettingsContentPro
         />
       )}
 
-      {activeSection === "workspace" && isAdmin && (
-        workspace ? (
+      {activeSection === "workspace" &&
+        isAdmin &&
+        (workspace ? (
           <WorkspaceTab workspace={workspace} />
         ) : (
           <Card>
@@ -85,11 +83,11 @@ export function SettingsContent({ user, workspace, isAdmin }: SettingsContentPro
               </Empty>
             </CardContent>
           </Card>
-        )
-      )}
+        ))}
 
-      {activeSection === "members" && isAdmin && (
-        workspace ? (
+      {activeSection === "members" &&
+        isAdmin &&
+        (workspace ? (
           <MembersTab workspaceId={workspace.id} currentUserId={user.id} />
         ) : (
           <Card>
@@ -107,8 +105,7 @@ export function SettingsContent({ user, workspace, isAdmin }: SettingsContentPro
               </Empty>
             </CardContent>
           </Card>
-        )
-      )}
+        ))}
 
       {activeSection === "account" && <AccountTab />}
     </div>

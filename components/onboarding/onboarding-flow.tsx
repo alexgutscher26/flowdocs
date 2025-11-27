@@ -7,12 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { completeOnboarding } from "@/app/actions/onboarding";
 import { toast } from "sonner";
-import {
-  IconInnerShadowTop,
-  IconFolder,
-  IconCheck,
-  IconRocket,
-} from "@tabler/icons-react";
+import { IconInnerShadowTop, IconFolder, IconCheck, IconRocket } from "@tabler/icons-react";
 import Link from "next/link";
 import Image from "next/image";
 import confetti from "canvas-confetti";
@@ -86,10 +81,7 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
         toast.success("Workspace created successfully!");
       }
     } catch (err: unknown) {
-      setError(
-        (err as Error).message ||
-          "Failed to create workspace. Please try again."
-      );
+      setError((err as Error).message || "Failed to create workspace. Please try again.");
       toast.error((err as Error).message || "Failed to create workspace");
     } finally {
       setIsLoading(false);
@@ -103,8 +95,7 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
       const animationEnd = Date.now() + duration;
       const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
 
-      const randomInRange = (min: number, max: number) =>
-        Math.random() * (max - min) + min;
+      const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min;
 
       const interval = window.setInterval(() => {
         const timeLeft = animationEnd - Date.now();
@@ -133,9 +124,9 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
   const slug = workspaceName ? generateSlug(workspaceName) : "";
 
   return (
-    <div className="container relative h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
+    <div className="relative container h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
       {/* Left Side - Branding */}
-      <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
+      <div className="bg-muted relative hidden h-full flex-col p-10 text-white lg:flex dark:border-r">
         <div className="absolute inset-0 bg-zinc-900" />
         <div className="relative z-20 flex items-center text-lg font-medium">
           <IconInnerShadowTop className="mr-2 h-6 w-6" />
@@ -144,8 +135,8 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
         <div className="relative z-20 mt-auto">
           <blockquote className="space-y-2">
             <p className="text-lg">
-              &ldquo;Transform any website with AI. Build stunning, modern
-              websites in minutes, not weeks.&rdquo;
+              &ldquo;Transform any website with AI. Build stunning, modern websites in minutes, not
+              weeks.&rdquo;
             </p>
             <footer className="text-sm">{siteConfig.name}</footer>
           </blockquote>
@@ -165,15 +156,13 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
                     alt="Codehagen"
                     width={96}
                     height={96}
-                    className="rounded-full border-4 border-primary/20 shadow-lg"
+                    className="border-primary/20 rounded-full border-4 shadow-lg"
                     priority
                   />
                 </div>
                 <div className="flex flex-col space-y-2 text-center">
-                  <h1 className="text-2xl font-semibold tracking-tight">
-                    Nice to meet you! ✌️
-                  </h1>
-                  <p className="text-sm text-muted-foreground">
+                  <h1 className="text-2xl font-semibold tracking-tight">Nice to meet you! ✌️</h1>
+                  <p className="text-muted-foreground text-sm">
                     I&apos;m {siteConfig.name}, the founder of {siteConfig.name}
                     . <br /> To start, why don&apos;t you introduce yourself :)
                   </p>
@@ -201,15 +190,13 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
                           key={roleOption.value}
                           onClick={() => setRole(roleOption.value)}
                           type="button"
-                          className={`p-4 text-left border-2 rounded-lg transition-all ${
+                          className={`rounded-lg border-2 p-4 text-left transition-all ${
                             role === roleOption.value
                               ? "border-primary bg-primary/5"
                               : "border-border hover:border-primary/50"
                           }`}
                         >
-                          <span className="font-medium">
-                            {roleOption.label}
-                          </span>
+                          <span className="font-medium">{roleOption.label}</span>
                         </button>
                       ))}
                     </div>
@@ -226,13 +213,13 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
                 </div>
               </div>
 
-              <p className="px-8 text-center text-sm text-muted-foreground">
+              <p className="text-muted-foreground px-8 text-center text-sm">
                 Need help? Message us{" "}
                 <a
                   href="https://x.com/codehagen"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="underline underline-offset-4 hover:text-primary"
+                  className="hover:text-primary underline underline-offset-4"
                 >
                   x.com/codehagen
                 </a>
@@ -247,7 +234,7 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
                 <h1 className="text-2xl font-semibold tracking-tight">
                   Tell us about your project
                 </h1>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   Help us understand what you're building with {siteConfig.name}
                 </p>
               </div>
@@ -262,15 +249,13 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
                           key={useCaseOption.value}
                           onClick={() => setUseCase(useCaseOption.value)}
                           type="button"
-                          className={`p-4 text-left border-2 rounded-lg transition-all ${
+                          className={`rounded-lg border-2 p-4 text-left transition-all ${
                             useCase === useCaseOption.value
                               ? "border-primary bg-primary/5"
                               : "border-border hover:border-primary/50"
                           }`}
                         >
-                          <span className="font-medium text-sm">
-                            {useCaseOption.label}
-                          </span>
+                          <span className="text-sm font-medium">{useCaseOption.label}</span>
                         </button>
                       ))}
                     </div>
@@ -284,26 +269,20 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
                           key={source.value}
                           onClick={() => setDiscoverySource(source.value)}
                           type="button"
-                          className={`p-4 text-left border-2 rounded-lg transition-all ${
+                          className={`rounded-lg border-2 p-4 text-left transition-all ${
                             discoverySource === source.value
                               ? "border-primary bg-primary/5"
                               : "border-border hover:border-primary/50"
                           }`}
                         >
-                          <span className="font-medium text-sm">
-                            {source.label}
-                          </span>
+                          <span className="text-sm font-medium">{source.label}</span>
                         </button>
                       ))}
                     </div>
                   </div>
 
                   <div className="flex gap-3">
-                    <Button
-                      variant="outline"
-                      onClick={() => setCurrentStep(1)}
-                      className="flex-1"
-                    >
+                    <Button variant="outline" onClick={() => setCurrentStep(1)} className="flex-1">
                       Back
                     </Button>
                     <Button
@@ -317,13 +296,13 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
                 </div>
               </div>
 
-              <p className="px-8 text-center text-sm text-muted-foreground">
+              <p className="text-muted-foreground px-8 text-center text-sm">
                 Need help? Message us{" "}
                 <a
                   href={siteConfig.links.twitter}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="underline underline-offset-4 hover:text-primary"
+                  className="hover:text-primary underline underline-offset-4"
                 >
                   {siteConfig.links.twitter.replace("https://", "")}
                 </a>
@@ -335,12 +314,10 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
           {currentStep === 3 && (
             <>
               <div className="flex flex-col space-y-2 text-center">
-                <h1 className="text-2xl font-semibold tracking-tight">
-                  Create your workspace
-                </h1>
-                <p className="text-sm text-muted-foreground">
-                  A workspace is where you&apos;ll organize your projects and
-                  collaborate with others
+                <h1 className="text-2xl font-semibold tracking-tight">Create your workspace</h1>
+                <p className="text-muted-foreground text-sm">
+                  A workspace is where you&apos;ll organize your projects and collaborate with
+                  others
                 </p>
               </div>
 
@@ -349,7 +326,7 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
                   <div className="grid gap-2">
                     <Label htmlFor="workspaceName">Workspace Name *</Label>
                     <div className="relative">
-                      <IconFolder className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
+                      <IconFolder className="text-muted-foreground absolute top-3 left-3 h-5 w-5" />
                       <Input
                         id="workspaceName"
                         value={workspaceName}
@@ -367,19 +344,15 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
                       />
                     </div>
                     {slug && (
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-muted-foreground text-sm">
                         Workspace URL:{" "}
-                        <code className="text-xs bg-secondary px-1 py-0.5 rounded">
-                          {slug}
-                        </code>
+                        <code className="bg-secondary rounded px-1 py-0.5 text-xs">{slug}</code>
                       </p>
                     )}
                   </div>
 
                   <div className="grid gap-2">
-                    <Label htmlFor="businessName">
-                      Company Name (Optional)
-                    </Label>
+                    <Label htmlFor="businessName">Company Name (Optional)</Label>
                     <Input
                       id="businessName"
                       value={businessName}
@@ -390,15 +363,13 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
                       placeholder="Acme Inc."
                       disabled={isLoading}
                     />
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-muted-foreground text-xs">
                       Your company or organization name
                     </p>
                   </div>
 
                   <div className="grid gap-2">
-                    <Label htmlFor="businessPhone">
-                      Phone Number (Optional)
-                    </Label>
+                    <Label htmlFor="businessPhone">Phone Number (Optional)</Label>
                     <Input
                       id="businessPhone"
                       type="tel"
@@ -407,18 +378,16 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
                       placeholder="+1 (555) 123-4567"
                       disabled={isLoading}
                     />
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-muted-foreground text-xs">
                       Your contact number • Email: {userEmail}
                     </p>
                   </div>
 
-                  {error && <p className="text-sm text-destructive">{error}</p>}
+                  {error && <p className="text-destructive text-sm">{error}</p>}
 
-                  <div className="bg-secondary/50 p-4 rounded-lg space-y-2">
-                    <h4 className="font-medium text-sm">
-                      What&apos;s a workspace?
-                    </h4>
-                    <ul className="text-sm text-muted-foreground space-y-1">
+                  <div className="bg-secondary/50 space-y-2 rounded-lg p-4">
+                    <h4 className="text-sm font-medium">What&apos;s a workspace?</h4>
+                    <ul className="text-muted-foreground space-y-1 text-sm">
                       <li>• Your central hub for managing projects</li>
                       <li>• Invite team members and collaborate</li>
                       <li>• Create multiple workspaces for different teams</li>
@@ -445,13 +414,13 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
                 </div>
               </div>
 
-              <p className="px-8 text-center text-sm text-muted-foreground">
+              <p className="text-muted-foreground px-8 text-center text-sm">
                 Need help? Message us{" "}
                 <a
                   href={siteConfig.links.twitter}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="underline underline-offset-4 hover:text-primary"
+                  className="hover:text-primary underline underline-offset-4"
                 >
                   {siteConfig.links.twitter.replace("https://", "")}
                 </a>
@@ -463,49 +432,44 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
           {currentStep === 4 && (
             <>
               <div className="flex flex-col space-y-2 text-center">
-                <h1 className="text-2xl font-semibold tracking-tight">
-                  You&apos;re all set! 🎉
-                </h1>
-                <p className="text-sm text-muted-foreground">
-                  Your workspace has been created and you&apos;re ready to start
-                  building
+                <h1 className="text-2xl font-semibold tracking-tight">You&apos;re all set! 🎉</h1>
+                <p className="text-muted-foreground text-sm">
+                  Your workspace has been created and you&apos;re ready to start building
                 </p>
               </div>
 
               <div className="grid gap-6">
                 <div className="flex items-center justify-center p-6">
                   <div className="relative">
-                    <div className="h-20 w-20 rounded-full bg-primary/10 flex items-center justify-center">
-                      <IconCheck className="h-10 w-10 text-primary" />
+                    <div className="bg-primary/10 flex h-20 w-20 items-center justify-center rounded-full">
+                      <IconCheck className="text-primary h-10 w-10" />
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-secondary/50 p-4 rounded-lg">
-                  <div className="flex items-center gap-3 mb-2">
-                    <IconFolder className="h-5 w-5 text-primary" />
+                <div className="bg-secondary/50 rounded-lg p-4">
+                  <div className="mb-2 flex items-center gap-3">
+                    <IconFolder className="text-primary h-5 w-5" />
                     <h3 className="font-medium">Workspace Created</h3>
                   </div>
-                  <p className="text-sm text-muted-foreground ml-8">
-                    {workspaceName}
-                  </p>
+                  <p className="text-muted-foreground ml-8 text-sm">{workspaceName}</p>
                 </div>
 
                 <Button asChild size="lg" className="w-full">
                   <Link href="/dashboard">
-                    <IconRocket className="h-4 w-4 mr-2" />
+                    <IconRocket className="mr-2 h-4 w-4" />
                     Go to Dashboard
                   </Link>
                 </Button>
               </div>
 
-              <p className="px-8 text-center text-sm text-muted-foreground">
+              <p className="text-muted-foreground px-8 text-center text-sm">
                 Need help? Message us{" "}
                 <a
                   href="https://x.com/codehagen"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="underline underline-offset-4 hover:text-primary"
+                  className="hover:text-primary underline underline-offset-4"
                 >
                   x.com/codehagen
                 </a>

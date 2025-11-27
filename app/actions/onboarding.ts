@@ -24,9 +24,7 @@ export async function completeOnboarding(data: OnboardingData) {
       throw new Error("Unauthorized");
     }
 
-    const workspaceSlug = data.workspaceName
-      .toLowerCase()
-      .replace(/[^a-z0-9]/g, "-");
+    const workspaceSlug = data.workspaceName.toLowerCase().replace(/[^a-z0-9]/g, "-");
 
     // Check if slug is already taken
     const existingWorkspace = await prisma.workspace.findUnique({
@@ -101,9 +99,9 @@ export async function updateOnboardingData(data: Partial<OnboardingData>) {
       select: { onboardingData: true },
     });
 
-    const currentData = (user?.onboardingData
-      ? (user.onboardingData as unknown as OnboardingData)
-      : {}) as OnboardingData;
+    const currentData = (
+      user?.onboardingData ? (user.onboardingData as unknown as OnboardingData) : {}
+    ) as OnboardingData;
 
     await prisma.user.update({
       where: {

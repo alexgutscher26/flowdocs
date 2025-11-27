@@ -62,10 +62,7 @@ export async function inviteMember(
     const validatedData = inviteMemberSchema.parse(input);
 
     // Check workspace admin permission
-    const adminCheck = await checkWorkspaceAdmin(
-      session.user.id,
-      validatedData.workspaceId
-    );
+    const adminCheck = await checkWorkspaceAdmin(session.user.id, validatedData.workspaceId);
     if (!adminCheck.success) {
       return { success: false, error: adminCheck.error };
     }
@@ -236,9 +233,7 @@ export async function getPendingInvitations(
 /**
  * Cancel a pending invitation
  */
-export async function cancelInvitation(
-  input: CancelInvitationInput
-): Promise<ActionResult<void>> {
+export async function cancelInvitation(input: CancelInvitationInput): Promise<ActionResult<void>> {
   try {
     const session = await auth.api.getSession({
       headers: await headers(),
@@ -262,10 +257,7 @@ export async function cancelInvitation(
     }
 
     // Check workspace admin permission
-    const adminCheck = await checkWorkspaceAdmin(
-      session.user.id,
-      invitation.workspaceId
-    );
+    const adminCheck = await checkWorkspaceAdmin(session.user.id, invitation.workspaceId);
     if (!adminCheck.success) {
       return { success: false, error: adminCheck.error };
     }

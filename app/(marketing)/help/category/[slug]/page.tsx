@@ -30,9 +30,7 @@ export async function generateMetadata({
 
   return constructMetadata({
     title: `${title} – HagenKit Help Center`,
-    description:
-      description ||
-      "Browse curated guides and how-tos from the HagenKit support team.",
+    description: description || "Browse curated guides and how-tos from the HagenKit support team.",
     image: `/api/og/help?title=${encodeURIComponent(
       title
     )}&summary=${encodeURIComponent(description)}`,
@@ -54,28 +52,28 @@ export default async function HelpCategory({
   const articles = allHelpPosts
     .filter((post) => post.categories.includes(data.slug))
     // order by POPULAR_ARTICLES
-    .reduce((acc, curr) => {
-      if (POPULAR_ARTICLES.includes(curr.slug)) {
-        acc.unshift(curr);
-      } else {
-        acc.push(curr);
-      }
-      return acc;
-    }, [] as typeof allHelpPosts);
+    .reduce(
+      (acc, curr) => {
+        if (POPULAR_ARTICLES.includes(curr.slug)) {
+          acc.unshift(curr);
+        } else {
+          acc.push(curr);
+        }
+        return acc;
+      },
+      [] as typeof allHelpPosts
+    );
 
   return (
     <>
-      <MaxWidthWrapper className="flex max-w-screen-lg flex-col py-10 mt-28">
+      <MaxWidthWrapper className="mt-28 flex max-w-screen-lg flex-col py-10">
         <SearchButton />
       </MaxWidthWrapper>
 
       <div className="min-h-[50vh] border border-gray-200 bg-white/50 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur-lg">
         <MaxWidthWrapper className="flex max-w-screen-lg flex-col py-10">
           <div className="flex items-center space-x-2">
-            <Link
-              href="/help"
-              className="text-sm font-medium text-gray-500 hover:text-gray-800"
-            >
+            <Link href="/help" className="text-sm font-medium text-gray-500 hover:text-gray-800">
               All Categories
             </Link>
             <ChevronRight className="h-4 w-4 text-gray-400" />
@@ -88,9 +86,7 @@ export default async function HelpCategory({
           </div>
           <div className="my-8 flex flex-col space-y-4">
             <Link href={`/help/category/${data.slug}`}>
-              <h1 className="font-display text-2xl font-bold sm:text-4xl">
-                {data.title}
-              </h1>
+              <h1 className="font-display text-2xl font-bold sm:text-4xl">{data.title}</h1>
             </Link>
             <p className="text-gray-500">{data.description}</p>
           </div>

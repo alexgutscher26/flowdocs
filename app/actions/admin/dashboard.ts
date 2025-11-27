@@ -63,9 +63,7 @@ export interface ActivityItem {
 }
 
 // Get dashboard statistics
-export async function getDashboardStats(): Promise<
-  ActionResult<DashboardStats>
-> {
+export async function getDashboardStats(): Promise<ActionResult<DashboardStats>> {
   const authCheck = await checkAdmin();
   if (!authCheck.success) return { success: false, error: authCheck.error };
 
@@ -75,33 +73,28 @@ export async function getDashboardStats(): Promise<
     const sixtyDaysAgo = new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000);
 
     // User statistics
-    const [
-      totalUsers,
-      newUsersLast30Days,
-      newUsersPrevious30Days,
-      activeUsers,
-    ] = await Promise.all([
-      prisma.user.count(),
-      prisma.user.count({
-        where: { createdAt: { gte: thirtyDaysAgo } },
-      }),
-      prisma.user.count({
-        where: {
-          createdAt: { gte: sixtyDaysAgo, lt: thirtyDaysAgo },
-        },
-      }),
-      prisma.user.count({
-        where: { lastLoginAt: { gte: thirtyDaysAgo } },
-      }),
-    ]);
+    const [totalUsers, newUsersLast30Days, newUsersPrevious30Days, activeUsers] = await Promise.all(
+      [
+        prisma.user.count(),
+        prisma.user.count({
+          where: { createdAt: { gte: thirtyDaysAgo } },
+        }),
+        prisma.user.count({
+          where: {
+            createdAt: { gte: sixtyDaysAgo, lt: thirtyDaysAgo },
+          },
+        }),
+        prisma.user.count({
+          where: { lastLoginAt: { gte: thirtyDaysAgo } },
+        }),
+      ]
+    );
 
     // Calculate user trend
     const userTrend =
       newUsersPrevious30Days === 0
         ? 100
-        : ((newUsersLast30Days - newUsersPrevious30Days) /
-            newUsersPrevious30Days) *
-          100;
+        : ((newUsersLast30Days - newUsersPrevious30Days) / newUsersPrevious30Days) * 100;
 
     const stats: DashboardStats = {
       users: {
@@ -147,9 +140,7 @@ export async function getRecentUsers(): Promise<ActionResult<RecentUser[]>> {
 }
 
 // Get recent activity feed
-export async function getRecentActivity(): Promise<
-  ActionResult<ActivityItem[]>
-> {
+export async function getRecentActivity(): Promise<ActionResult<ActivityItem[]>> {
   const authCheck = await checkAdmin();
   if (!authCheck.success) return { success: false, error: authCheck.error };
 

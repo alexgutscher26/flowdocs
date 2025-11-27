@@ -21,20 +21,24 @@ emails/
 ## Available Templates
 
 ### 1. Welcome Email
+
 Sent when a new user signs up.
 
 **Template ID:** `EmailTemplateId.WORKSPACE_WELCOME`
 
 **Data:**
+
 - `firstName`: User's first name
 - `dashboardUrl`: URL to complete setup
 
 ### 2. Workspace Invitation
+
 Sent when inviting a user to join a workspace.
 
 **Template ID:** `EmailTemplateId.WORKSPACE_INVITATION`
 
 **Data:**
+
 - `inviterName`: Name of person sending invitation
 - `workspaceName`: Name of workspace
 - `inviteeEmail`: Email of invited user
@@ -42,20 +46,24 @@ Sent when inviting a user to join a workspace.
 - `declineUrl`: URL to decline invitation (optional)
 
 ### 3. Email Verification
+
 Sent to verify a user's email address.
 
 **Template ID:** `EmailTemplateId.EMAIL_VERIFICATION`
 
 **Data:**
+
 - `firstName`: User's first name
 - `verificationUrl`: URL to verify email
 
 ### 4. Password Reset
+
 Sent when a user requests to reset their password.
 
 **Template ID:** `EmailTemplateId.PASSWORD_RESET`
 
 **Data:**
+
 - `firstName`: User's first name
 - `resetUrl`: URL to reset password
 - `expiresInMinutes`: How long the link is valid (typically 60)
@@ -71,6 +79,7 @@ pnpm email
 ```
 
 This will start a preview server at `http://localhost:3001` where you can:
+
 - View all email templates
 - See how they render in different email clients
 - Test with different data using PreviewProps
@@ -87,7 +96,7 @@ import { sendWelcomeEmail } from "@/app/actions/email";
 const result = await sendWelcomeEmail(
   {
     firstName: "John",
-    dashboardUrl: "https://yourdomain.com/dashboard"
+    dashboardUrl: "https://yourdomain.com/dashboard",
   },
   "john@example.com"
 );
@@ -110,7 +119,7 @@ import { EmailTemplateId } from "@/lib/notifications/types";
 const template = getEmailTemplate(EmailTemplateId.WORKSPACE_WELCOME);
 const { subject, previewText, component } = template.render({
   firstName: "John",
-  dashboardUrl: "https://yourdomain.com/dashboard"
+  dashboardUrl: "https://yourdomain.com/dashboard",
 });
 ```
 
@@ -122,7 +131,7 @@ Use helper functions from `lib/notifications/utils.ts`:
 import {
   buildWelcomeEmailData,
   buildWorkspaceInvitationData,
-  extractFirstName
+  extractFirstName,
 } from "@/lib/notifications/utils";
 
 // Build email data with proper URLs
@@ -185,6 +194,7 @@ export const siteConfig = {
 ### Visual Styling
 
 Edit `emails/templates/components/email-layout.tsx` to customize:
+
 - Brand colors (currently using purple: #9B99FE)
 - Typography and fonts
 - Button styles

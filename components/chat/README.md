@@ -17,6 +17,7 @@ A comprehensive Slack-like chat interface with real-time messaging, threading, a
 ## Components
 
 ### ChatLayout
+
 Main container component that orchestrates all chat functionality.
 
 ```tsx
@@ -28,22 +29,27 @@ import { ChatLayout } from "@/components/chat";
   userName="User Name"
   initialChannelId="channel-id" // optional
   onCreateChannel={() => {}} // optional
-/>
+/>;
 ```
 
 ### ChannelSidebar
+
 Displays list of channels with search and unread counts.
 
 ### MessageList
+
 Renders messages with infinite scroll and date grouping.
 
 ### MessageInput
+
 Input area with file upload and typing indicators.
 
 ### ThreadView
+
 Overlay for viewing and replying to message threads.
 
 ### UserPresence
+
 Avatar with online status indicator.
 
 ## Usage Example
@@ -95,6 +101,7 @@ The WebSocket server is automatically initialized in `server.ts`. Make sure your
 ### 4. Database Schema
 
 The chat components use the following Prisma models:
+
 - `Channel`
 - `ChannelMember`
 - `Message`
@@ -147,7 +154,7 @@ chatFileUploader: f({
   image: { maxFileSize: "4MB", maxFileCount: 5 },
   video: { maxFileSize: "16MB", maxFileCount: 2 },
   // ... other file types
-})
+});
 ```
 
 ## Troubleshooting

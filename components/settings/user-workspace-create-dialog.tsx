@@ -13,13 +13,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
+import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -122,7 +116,8 @@ export function UserWorkspaceCreateDialog({ children }: UserWorkspaceCreateDialo
                 {...form.register("slug")}
               />
               <FieldDescription>
-                Unique identifier for your workspace. Only lowercase letters, numbers, and hyphens allowed.
+                Unique identifier for your workspace. Only lowercase letters, numbers, and hyphens
+                allowed.
               </FieldDescription>
               <FieldError errors={[form.formState.errors.slug]} />
             </Field>

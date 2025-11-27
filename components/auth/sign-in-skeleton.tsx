@@ -3,14 +3,14 @@ import { IconInnerShadowTop } from "@tabler/icons-react";
 
 export default function SignInSkeleton() {
   return (
-    <div className="container relative hidden h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
+    <div className="relative container hidden h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
       {/* Sign Up button skeleton */}
-      <div className="absolute right-4 top-4 md:right-8 md:top-8">
+      <div className="absolute top-4 right-4 md:top-8 md:right-8">
         <Skeleton className="h-10 w-20" />
       </div>
 
       {/* Left panel - static content */}
-      <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
+      <div className="bg-muted relative hidden h-full flex-col p-10 text-white lg:flex dark:border-r">
         <div className="absolute inset-0 bg-zinc-900" />
         <div className="relative z-20 flex items-center text-lg font-medium">
           <IconInnerShadowTop className="mr-2 h-6 w-6" />
@@ -19,13 +19,10 @@ export default function SignInSkeleton() {
         <div className="relative z-20 mt-auto">
           <blockquote className="space-y-2">
             <p className="text-lg">
-              &ldquo;HagenKit gave us launch-ready auth, billing, and UI in a
-              single weekend. Our team shipped features instead of scaffolding
-              infrastructure.&rdquo;
+              &ldquo;HagenKit gave us launch-ready auth, billing, and UI in a single weekend. Our
+              team shipped features instead of scaffolding infrastructure.&rdquo;
             </p>
-            <footer className="text-sm">
-              — Sarah Mitchell, Principal Product Designer
-            </footer>
+            <footer className="text-sm">— Sarah Mitchell, Principal Product Designer</footer>
           </blockquote>
         </div>
       </div>
@@ -73,9 +70,7 @@ export default function SignInSkeleton() {
                 <span className="w-full border-t" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">
-                  Or continue with
-                </span>
+                <span className="bg-background text-muted-foreground px-2">Or continue with</span>
               </div>
             </div>
 

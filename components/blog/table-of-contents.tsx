@@ -17,25 +17,21 @@ export default function TableOfContents({
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center gap-2 text-warm-white/60">
+      <div className="text-warm-white/60 flex items-center gap-2">
         <IconList className="h-5 w-5" />
         <span className="text-sm font-medium">On this page</span>
       </div>
-      <div className="grid gap-4 border-l-2 border-warm-grey-2/20">
+      <div className="border-warm-grey-2/20 grid gap-4 border-l-2">
         {items.map((item, idx) => (
           <Link
             key={item.slug}
             href={`#${item.slug}`}
-            className={cn(
-              "-ml-0.5 pl-4 text-sm text-warm-white/60 transition-colors",
-              {
-                "border-l-2 border-warm-white text-warm-white hover:text-warm-white":
-                  currentAnchor ? currentAnchor === item.slug : idx === 0,
-                "hover:text-warm-white/80": currentAnchor
-                  ? currentAnchor !== item.slug
-                  : idx !== 0,
-              }
-            )}
+            className={cn("text-warm-white/60 -ml-0.5 pl-4 text-sm transition-colors", {
+              "border-warm-white text-warm-white hover:text-warm-white border-l-2": currentAnchor
+                ? currentAnchor === item.slug
+                : idx === 0,
+              "hover:text-warm-white/80": currentAnchor ? currentAnchor !== item.slug : idx !== 0,
+            })}
           >
             {item.title}
           </Link>

@@ -1,39 +1,25 @@
 import * as React from "react";
 import { Section, Text } from "@react-email/components";
-import type {
-  EmailTemplateRenderResult,
-  EmailTemplateData,
-} from "@/lib/notifications/types";
+import type { EmailTemplateRenderResult, EmailTemplateData } from "@/lib/notifications/types";
 import { EmailTemplateId } from "@/lib/notifications/types";
 import { siteConfig } from "@/lib/config";
-import {
-  EmailLayout,
-  PrimaryButton,
-} from "./components/email-layout";
+import { EmailLayout, PrimaryButton } from "./components/email-layout";
 
-type MagicLinkData =
-  EmailTemplateData[EmailTemplateId.MAGIC_LINK];
+type MagicLinkData = EmailTemplateData[EmailTemplateId.MAGIC_LINK];
 
 const paragraphStyle = {
   margin: 0,
 };
 
-export function MagicLink({
-  firstName,
-  magicLinkUrl,
-  expiresInMinutes,
-}: MagicLinkData) {
+export function MagicLink({ firstName, magicLinkUrl, expiresInMinutes }: MagicLinkData) {
   const recipient = firstName?.trim() || "there";
 
   return (
-    <EmailLayout
-      previewText={`Sign in to ${siteConfig.name}`}
-      heading="Sign in to your account"
-    >
+    <EmailLayout previewText={`Sign in to ${siteConfig.name}`} heading="Sign in to your account">
       <Text style={paragraphStyle}>Hi {recipient},</Text>
       <Text style={paragraphStyle}>
-        Click the button below to sign in to your {siteConfig.name} account.
-        This link will expire in {expiresInMinutes} minutes.
+        Click the button below to sign in to your {siteConfig.name} account. This link will expire
+        in {expiresInMinutes} minutes.
       </Text>
       <Section style={{ textAlign: "center" }}>
         <PrimaryButton href={magicLinkUrl}>Sign In</PrimaryButton>
@@ -49,13 +35,9 @@ export function MagicLink({
           color: "#6B7280",
         }}
       >
-        If the button doesn&apos;t work, copy and paste this link into your
-        browser:
+        If the button doesn&apos;t work, copy and paste this link into your browser:
         <br />
-        <a
-          href={magicLinkUrl}
-          style={{ color: "#9B99FE", wordBreak: "break-all" }}
-        >
+        <a href={magicLinkUrl} style={{ color: "#9B99FE", wordBreak: "break-all" }}>
           {magicLinkUrl}
         </a>
       </Text>

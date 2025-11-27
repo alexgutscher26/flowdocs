@@ -16,7 +16,7 @@ related: ["other-post-slug"] # Optional: related article slugs
 
 Start your blog post with an engaging introduction that hooks the reader and sets up what they'll learn.
 
-Use **bold** for emphasis and *italics* for subtle highlights.
+Use **bold** for emphasis and _italics_ for subtle highlights.
 
 ## Main Content Section
 
@@ -36,10 +36,7 @@ You can use various MDX components in your content:
 
 ### Images
 
-<Image
-  src="/images/example.jpg"
-  alt="Description of the image"
-/>
+<Image src="/images/example.jpg" alt="Description of the image" />
 
 ### Videos
 
@@ -52,8 +49,8 @@ You can use various MDX components in your content:
 ### Code Blocks
 
 ```javascript
-const example = "Your code here"
-console.log(example)
+const example = "Your code here";
+console.log(example);
 ```
 
 ### Call to Action
@@ -64,27 +61,23 @@ console.log(example)
   description="Get started with our platform today"
   primaryAction={{
     label: "Sign Up",
-    href: "/signup"
+    href: "/signup",
   }}
   secondaryAction={{
     label: "Learn More",
-    href: "/docs"
+    href: "/docs",
   }}
 />
 
 ### Notes and Callouts
 
 <Note variant="info">
-This is an informational note. Use it to highlight important information.
+  This is an informational note. Use it to highlight important information.
 </Note>
 
-<Note variant="warning">
-This is a warning. Use it for cautionary information.
-</Note>
+<Note variant="warning">This is a warning. Use it for cautionary information.</Note>
 
-<Note variant="success">
-This is a success message. Use it to highlight positive outcomes.
-</Note>
+<Note variant="success">This is a success message. Use it to highlight positive outcomes.</Note>
 
 ### Diagrams
 
@@ -98,11 +91,7 @@ This is a success message. Use it to highlight positive outcomes.
 
 ### Code Playground
 
-<CodeSandbox
-  id="your-sandbox-id"
-  title="Interactive Example"
-  height={500}
-/>
+<CodeSandbox id="your-sandbox-id" title="Interactive Example" height={500} />
 
 ### Tabs for Multiple Options
 
@@ -111,13 +100,13 @@ This is a success message. Use it to highlight positive outcomes.
     {
       label: "JavaScript",
       value: "js",
-      content: <pre>console.log("Hello")</pre>
+      content: <pre>console.log("Hello")</pre>,
     },
     {
       label: "Python",
       value: "py",
-      content: <pre>print("Hello")</pre>
-    }
+      content: <pre>print("Hello")</pre>,
+    },
   ]}
 />
 

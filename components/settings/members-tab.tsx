@@ -4,24 +4,13 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Loader2, Link2, Check } from "lucide-react";
 import { IconTrash } from "@tabler/icons-react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { MemberInviteDialog } from "./member-invite-dialog";
 import { MembersDataTable } from "./members-data-table";
-import {
-  getWorkspaceMembers,
-} from "@/app/actions/workspace-members";
-import {
-  getPendingInvitations,
-  cancelInvitation,
-} from "@/app/actions/workspace-invitations";
+import { getWorkspaceMembers } from "@/app/actions/workspace-members";
+import { getPendingInvitations, cancelInvitation } from "@/app/actions/workspace-invitations";
 import type { WorkspaceMemberWithUser, PendingInvitation } from "@/types/workspace";
 import { formatDate } from "@/lib/format";
 
@@ -127,20 +116,15 @@ export function MembersTab({ workspaceId, currentUserId }: MembersTabProps) {
           <div className="flex items-center justify-between">
             <div>
               <CardTitle>Team Members</CardTitle>
-              <CardDescription>
-                Manage members and their roles in your workspace
-              </CardDescription>
+              <CardDescription>Manage members and their roles in your workspace</CardDescription>
             </div>
-            <MemberInviteDialog
-              workspaceId={workspaceId}
-              onInviteSent={handleRefresh}
-            />
+            <MemberInviteDialog workspaceId={workspaceId} onInviteSent={handleRefresh} />
           </div>
         </CardHeader>
         <CardContent>
           {isLoadingMembers ? (
             <div className="flex justify-center py-8">
-              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+              <Loader2 className="text-muted-foreground h-6 w-6 animate-spin" />
             </div>
           ) : (
             <MembersDataTable
@@ -156,41 +140,35 @@ export function MembersTab({ workspaceId, currentUserId }: MembersTabProps) {
       <Card>
         <CardHeader>
           <CardTitle>Pending Invitations</CardTitle>
-          <CardDescription>
-            Invitations that have been sent but not yet accepted
-          </CardDescription>
+          <CardDescription>Invitations that have been sent but not yet accepted</CardDescription>
         </CardHeader>
         <CardContent>
           {isLoadingInvitations ? (
             <div className="flex justify-center py-8">
-              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+              <Loader2 className="text-muted-foreground h-6 w-6 animate-spin" />
             </div>
           ) : invitations.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
-              No pending invitations
-            </div>
+            <div className="text-muted-foreground py-8 text-center">No pending invitations</div>
           ) : (
             <div className="space-y-4">
               {invitations.map((invitation) => (
                 <div
                   key={invitation.id}
-                  className="flex items-center justify-between p-4 border rounded-lg"
+                  className="flex items-center justify-between rounded-lg border p-4"
                 >
                   <div className="flex-1">
                     <div className="flex items-center gap-3">
                       <div>
                         <p className="font-medium">{invitation.email}</p>
-                        <p className="text-sm text-muted-foreground">
-                          Invited by {invitation.invitedBy.name || invitation.invitedBy.email}{" "}
-                          on {formatDate(invitation.createdAt)}
+                        <p className="text-muted-foreground text-sm">
+                          Invited by {invitation.invitedBy.name || invitation.invitedBy.email} on{" "}
+                          {formatDate(invitation.createdAt)}
                         </p>
                       </div>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="text-sm text-muted-foreground">
-                      Role: {invitation.role}
-                    </span>
+                    <span className="text-muted-foreground text-sm">Role: {invitation.role}</span>
                     <Button
                       variant="ghost"
                       size="icon-sm"
@@ -214,7 +192,7 @@ export function MembersTab({ workspaceId, currentUserId }: MembersTabProps) {
                       {cancelingInvitationId === invitation.id ? (
                         <Loader2 className="h-4 w-4 animate-spin" />
                       ) : (
-                        <IconTrash className="h-4 w-4 text-destructive" />
+                        <IconTrash className="text-destructive h-4 w-4" />
                       )}
                     </Button>
                   </div>

@@ -1,9 +1,9 @@
-import { DashboardProEmptyState } from "@/components/dashboard/empty-state-pro"
+import { DashboardProEmptyState } from "@/components/dashboard/empty-state-pro";
 
 export default function LifecyclePage() {
   return (
-    <div className="flex items-center justify-center min-h-[calc(100vh-200px)] p-8">
+    <div className="flex min-h-[calc(100vh-200px)] items-center justify-center p-8">
       <DashboardProEmptyState />
     </div>
-  )
+  );
 }

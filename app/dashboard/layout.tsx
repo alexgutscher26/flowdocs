@@ -7,13 +7,9 @@ import { getImpersonationStatus } from "@/app/actions/admin/impersonate";
 import { ImpersonationBanner } from "@/components/impersonation-banner";
 import { redirect } from "next/navigation";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
-export default async function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const currentUser = await getCurrentUser();
 
   // Redirect to login if user is not authenticated
@@ -45,9 +41,7 @@ export default async function DashboardLayout({
     >
       <AppSidebar variant="inset" user={user} />
       <SidebarInset>
-        {impersonationStatus && (
-          <ImpersonationBanner impersonationStatus={impersonationStatus} />
-        )}
+        {impersonationStatus && <ImpersonationBanner impersonationStatus={impersonationStatus} />}
         <SiteHeader />
         {children}
       </SidebarInset>

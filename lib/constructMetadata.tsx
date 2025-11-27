@@ -57,5 +57,5 @@ export const HOME_DOMAIN =
   process.env.NEXT_PUBLIC_VERCEL_ENV === "production"
     ? "https://www.prismstack.com/hagenkit"
     : process.env.NEXT_PUBLIC_VERCEL_ENV === "preview"
-    ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
-    : "http://localhost:3000";
+      ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+      : "http://localhost:3000";

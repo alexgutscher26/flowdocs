@@ -52,13 +52,8 @@ export default function Author({
         className="rounded-full"
       />
       <div className="flex flex-col">
-        <p className="text-sm text-warm-white/80">
-          Written by {authors[username].name}
-        </p>
-        <time
-          dateTime={updatedAt}
-          className="text-sm font-light text-warm-white/60"
-        >
+        <p className="text-warm-white/80 text-sm">Written by {authors[username].name}</p>
+        <time dateTime={updatedAt} className="text-warm-white/60 text-sm font-light">
           Last updated {timeAgo(new Date(updatedAt))}
         </time>
       </div>
@@ -78,10 +73,8 @@ export default function Author({
         className="rounded-full transition-all group-hover:brightness-90"
       />
       <div className="flex flex-col">
-        <p className="font-semibold text-warm-white">
-          {authors[username].name}
-        </p>
-        <p className="text-sm text-warm-white/60">@{username}</p>
+        <p className="text-warm-white font-semibold">{authors[username].name}</p>
+        <p className="text-warm-white/60 text-sm">@{username}</p>
       </div>
     </Link>
   );

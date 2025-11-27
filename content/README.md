@@ -5,11 +5,13 @@ This directory contains all the content for the application, organized into six 
 ## 📂 Collections Overview
 
 ### 1. Blog Posts (`/content/blog/`)
+
 Articles and blog content for the main blog section.
 
 **Route Pattern:** `/blog/{slug}` or `/blog/category/{category-slug}`
 
 **Schema:**
+
 ```yaml
 title: string (required)
 publishedAt: YYYY-MM-DD (required)
@@ -26,6 +28,7 @@ related: array of slugs (optional)
 ```
 
 **Example:**
+
 ```mdx
 ---
 title: Welcome to Our Platform
@@ -48,9 +51,11 @@ Write your blog content using MDX...
 ```
 
 ### 2. Changelog Posts (`/content/changelog/`)
+
 Product updates, feature releases, and version changelogs.
 
 **Schema:**
+
 ```yaml
 title: string (required)
 publishedAt: YYYY-MM-DD (required)
@@ -63,9 +68,11 @@ slug: string (optional)
 ```
 
 ### 3. Customer Stories (`/content/customers/`)
+
 Case studies and customer success stories.
 
 **Schema:**
+
 ```yaml
 title: string (required)
 publishedAt: string (required)
@@ -85,11 +92,13 @@ slug: string (optional)
 ```
 
 ### 4. Help Center (`/content/help/`)
+
 Support articles and documentation for users.
 
 **Route Pattern:** `/help/article/{slug}` or `/help/category/{category-slug}`
 
 **Schema:**
+
 ```yaml
 title: string (required)
 updatedAt: string (required)
@@ -104,9 +113,11 @@ slug: string (optional)
 ```
 
 ### 5. Legal Documents (`/content/legal/`)
+
 Terms of service, privacy policy, and other legal pages.
 
 **Schema:**
+
 ```yaml
 title: string (required)
 updatedAt: string (required)
@@ -116,9 +127,11 @@ slug: string (optional)
 ```
 
 ### 6. Integrations (`/content/integrations/`)
+
 Integration guides and documentation.
 
 **Schema:**
+
 ```yaml
 title: string (required)
 publishedAt: string (required)
@@ -142,7 +155,7 @@ All content files use MDX format (`.mdx`), which combines Markdown with React co
 
 ### Basic Syntax
 
-````mdx
+```mdx
 ---
 title: My Article
 publishedAt: 2025-01-15
@@ -156,27 +169,25 @@ Regular markdown content works here.
 ### Subsections
 
 Use standard markdown features:
+
 - Lists
-- **Bold** and *italic*
+- **Bold** and _italic_
 - [Links](https://example.com)
 - `code blocks`
-````
+```
 
 ### Available Custom Components
 
 The following React components are available in your MDX content:
 
 #### Images
+
 ```mdx
-<Image
-  src="https://example.com/image.jpg"
-  alt="Description"
-  width={1200}
-  height={630}
-/>
+<Image src="https://example.com/image.jpg" alt="Description" width={1200} height={630} />
 ```
 
 #### Call-to-Action Blocks
+
 ```mdx
 <CTA
   title="Get Started Today"
@@ -187,21 +198,17 @@ The following React components are available in your MDX content:
 ```
 
 #### Notes and Alerts
+
 ```mdx
-<Note type="info">
-  This is an informational note.
-</Note>
+<Note type="info">This is an informational note.</Note>
 
-<Note type="warning">
-  Important warning message.
-</Note>
+<Note type="warning">Important warning message.</Note>
 
-<Note type="success">
-  Success message here.
-</Note>
+<Note type="success">Success message here.</Note>
 ```
 
 #### Quotes
+
 ```mdx
 <Quote author="John Doe" role="CEO, Example Corp">
   This platform transformed how we work.
@@ -209,21 +216,25 @@ The following React components are available in your MDX content:
 ```
 
 #### GitHub Repositories
+
 ```mdx
 <GithubRepo url="https://github.com/username/repo" />
 ```
 
 #### Tweet Embeds
+
 ```mdx
 <Tweet id="1234567890" />
 ```
 
 #### Help Articles (for blog/changelog posts)
+
 ```mdx
 <HelpArticles articles={["getting-started", "faq"]} />
 ```
 
 #### Help Categories
+
 ```mdx
 <HelpCategories />
 ```
@@ -363,9 +374,7 @@ seoTitle: Account Configuration Guide
 
 Brief overview of what this article covers.
 
-<Note type="info">
-  Pro tip: This will save you time!
-</Note>
+<Note type="info">Pro tip: This will save you time!</Note>
 
 ## Step 1: Initial Setup
 
@@ -392,20 +401,18 @@ import {
   allHelpPosts,
   allLegalPosts,
   allIntegrationsPosts,
-} from "content-collections"
+} from "content-collections";
 
 // Find a specific post
-const post = allBlogPosts.find(p => p.slug === "my-slug")
+const post = allBlogPosts.find((p) => p.slug === "my-slug");
 
 // Filter by category
-const companyPosts = allBlogPosts.filter(p =>
-  p.categories.includes("company")
-)
+const companyPosts = allBlogPosts.filter((p) => p.categories.includes("company"));
 
 // Sort by date
 const latestPosts = allBlogPosts
   .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))
-  .slice(0, 5)
+  .slice(0, 5);
 ```
 
 ## ⚙️ Technical Details

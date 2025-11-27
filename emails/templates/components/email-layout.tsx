@@ -145,14 +145,10 @@ export function EmailLayout({
             <Section style={styles.footer}>
               <Text style={styles.footerIntro}>{resolvedTagline}</Text>
               <Text style={styles.footerText}>
-                © {new Date().getFullYear()} {resolvedBrandName}, All rights
-                reserved
+                © {new Date().getFullYear()} {resolvedBrandName}, All rights reserved
               </Text>
               <Text style={{ ...styles.footerText, marginTop: "8px" }}>
-                <a
-                  href={`${siteConfig.url}/settings/notifications`}
-                  style={styles.footerLink}
-                >
+                <a href={`${siteConfig.url}/settings/notifications`} style={styles.footerLink}>
                   Manage email preferences
                 </a>
               </Text>

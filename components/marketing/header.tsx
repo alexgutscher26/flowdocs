@@ -161,7 +161,7 @@ export function Header() {
       <div
         className={cn(
           "border-foregroud/5 absolute inset-x-0 top-0 z-50 transition-all duration-300",
-          "in-data-scrolled:border-b in-data-scrolled:bg-background/75 in-data-scrolled:backdrop-blur",
+          "in-data-scrolled:bg-background/75 in-data-scrolled:border-b in-data-scrolled:backdrop-blur",
           !isLarge && "h-14 overflow-hidden border-b",
           isMobileMenuOpen && "bg-background/75 h-screen backdrop-blur"
         )}
@@ -169,25 +169,19 @@ export function Header() {
         <div className="mx-auto max-w-6xl px-6 lg:px-12">
           <div className="relative flex flex-wrap items-center justify-between lg:py-3">
             <div className="max-lg:border-foreground/5 flex justify-between gap-8 max-lg:h-14 max-lg:w-full max-lg:border-b">
-              <Link
-                href="/"
-                aria-label="home"
-                className="flex items-center space-x-2"
-              >
-                <span className="h-5 flex items-center text-foreground font-semibold">
+              <Link href="/" aria-label="home" className="flex items-center space-x-2">
+                <span className="text-foreground flex h-5 items-center font-semibold">
                   {siteConfig.name}
                 </span>
               </Link>
 
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                aria-label={
-                  isMobileMenuOpen == true ? "Close Menu" : "Open Menu"
-                }
+                aria-label={isMobileMenuOpen == true ? "Close Menu" : "Open Menu"}
                 className="relative z-20 -m-2.5 -mr-3 block cursor-pointer p-2.5 lg:hidden"
               >
-                <Menu className="in-data-[state=active]:rotate-180 in-data-[state=active]:scale-0 in-data-[state=active]:opacity-0 m-auto size-5 duration-200" />
-                <X className="in-data-[state=active]:rotate-0 in-data-[state=active]:scale-100 in-data-[state=active]:opacity-100 absolute inset-0 m-auto size-5 -rotate-180 scale-0 opacity-0 duration-200" />
+                <Menu className="m-auto size-5 duration-200 in-data-[state=active]:scale-0 in-data-[state=active]:rotate-180 in-data-[state=active]:opacity-0" />
+                <X className="absolute inset-0 m-auto size-5 scale-0 -rotate-180 opacity-0 duration-200 in-data-[state=active]:scale-100 in-data-[state=active]:rotate-0 in-data-[state=active]:opacity-100" />
               </button>
             </div>
 
@@ -200,7 +194,7 @@ export function Header() {
               <MobileMenu closeMenu={() => setIsMobileMenuOpen(false)} />
             )}
 
-            <div className="max-lg:in-data-[state=active]:mt-6 in-data-[state=active]:flex mb-6 hidden w-full flex-wrap items-center justify-end space-y-8 md:flex-nowrap lg:m-0 lg:flex lg:w-fit lg:gap-6 lg:space-y-0 lg:border-transparent lg:bg-transparent lg:p-0 lg:shadow-none dark:shadow-none dark:lg:bg-transparent">
+            <div className="mb-6 hidden w-full flex-wrap items-center justify-end space-y-8 in-data-[state=active]:flex max-lg:in-data-[state=active]:mt-6 md:flex-nowrap lg:m-0 lg:flex lg:w-fit lg:gap-6 lg:space-y-0 lg:border-transparent lg:bg-transparent lg:p-0 lg:shadow-none dark:shadow-none dark:lg:bg-transparent">
               <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">
                 <Button asChild variant="outline" size="sm">
                   <Link href="/sign-in">
@@ -223,14 +217,11 @@ export function Header() {
 
 const MobileMenu = ({ closeMenu }: { closeMenu: () => void }) => {
   return (
-    <nav
-      role="navigation"
-      className="w-full [--color-muted:--alpha(var(--color-foreground)/5%)]"
-    >
+    <nav role="navigation" className="w-full [--color-muted:--alpha(var(--color-foreground)/5%)]">
       <Accordion
         type="single"
         collapsible
-        className="**:hover:no-underline -mx-4 mt-0.5 space-y-0.5"
+        className="-mx-4 mt-0.5 space-y-0.5 **:hover:no-underline"
       >
         {mobileLinks.map((link, index) => {
           if (link.groupName && link.links) {
@@ -240,7 +231,7 @@ const MobileMenu = ({ closeMenu }: { closeMenu: () => void }) => {
                 value={link.groupName}
                 className="group relative border-b-0"
               >
-                <AccordionTrigger className="**:font-normal! data-[state=open]:bg-muted flex items-center justify-between px-4 py-3 text-lg">
+                <AccordionTrigger className="data-[state=open]:bg-muted flex items-center justify-between px-4 py-3 text-lg **:font-normal!">
                   {link.groupName}
                 </AccordionTrigger>
                 <AccordionContent className="pb-5">
@@ -252,10 +243,7 @@ const MobileMenu = ({ closeMenu }: { closeMenu: () => void }) => {
                           onClick={closeMenu}
                           className="grid grid-cols-[auto_1fr] items-center gap-2.5 px-4 py-2"
                         >
-                          <div
-                            aria-hidden
-                            className="flex items-center justify-center *:size-4"
-                          >
+                          <div aria-hidden className="flex items-center justify-center *:size-4">
                             {feature.icon}
                           </div>
                           <div className="text-base">{feature.name}</div>
@@ -291,7 +279,7 @@ const MobileMenu = ({ closeMenu }: { closeMenu: () => void }) => {
 
 const NavMenu = () => {
   return (
-    <NavigationMenu className="**:data-[slot=navigation-menu-viewport]:bg-[color-mix(in_oklch,var(--color-muted)_25%,var(--color-background))] **:data-[slot=navigation-menu-viewport]:shadow-lg **:data-[slot=navigation-menu-viewport]:rounded-2xl **:data-[slot=navigation-menu-viewport]:top-4 [--color-muted:color-mix(in_oklch,var(--color-foreground)_5%,transparent)] [--viewport-outer-px:2rem] max-lg:hidden">
+    <NavigationMenu className="[--color-muted:color-mix(in_oklch,var(--color-foreground)_5%,transparent)] [--viewport-outer-px:2rem] **:data-[slot=navigation-menu-viewport]:top-4 **:data-[slot=navigation-menu-viewport]:rounded-2xl **:data-[slot=navigation-menu-viewport]:bg-[color-mix(in_oklch,var(--color-muted)_25%,var(--color-background))] **:data-[slot=navigation-menu-viewport]:shadow-lg max-lg:hidden">
       <NavigationMenuList className="gap-3">
         <NavigationMenuItem value="product">
           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>

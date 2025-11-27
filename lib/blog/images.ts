@@ -3,9 +3,7 @@ export async function getBlurDataURL(url: string | null) {
     return "data:image/webp;base64,AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   }
   try {
-    const response = await fetch(
-      `https://wsrv.nl/?url=${url}&w=50&h=50&blur=5`,
-    );
+    const response = await fetch(`https://wsrv.nl/?url=${url}&w=50&h=50&blur=5`);
     const buffer = await response.arrayBuffer();
     const base64 = Buffer.from(buffer).toString("base64");
 

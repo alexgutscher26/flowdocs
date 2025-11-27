@@ -39,21 +39,17 @@ function CMDKHelper({
             debouncedTrackSearch(e.currentTarget.value);
           }}
           placeholder="Search articles, guides and more..."
-          className="w-full border-0 border-b border-gray-100 bg-white px-5 pb-4 pt-5 text-base text-gray-700 placeholder:text-gray-400 focus:outline-none focus:ring-0"
+          className="w-full border-0 border-b border-gray-100 bg-white px-5 pt-5 pb-4 text-base text-gray-700 placeholder:text-gray-400 focus:ring-0 focus:outline-none"
         />
         <Command.List
           ref={commandListRef}
-          className="scrollbar-hide h-[50vh] max-h-[340px] min-h-[240px] overflow-y-auto bg-white px-2 pb-3 pt-2 transition-all sm:h-[calc(var(--cmdk-list-height)+10rem)]"
+          className="scrollbar-hide h-[50vh] max-h-[340px] min-h-[240px] overflow-y-auto bg-white px-2 pt-2 pb-3 transition-all sm:h-[calc(var(--cmdk-list-height)+10rem)]"
         >
           <Command.Empty className="flex cursor-not-allowed items-center space-x-2 rounded-xl bg-gray-50 px-4 py-3 text-sm text-gray-500">
             <Magic className="h-4 w-4 text-gray-400" />
             <div className="flex flex-col space-y-1">
-              <p className="text-sm font-medium text-gray-700">
-                Ask AI (Coming soon)
-              </p>
-              <p className="text-xs text-gray-500">
-                Use our AI to find answers to your questions
-              </p>
+              <p className="text-sm font-medium text-gray-700">Ask AI (Coming soon)</p>
+              <p className="text-xs text-gray-500">Use our AI to find answers to your questions</p>
             </div>
           </Command.Empty>
           <CommandResults setShowCMDK={setShowCMDK} />
@@ -63,11 +59,7 @@ function CMDKHelper({
   );
 }
 
-const CommandResults = ({
-  setShowCMDK,
-}: {
-  setShowCMDK: Dispatch<SetStateAction<boolean>>;
-}) => {
+const CommandResults = ({ setShowCMDK }: { setShowCMDK: Dispatch<SetStateAction<boolean>> }) => {
   const router = useRouter();
   const popularArticles = POPULAR_ARTICLES.map(
     (slug) => allHelpPosts.find((post) => post.slug === slug)!
@@ -83,14 +75,12 @@ const CommandResults = ({
       if (post.excludeHeadingsFromSearch) {
         return [];
       }
-      return post.tableOfContents.map(
-        (toc: { title: string; slug: string }) => ({
-          slug: `${post.slug}#${toc.slug}`,
-          title: toc.title,
-          description: null, // omit description since we don't want to search it
-          summary: `In: "${post.title}"`,
-        })
-      );
+      return post.tableOfContents.map((toc: { title: string; slug: string }) => ({
+        slug: `${post.slug}#${toc.slug}`,
+        title: toc.title,
+        description: null, // omit description since we don't want to search it
+        summary: `In: "${post.title}"`,
+      }));
     }),
   ];
 
@@ -166,8 +156,5 @@ export default function useCMDK() {
     return <CMDKHelper showCMDK={showCMDK} setShowCMDK={setShowCMDK} />;
   }, [showCMDK, setShowCMDK]);
 
-  return useMemo(
-    () => ({ showCMDK, setShowCMDK, CMDK }),
-    [showCMDK, setShowCMDK, CMDK]
-  );
+  return useMemo(() => ({ showCMDK, setShowCMDK, CMDK }), [showCMDK, setShowCMDK, CMDK]);
 }

@@ -140,9 +140,7 @@ export function WorkspaceCreateDialog({ children }: WorkspaceCreateDialogProps) 
                   <FormControl>
                     <Input placeholder="https://example.com/workspace.jpg" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    Provide a URL to the workspace's logo or image
-                  </FormDescription>
+                  <FormDescription>Provide a URL to the workspace's logo or image</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

@@ -7,13 +7,9 @@ import { toSidebarUser } from "@/types/user";
 import { getImpersonationStatus } from "@/app/actions/admin/impersonate";
 import { ImpersonationBanner } from "@/components/impersonation-banner";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
-export default async function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const currentUser = await getCurrentUser();
 
   // Protect admin routes - redirect if not admin
@@ -40,9 +36,7 @@ export default async function AdminLayout({
     >
       <AdminSidebar variant="inset" user={user} />
       <SidebarInset>
-        {impersonationStatus && (
-          <ImpersonationBanner impersonationStatus={impersonationStatus} />
-        )}
+        {impersonationStatus && <ImpersonationBanner impersonationStatus={impersonationStatus} />}
         <SiteHeader />
         {children}
       </SidebarInset>

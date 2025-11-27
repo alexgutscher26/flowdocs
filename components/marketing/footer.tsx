@@ -49,14 +49,12 @@ export function FooterSection() {
         <div className="grid gap-12 md:grid-cols-5">
           <div className="space-y-6 md:col-span-2 md:space-y-12">
             <Link href="/" aria-label="go home" className="block size-fit">
-              <span className="h-5 flex items-center text-foreground font-semibold">
+              <span className="text-foreground flex h-5 items-center font-semibold">
                 {siteConfig.name}
               </span>
             </Link>
 
-            <p className="text-muted-foreground text-balance text-sm">
-              {siteConfig.description}
-            </p>
+            <p className="text-muted-foreground text-sm text-balance">{siteConfig.description}</p>
           </div>
 
           <div className="col-span-3 grid gap-6 sm:grid-cols-3">
@@ -127,12 +125,11 @@ export function FooterSection() {
         </div>
         <div
           aria-hidden
-          className="bg-size-[6px_1px] h-px bg-[linear-gradient(90deg,var(--color-foreground)_1px,transparent_1px)] bg-repeat-x opacity-25"
+          className="h-px bg-[linear-gradient(90deg,var(--color-foreground)_1px,transparent_1px)] bg-size-[6px_1px] bg-repeat-x opacity-25"
         />
         <div className="flex flex-wrap justify-between gap-4">
           <span className="text-muted-foreground text-sm">
-            © {new Date().getFullYear()} {siteConfig.name}, All rights
-            reserved{" "}
+            © {new Date().getFullYear()} {siteConfig.name}, All rights reserved{" "}
           </span>
         </div>
       </div>

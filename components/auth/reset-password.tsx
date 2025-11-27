@@ -9,12 +9,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Spinner } from "@/components/ui/spinner";
-import {
-  IconInnerShadowTop,
-  IconCheck,
-  IconAlertCircle,
-  IconX,
-} from "@tabler/icons-react";
+import { IconInnerShadowTop, IconCheck, IconAlertCircle, IconX } from "@tabler/icons-react";
 import { buttonVariants } from "@/components/ui/button";
 
 // Password strength validation
@@ -27,11 +22,7 @@ const validatePasswordStrength = (password: string) => {
 
   return {
     isValid:
-      password.length >= minLength &&
-      hasUpperCase &&
-      hasLowerCase &&
-      hasNumber &&
-      hasSpecialChar,
+      password.length >= minLength && hasUpperCase && hasLowerCase && hasNumber && hasSpecialChar,
     checks: {
       minLength: password.length >= minLength,
       hasUpperCase,
@@ -120,17 +111,17 @@ export default function ResetPasswordAuth() {
 
   return (
     <>
-      <div className="container relative hidden h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
+      <div className="relative container hidden h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
         <Link
           href="/sign-in"
           className={cn(
             buttonVariants({ variant: "ghost" }),
-            "absolute right-4 top-4 md:right-8 md:top-8"
+            "absolute top-4 right-4 md:top-8 md:right-8"
           )}
         >
           Back to Sign In
         </Link>
-        <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
+        <div className="bg-muted relative hidden h-full flex-col p-10 text-white lg:flex dark:border-r">
           <div className="absolute inset-0 bg-zinc-900" />
           <div className="relative z-20 flex items-center text-lg font-medium">
             <IconInnerShadowTop className="mr-2 h-6 w-6" />
@@ -139,8 +130,8 @@ export default function ResetPasswordAuth() {
           <div className="relative z-20 mt-auto">
             <blockquote className="space-y-2">
               <p className="text-lg">
-                &ldquo;Security first. Strong passwords protect your account and
-                your team's data.&rdquo;
+                &ldquo;Security first. Strong passwords protect your account and your team's
+                data.&rdquo;
               </p>
               <footer className="text-sm">Security Team</footer>
             </blockquote>
@@ -149,10 +140,8 @@ export default function ResetPasswordAuth() {
         <div className="lg:p-8">
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[380px]">
             <div className="flex flex-col space-y-2 text-center">
-              <h1 className="text-2xl font-semibold tracking-tight">
-                Set new password
-              </h1>
-              <p className="text-sm text-muted-foreground">
+              <h1 className="text-2xl font-semibold tracking-tight">Set new password</h1>
+              <p className="text-muted-foreground text-sm">
                 Choose a strong password for your account
               </p>
             </div>
@@ -160,12 +149,10 @@ export default function ResetPasswordAuth() {
             {success ? (
               <div className="rounded-lg border border-green-500/50 bg-green-500/10 p-4">
                 <div className="flex items-start gap-3">
-                  <IconCheck className="h-5 w-5 text-green-500 mt-0.5" />
+                  <IconCheck className="mt-0.5 h-5 w-5 text-green-500" />
                   <div className="flex-1">
-                    <h3 className="font-semibold text-green-500">
-                      Password reset successful!
-                    </h3>
-                    <p className="text-sm text-muted-foreground mt-1">
+                    <h3 className="font-semibold text-green-500">Password reset successful!</h3>
+                    <p className="text-muted-foreground mt-1 text-sm">
                       Your password has been updated. Redirecting you to sign in...
                     </p>
                   </div>
@@ -178,7 +165,7 @@ export default function ResetPasswordAuth() {
                     {error && (
                       <div className="rounded-lg border border-red-500/50 bg-red-500/10 p-3">
                         <div className="flex items-start gap-2">
-                          <IconAlertCircle className="h-4 w-4 text-red-500 mt-0.5" />
+                          <IconAlertCircle className="mt-0.5 h-4 w-4 text-red-500" />
                           <p className="text-sm text-red-500">{error}</p>
                         </div>
                       </div>
@@ -190,10 +177,7 @@ export default function ResetPasswordAuth() {
                           <IconAlertCircle className="h-4 w-4 text-yellow-500" />
                           <p className="text-sm text-yellow-600">
                             Invalid or expired token.{" "}
-                            <Link
-                              href="/forgot-password"
-                              className="underline hover:no-underline"
-                            >
+                            <Link href="/forgot-password" className="underline hover:no-underline">
                               Request a new reset link
                             </Link>
                           </p>
@@ -219,8 +203,8 @@ export default function ResetPasswordAuth() {
                     </div>
 
                     {showValidation && newPassword && (
-                      <div className="rounded-lg border bg-muted/50 p-3 text-sm">
-                        <p className="font-medium mb-2">Password must contain:</p>
+                      <div className="bg-muted/50 rounded-lg border p-3 text-sm">
+                        <p className="mb-2 font-medium">Password must contain:</p>
                         <div className="space-y-1">
                           <PasswordRequirement
                             met={passwordValidation.checks.minLength}
@@ -259,13 +243,13 @@ export default function ResetPasswordAuth() {
                         autoComplete="new-password"
                       />
                       {confirmPassword && !passwordsMatch && (
-                        <p className="text-xs text-red-500 flex items-center gap-1">
+                        <p className="flex items-center gap-1 text-xs text-red-500">
                           <IconX className="h-3 w-3" />
                           Passwords do not match
                         </p>
                       )}
                       {confirmPassword && passwordsMatch && (
-                        <p className="text-xs text-green-500 flex items-center gap-1">
+                        <p className="flex items-center gap-1 text-xs text-green-500">
                           <IconCheck className="h-3 w-3" />
                           Passwords match
                         </p>
@@ -275,10 +259,7 @@ export default function ResetPasswordAuth() {
                     <Button
                       type="submit"
                       disabled={
-                        loading ||
-                        !!tokenError ||
-                        !passwordValidation.isValid ||
-                        !passwordsMatch
+                        loading || !!tokenError || !passwordValidation.isValid || !passwordsMatch
                       }
                       className="w-full"
                     >
@@ -294,12 +275,9 @@ export default function ResetPasswordAuth() {
                   </div>
                 </form>
 
-                <div className="text-center text-sm text-muted-foreground">
+                <div className="text-muted-foreground text-center text-sm">
                   Remember your password?{" "}
-                  <Link
-                    href="/sign-in"
-                    className="underline underline-offset-4 hover:text-primary"
-                  >
+                  <Link href="/sign-in" className="hover:text-primary underline underline-offset-4">
                     Sign in
                   </Link>
                 </div>
@@ -311,17 +289,15 @@ export default function ResetPasswordAuth() {
 
       {/* Mobile view */}
       <div className="flex min-h-screen flex-col items-center justify-center p-6 md:hidden">
-        <div className="flex items-center text-lg font-medium mb-8">
+        <div className="mb-8 flex items-center text-lg font-medium">
           <IconInnerShadowTop className="mr-2 h-6 w-6" />
           HagenKit
         </div>
 
         <div className="w-full max-w-sm space-y-6">
           <div className="flex flex-col space-y-2 text-center">
-            <h1 className="text-2xl font-semibold tracking-tight">
-              Set new password
-            </h1>
-            <p className="text-sm text-muted-foreground">
+            <h1 className="text-2xl font-semibold tracking-tight">Set new password</h1>
+            <p className="text-muted-foreground text-sm">
               Choose a strong password for your account
             </p>
           </div>
@@ -329,12 +305,10 @@ export default function ResetPasswordAuth() {
           {success ? (
             <div className="rounded-lg border border-green-500/50 bg-green-500/10 p-4">
               <div className="flex items-start gap-3">
-                <IconCheck className="h-5 w-5 text-green-500 mt-0.5" />
+                <IconCheck className="mt-0.5 h-5 w-5 text-green-500" />
                 <div className="flex-1">
-                  <h3 className="font-semibold text-green-500">
-                    Password reset successful!
-                  </h3>
-                  <p className="text-sm text-muted-foreground mt-1">
+                  <h3 className="font-semibold text-green-500">Password reset successful!</h3>
+                  <p className="text-muted-foreground mt-1 text-sm">
                     Your password has been updated. Redirecting you to sign in...
                   </p>
                 </div>
@@ -347,7 +321,7 @@ export default function ResetPasswordAuth() {
                   {error && (
                     <div className="rounded-lg border border-red-500/50 bg-red-500/10 p-3">
                       <div className="flex items-start gap-2">
-                        <IconAlertCircle className="h-4 w-4 text-red-500 mt-0.5" />
+                        <IconAlertCircle className="mt-0.5 h-4 w-4 text-red-500" />
                         <p className="text-sm text-red-500">{error}</p>
                       </div>
                     </div>
@@ -359,10 +333,7 @@ export default function ResetPasswordAuth() {
                         <IconAlertCircle className="h-4 w-4 text-yellow-500" />
                         <p className="text-sm text-yellow-600">
                           Invalid or expired token.{" "}
-                          <Link
-                            href="/forgot-password"
-                            className="underline hover:no-underline"
-                          >
+                          <Link href="/forgot-password" className="underline hover:no-underline">
                             Request a new reset link
                           </Link>
                         </p>
@@ -388,8 +359,8 @@ export default function ResetPasswordAuth() {
                   </div>
 
                   {showValidation && newPassword && (
-                    <div className="rounded-lg border bg-muted/50 p-3 text-sm">
-                      <p className="font-medium mb-2">Password must contain:</p>
+                    <div className="bg-muted/50 rounded-lg border p-3 text-sm">
+                      <p className="mb-2 font-medium">Password must contain:</p>
                       <div className="space-y-1">
                         <PasswordRequirement
                           met={passwordValidation.checks.minLength}
@@ -428,13 +399,13 @@ export default function ResetPasswordAuth() {
                       autoComplete="new-password"
                     />
                     {confirmPassword && !passwordsMatch && (
-                      <p className="text-xs text-red-500 flex items-center gap-1">
+                      <p className="flex items-center gap-1 text-xs text-red-500">
                         <IconX className="h-3 w-3" />
                         Passwords do not match
                       </p>
                     )}
                     {confirmPassword && passwordsMatch && (
-                      <p className="text-xs text-green-500 flex items-center gap-1">
+                      <p className="flex items-center gap-1 text-xs text-green-500">
                         <IconCheck className="h-3 w-3" />
                         Passwords match
                       </p>
@@ -444,10 +415,7 @@ export default function ResetPasswordAuth() {
                   <Button
                     type="submit"
                     disabled={
-                      loading ||
-                      !!tokenError ||
-                      !passwordValidation.isValid ||
-                      !passwordsMatch
+                      loading || !!tokenError || !passwordValidation.isValid || !passwordsMatch
                     }
                     className="w-full"
                   >
@@ -463,12 +431,9 @@ export default function ResetPasswordAuth() {
                 </div>
               </form>
 
-              <div className="text-center text-sm text-muted-foreground">
+              <div className="text-muted-foreground text-center text-sm">
                 Remember your password?{" "}
-                <Link
-                  href="/sign-in"
-                  className="underline underline-offset-4 hover:text-primary"
-                >
+                <Link href="/sign-in" className="hover:text-primary underline underline-offset-4">
                   Sign in
                 </Link>
               </div>
@@ -476,10 +441,7 @@ export default function ResetPasswordAuth() {
           )}
 
           <div className="mt-8 text-center">
-            <Link
-              href="/sign-in"
-              className={cn(buttonVariants({ variant: "ghost" }), "w-full")}
-            >
+            <Link href="/sign-in" className={cn(buttonVariants({ variant: "ghost" }), "w-full")}>
               Back to Sign In
             </Link>
           </div>
@@ -496,7 +458,7 @@ function PasswordRequirement({ met, text }: { met: boolean; text: string }) {
       {met ? (
         <IconCheck className="h-3.5 w-3.5 text-green-500" />
       ) : (
-        <IconX className="h-3.5 w-3.5 text-muted-foreground" />
+        <IconX className="text-muted-foreground h-3.5 w-3.5" />
       )}
       <span className={cn("text-xs", met ? "text-green-600" : "text-muted-foreground")}>
         {text}

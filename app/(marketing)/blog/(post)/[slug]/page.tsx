@@ -67,9 +67,7 @@ export default async function BlogArticle({
     ),
   ]);
 
-  const category = BLOG_CATEGORIES.find(
-    (category) => category.slug === data.categories[0]
-  );
+  const category = BLOG_CATEGORIES.find((category) => category.slug === data.categories[0]);
 
   const relatedArticles = (data.related || [])
     .map((slug) => allBlogPosts.find((post) => post.slug === slug))
@@ -102,14 +100,12 @@ export default async function BlogArticle({
               ← {category.title}
             </Link>
           )}
-          <h1 className="font-display text-3xl font-extrabold text-gray-700 [text-wrap:balance] sm:text-4xl sm:leading-snug">
+          <h1 className="font-display text-3xl font-extrabold [text-wrap:balance] text-gray-700 sm:text-4xl sm:leading-snug">
             {data.title}
           </h1>
           <p className="text-xl text-gray-500">{data.summary}</p>
           <div className="flex items-center gap-2 text-sm text-gray-500">
-            <time dateTime={data.publishedAt}>
-              {formatDate(data.publishedAt)}
-            </time>
+            <time dateTime={data.publishedAt}>{formatDate(data.publishedAt)}</time>
             {data.readingTime && (
               <>
                 <span>•</span>
@@ -139,7 +135,7 @@ export default async function BlogArticle({
                 ...image,
                 alt: data.title,
               }))}
-              className="px-5 pb-20 pt-4 sm:px-10"
+              className="px-5 pt-4 pb-20 sm:px-10"
             />
           </div>
           <div className="sticky top-20 col-span-1 mt-48 hidden flex-col divide-y divide-gray-200 self-start sm:flex">
@@ -153,10 +149,7 @@ export default async function BlogArticle({
                 <ul className="flex flex-col space-y-4">
                   {relatedArticles.map((post) => (
                     <li key={post.slug}>
-                      <Link
-                        href={`/blog/${post.slug}`}
-                        className="group flex flex-col space-y-2"
-                      >
+                      <Link href={`/blog/${post.slug}`} className="group flex flex-col space-y-2">
                         <p className="font-semibold text-gray-700 underline-offset-4 group-hover:underline">
                           {post.title}
                         </p>

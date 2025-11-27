@@ -47,9 +47,7 @@ async function ImpersonateContent({ searchParams }: PageProps) {
     return (
       <div className="flex h-[50vh] items-center justify-center">
         <div className="text-center">
-          <p className="text-destructive">
-            {result.error || "Failed to load users"}
-          </p>
+          <p className="text-destructive">{result.error || "Failed to load users"}</p>
         </div>
       </div>
     );
@@ -70,7 +68,7 @@ export default function ImpersonatePage(props: PageProps) {
       <div className="flex flex-col gap-6">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Impersonate User</h1>
-          <p className="mt-1 text-muted-foreground">
+          <p className="text-muted-foreground mt-1">
             View the application from a user&apos;s perspective
           </p>
         </div>
@@ -79,10 +77,9 @@ export default function ImpersonatePage(props: PageProps) {
           <IconAlertCircle className="h-4 w-4" />
           <AlertTitle>Important</AlertTitle>
           <AlertDescription>
-            When you impersonate a user, you will see the application exactly as
-            they do. All actions you perform will be done on their behalf. The
-            impersonation session will last for 1 hour or until you stop
-            impersonating.
+            When you impersonate a user, you will see the application exactly as they do. All
+            actions you perform will be done on their behalf. The impersonation session will last
+            for 1 hour or until you stop impersonating.
           </AlertDescription>
         </Alert>
 

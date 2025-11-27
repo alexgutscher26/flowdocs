@@ -1,41 +1,52 @@
-'use client'
+"use client";
 
-import { useMemo, useState, useEffect } from 'react'
-import { useSearchParams } from 'next/navigation'
-import { allBlogPosts } from 'content-collections'
-import BlogCard from '@/components/blog/blog-card'
-import { BlogHero } from '@/components/blog/blog-hero'
-import { getBlurDataURL } from '@/lib/blog/images'
-import BlogPageSkeleton from '@/components/blog/blog-page-skeleton'
+import { useMemo, useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import { allBlogPosts } from "content-collections";
+import BlogCard from "@/components/blog/blog-card";
+import { BlogHero } from "@/components/blog/blog-hero";
+import { getBlurDataURL } from "@/lib/blog/images";
+import BlogPageSkeleton from "@/components/blog/blog-page-skeleton";
 
-type Category = 'company' | 'marketing' | 'newsroom' | 'partners' | 'engineering' | 'press'
+type Category = "company" | "marketing" | "newsroom" | "partners" | "engineering" | "press";
 
-type Filter = 'all' | Category
+type Filter = "all" | Category;
 
 interface ArticleWithBlur {
-  title: string
-  summary: string
-  publishedAt: string
-  image: string
-  author: string
-  slug: string
-  categories: Category[]
-  blurDataURL: string
+  title: string;
+  summary: string;
+  publishedAt: string;
+  image: string;
+  author: string;
+  slug: string;
+  categories: Category[];
+  blurDataURL: string;
 }
 
 export default function BlogClient() {
-  const searchParams = useSearchParams()
-  const categoryParam = searchParams.get('category') as Filter | null
+  const searchParams = useSearchParams();
+  const categoryParam = searchParams.get("category") as Filter | null;
 
   const [activeFilter, setActiveFilter] = useState<Filter>(
-    categoryParam && ['company', 'marketing', 'newsroom', 'partners', 'engineering', 'press'].includes(categoryParam)
+    categoryParam &&
+      ["company", "marketing", "newsroom", "partners", "engineering", "press"].includes(
+        categoryParam
+      )
       ? categoryParam
-      : 'all'
-  )
-  const [articles, setArticles] = useState<ArticleWithBlur[]>([])
-  const [loading, setLoading] = useState(true)
+      : "all"
+  );
+  const [articles, setArticles] = useState<ArticleWithBlur[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const filters: Filter[] = ['all', 'company', 'marketing', 'newsroom', 'partners', 'engineering', 'press']
+  const filters: Filter[] = [
+    "all",
+    "company",
+    "marketing",
+    "newsroom",
+    "partners",
+    "engineering",
+    "press",
+  ];
 
   useEffect(() => {
     async function loadArticles() {
@@ -46,12 +57,12 @@ export default function BlogClient() {
             ...post,
             blurDataURL: await getBlurDataURL(post.image),
           }))
-      )
-      setArticles(articlesWithBlur as ArticleWithBlur[])
-      setLoading(false)
+      );
+      setArticles(articlesWithBlur as ArticleWithBlur[]);
+      setLoading(false);
     }
-    loadArticles()
-  }, [])
+    loadArticles();
+  }, []);
 
   const categoryCounts = useMemo(() => {
     const counts: Record<Filter, number> = {
@@ -62,35 +73,34 @@ export default function BlogClient() {
       partners: 0,
       engineering: 0,
       press: 0,
-    }
+    };
     for (const article of articles) {
-      counts.all++
+      counts.all++;
       if (article.categories && article.categories.length > 0) {
         for (const category of article.categories) {
-          counts[category]++
+          counts[category]++;
         }
       }
     }
-    return counts
-  }, [articles])
+    return counts;
+  }, [articles]);
 
   const filteredArticles = useMemo(
     () =>
-      activeFilter === 'all'
+      activeFilter === "all"
         ? articles
         : articles.filter(
-            (article) =>
-              article.categories && article.categories.includes(activeFilter as Category)
+            (article) => article.categories && article.categories.includes(activeFilter as Category)
           ),
     [articles, activeFilter]
-  )
+  );
 
-  const topArticles = useMemo(() => filteredArticles.slice(0, 2), [filteredArticles])
+  const topArticles = useMemo(() => filteredArticles.slice(0, 2), [filteredArticles]);
 
-  const moreArticles = useMemo(() => filteredArticles.slice(2), [filteredArticles])
+  const moreArticles = useMemo(() => filteredArticles.slice(2), [filteredArticles]);
 
   if (loading) {
-    return <BlogPageSkeleton />
+    return <BlogPageSkeleton />;
   }
 
   return (
@@ -106,11 +116,7 @@ export default function BlogClient() {
         <div className="relative">
           <div className="grid gap-6 sm:gap-8 md:grid-cols-2 lg:gap-12">
             {topArticles.map((article, index) => (
-              <BlogCard
-                key={`${article.slug}-${index}`}
-                data={article}
-                priority={index === 0}
-              />
+              <BlogCard key={`${article.slug}-${index}`} data={article} priority={index === 0} />
             ))}
           </div>
         </div>
@@ -121,11 +127,7 @@ export default function BlogClient() {
               <h2 className="text-foreground text-2xl font-semibold">More Articles</h2>
               <div className="grid gap-6 sm:grid-cols-2 sm:gap-x-8 sm:gap-y-12 lg:grid-cols-3">
                 {moreArticles.map((article, index) => (
-                  <BlogCard
-                    key={`${article.slug}-${index}`}
-                    data={article}
-                    priority={false}
-                  />
+                  <BlogCard key={`${article.slug}-${index}`} data={article} priority={false} />
                 ))}
               </div>
             </div>
@@ -135,5 +137,5 @@ export default function BlogClient() {
         <div className="pb-16 md:pb-24" />
       </div>
     </section>
-  )
+  );
 }

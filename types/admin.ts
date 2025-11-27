@@ -67,10 +67,7 @@ export type UserDeleteFields = Pick<AdminUser, "id" | "email" | "name">;
 /**
  * Minimal workspace fields for edit operations
  */
-export type WorkspaceEditFields = Pick<
-  AdminWorkspace,
-  "id" | "name" | "slug" | "image"
->;
+export type WorkspaceEditFields = Pick<AdminWorkspace, "id" | "name" | "slug" | "image">;
 
 /**
  * Minimal workspace fields for delete operations

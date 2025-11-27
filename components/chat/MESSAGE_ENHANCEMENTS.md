@@ -11,11 +11,13 @@ Enhanced the message list with emoji reactions, read receipts, and improved thre
 Emoji picker popover for adding reactions to messages.
 
 **Usage:**
+
 ```tsx
 <ReactionPicker onSelect={(emoji) => handleReaction(messageId, emoji)} />
 ```
 
 **Features:**
+
 - 18 common emojis (👍, ❤️, 😂, etc.)
 - Popover interface
 - Click to select and close
@@ -25,6 +27,7 @@ Emoji picker popover for adding reactions to messages.
 Displays grouped reactions on messages with user tooltips.
 
 **Usage:**
+
 ```tsx
 <MessageReactions
   reactions={message.reactions || []}
@@ -35,6 +38,7 @@ Displays grouped reactions on messages with user tooltips.
 ```
 
 **Features:**
+
 - Groups reactions by emoji
 - Shows count for each emoji
 - Highlights user's own reactions
@@ -46,6 +50,7 @@ Displays grouped reactions on messages with user tooltips.
 Shows who has read a message with avatars and timestamps.
 
 **Usage:**
+
 ```tsx
 <ReadReceipts
   readBy={message.readBy || []}
@@ -55,6 +60,7 @@ Shows who has read a message with avatars and timestamps.
 ```
 
 **Features:**
+
 - Single check (✓) for sent
 - Double check (✓✓) for read by some
 - Blue double check for read by all
@@ -66,6 +72,7 @@ Shows who has read a message with avatars and timestamps.
 ### MessageItem (`message-item.tsx`)
 
 Added new props:
+
 ```typescript
 interface MessageItemProps {
   // ... existing props
@@ -76,6 +83,7 @@ interface MessageItemProps {
 ```
 
 **New Features:**
+
 - Reaction picker in hover menu
 - Reactions display below message
 - Read receipts indicator
@@ -118,6 +126,7 @@ Created `/api/chat/[workspaceId]/channels/[channelId]/messages/[messageId]/react
 - **DELETE** - Remove reaction
 
 > **Note:** These are placeholder implementations. To fully integrate:
+>
 > 1. Add `MessageReaction` model to Prisma schema
 > 2. Update message queries to include reactions
 > 3. Add WebSocket events for real-time reaction updates
@@ -135,10 +144,10 @@ model MessageReaction {
   userId    String
   emoji     String
   createdAt DateTime @default(now())
-  
+
   message Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+
   @@unique([messageId, userId, emoji])
   @@index([messageId])
   @@map("message_reaction")
@@ -149,10 +158,10 @@ model ReadReceipt {
   messageId String
   userId    String
   readAt    DateTime @default(now())
-  
+
   message Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+
   @@unique([messageId, userId])
   @@index([messageId])
   @@map("read_receipt")
@@ -167,6 +176,7 @@ model Message {
 ```
 
 Then run:
+
 ```bash
 npx prisma generate
 npx prisma db push
@@ -183,16 +193,16 @@ const messages = await prisma.message.findMany({
     user: { select: { id: true, name: true, email: true, image: true } },
     reactions: {
       include: {
-        user: { select: { id: true, name: true, image: true } }
-      }
+        user: { select: { id: true, name: true, image: true } },
+      },
     },
     readReceipts: {
       include: {
-        user: { select: { id: true, name: true, image: true } }
-      }
+        user: { select: { id: true, name: true, image: true } },
+      },
     },
-    _count: { select: { replies: true } }
-  }
+    _count: { select: { replies: true } },
+  },
 });
 ```
 
@@ -269,17 +279,16 @@ For real-time reactions, add to `lib/websocket.ts`:
 
 ```typescript
 // Add to WebSocketEvent enum
-REACTION_ADDED = "reaction_added",
-REACTION_REMOVED = "reaction_removed",
-
-// Add handlers
-socket.on(WebSocketEvent.REACTION_ADDED, ({ channelId, messageId, reaction }) => {
-  socket.to(`channel:${channelId}`).emit(WebSocketEvent.REACTION_ADDED, {
-    channelId,
-    messageId,
-    reaction,
-  });
-});
+((REACTION_ADDED = "reaction_added"),
+  (REACTION_REMOVED = "reaction_removed"),
+  // Add handlers
+  socket.on(WebSocketEvent.REACTION_ADDED, ({ channelId, messageId, reaction }) => {
+    socket.to(`channel:${channelId}`).emit(WebSocketEvent.REACTION_ADDED, {
+      channelId,
+      messageId,
+      reaction,
+    });
+  }));
 ```
 
 ## Features Checklist
@@ -354,15 +363,18 @@ To make this production-ready:
 ## Files Created/Modified
 
 **New Files:**
+
 - `components/chat/reaction-picker.tsx`
 - `components/chat/message-reactions.tsx`
 - `components/chat/read-receipts.tsx`
 - `app/api/chat/[workspaceId]/channels/[channelId]/messages/[messageId]/reactions/route.ts`
 
 **Modified Files:**
+
 - `types/chat.ts` - Added MessageReaction and ReadReceipt types
 - `components/chat/message-item.tsx` - Added reaction and read receipt support
 
 **Ready to Integrate:**
+
 - `components/chat/chat-layout.tsx` - Needs reaction handlers
 - `components/chat/message-list.tsx` - Needs to pass through props

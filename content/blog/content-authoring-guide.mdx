@@ -19,8 +19,9 @@ slug: open-source-content-authoring-guide
 ---
 
 <Note variant="info">
-  Welcome, contributors! This public playbook keeps humans and language models aligned on how to plan, draft, and review new
-  HagenKit articles. Reference it whenever you brief an LLM or open a pull request.
+  Welcome, contributors! This public playbook keeps humans and language models aligned on how to
+  plan, draft, and review new HagenKit articles. Reference it whenever you brief an LLM or open a
+  pull request.
 </Note>
 
 ## Why this guide lives in the blog archive
@@ -81,34 +82,34 @@ Whether you're writing a blog update or a help center fix, start with the same f
 
 ## Frontmatter reference
 
-| Field | Required | Collections | Guidance |
-| ----- | -------- | ----------- | -------- |
-| `title` | ✅ | All | Keep under 60 characters and front-load the keyword. |
-| `summary` | ✅ | Blog, Help, Changelog, Customers, Integrations | Compose 1–2 sentences that answer the primary intent. |
-| `seoTitle` | ➕ | All | Customize when the on-page title is longer than ideal SERP length. Falls back to `title`. |
-| `seoDescription` | ➕ | All | Use 150–160 character, action-oriented summaries. Falls back to the summary or integration description. |
-| `seoKeywords` | ➕ | All | List the main keyword phrase plus supporting modifiers (no more than six). |
-| `related` | ➕ | Blog, Help | Provide slugs for cross-linking. |
+| Field            | Required | Collections                                    | Guidance                                                                                                |
+| ---------------- | -------- | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `title`          | ✅       | All                                            | Keep under 60 characters and front-load the keyword.                                                    |
+| `summary`        | ✅       | Blog, Help, Changelog, Customers, Integrations | Compose 1–2 sentences that answer the primary intent.                                                   |
+| `seoTitle`       | ➕       | All                                            | Customize when the on-page title is longer than ideal SERP length. Falls back to `title`.               |
+| `seoDescription` | ➕       | All                                            | Use 150–160 character, action-oriented summaries. Falls back to the summary or integration description. |
+| `seoKeywords`    | ➕       | All                                            | List the main keyword phrase plus supporting modifiers (no more than six).                              |
+| `related`        | ➕       | Blog, Help                                     | Provide slugs for cross-linking.                                                                        |
 
 ## Available MDX components
 
 You can use the following JSX components inside MDX files. They are already registered in the MDX provider.
 
-| Component | Usage |
-| --------- | ----- |
-| `<Note variant="info"\|"warning"\|"success">` | Highlight tips, cautions, or success states. |
-| `<Quote>` | Showcase customer testimonials with avatars and company logos. |
-| `<Prerequisites>` | Summarize requirements before readers follow a workflow. |
-| `<CopyBox>` | Provide copy-to-clipboard values (API keys, URLs, etc.). |
-| `<GithubRepo>` | Link to supporting repositories with consistent styling. |
-| `<HelpArticles>` & `<HelpCategories>` | Cross-promote other documentation entries. |
-| `<Tweet>` | Embed tweets with a graceful fallback. |
-| `<Stepper>` | Break complex workflows into numbered steps with optional imagery. |
-| `<Example>` | Walk through numeric calculations or scenarios. |
-| `<Summary>` | Present key takeaways in a two-column grid. |
-| `<CTA>` | Drop in a polished call-to-action module. |
-| `<DcfChart>` | Render financial charts where relevant. |
-| `<Image>` | Automatically wraps screenshots with zoom and blurhash loading. |
+| Component                                     | Usage                                                              |
+| --------------------------------------------- | ------------------------------------------------------------------ |
+| `<Note variant="info"\|"warning"\|"success">` | Highlight tips, cautions, or success states.                       |
+| `<Quote>`                                     | Showcase customer testimonials with avatars and company logos.     |
+| `<Prerequisites>`                             | Summarize requirements before readers follow a workflow.           |
+| `<CopyBox>`                                   | Provide copy-to-clipboard values (API keys, URLs, etc.).           |
+| `<GithubRepo>`                                | Link to supporting repositories with consistent styling.           |
+| `<HelpArticles>` & `<HelpCategories>`         | Cross-promote other documentation entries.                         |
+| `<Tweet>`                                     | Embed tweets with a graceful fallback.                             |
+| `<Stepper>`                                   | Break complex workflows into numbered steps with optional imagery. |
+| `<Example>`                                   | Walk through numeric calculations or scenarios.                    |
+| `<Summary>`                                   | Present key takeaways in a two-column grid.                        |
+| `<CTA>`                                       | Drop in a polished call-to-action module.                          |
+| `<DcfChart>`                                  | Render financial charts where relevant.                            |
+| `<Image>`                                     | Automatically wraps screenshots with zoom and blurhash loading.    |
 
 Refer to the MDX provider for the full implementation details, styling, and helper imports. 【F:components/blog/mdx.tsx†L1-L456】
 

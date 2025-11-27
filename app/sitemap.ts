@@ -1,4 +1,4 @@
-import { MetadataRoute } from "next"
+import { MetadataRoute } from "next";
 import {
   allBlogPosts,
   allChangelogPosts,
@@ -6,10 +6,10 @@ import {
   allHelpPosts,
   allIntegrationsPosts,
   allLegalPosts,
-} from "content-collections"
+} from "content-collections";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://hagenkit.com"
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://hagenkit.com";
 
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
@@ -55,7 +55,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.5,
     },
-  ]
+  ];
 
   // Blog posts
   const blogPages: MetadataRoute.Sitemap = allBlogPosts.map((post) => ({
@@ -63,7 +63,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: new Date(post.publishedAt),
     changeFrequency: "monthly" as const,
     priority: post.featured ? 0.9 : 0.7,
-  }))
+  }));
 
   // Help articles
   const helpPages: MetadataRoute.Sitemap = allHelpPosts.map((post) => ({
@@ -71,37 +71,31 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: new Date(post.updatedAt),
     changeFrequency: "weekly" as const,
     priority: 0.8,
-  }))
+  }));
 
   // Changelog posts
-  const changelogPages: MetadataRoute.Sitemap = allChangelogPosts.map(
-    (post) => ({
-      url: `${baseUrl}/changelog/${post.slug}`,
-      lastModified: new Date(post.publishedAt),
-      changeFrequency: "monthly" as const,
-      priority: 0.6,
-    }),
-  )
+  const changelogPages: MetadataRoute.Sitemap = allChangelogPosts.map((post) => ({
+    url: `${baseUrl}/changelog/${post.slug}`,
+    lastModified: new Date(post.publishedAt),
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }));
 
   // Customer stories
-  const customerPages: MetadataRoute.Sitemap = allCustomersPosts.map(
-    (post) => ({
-      url: `${baseUrl}/customers/${post.slug}`,
-      lastModified: new Date(post.publishedAt),
-      changeFrequency: "monthly" as const,
-      priority: 0.6,
-    }),
-  )
+  const customerPages: MetadataRoute.Sitemap = allCustomersPosts.map((post) => ({
+    url: `${baseUrl}/customers/${post.slug}`,
+    lastModified: new Date(post.publishedAt),
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }));
 
   // Integration pages
-  const integrationPages: MetadataRoute.Sitemap = allIntegrationsPosts.map(
-    (post) => ({
-      url: `${baseUrl}/integrations/${post.slug}`,
-      lastModified: new Date(post.publishedAt),
-      changeFrequency: "monthly" as const,
-      priority: 0.6,
-    }),
-  )
+  const integrationPages: MetadataRoute.Sitemap = allIntegrationsPosts.map((post) => ({
+    url: `${baseUrl}/integrations/${post.slug}`,
+    lastModified: new Date(post.publishedAt),
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }));
 
   // Legal pages
   const legalPages: MetadataRoute.Sitemap = allLegalPosts.map((post) => ({
@@ -109,7 +103,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: new Date(post.updatedAt),
     changeFrequency: "yearly" as const,
     priority: 0.3,
-  }))
+  }));
 
   return [
     ...staticPages,
@@ -119,5 +113,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...customerPages,
     ...integrationPages,
     ...legalPages,
-  ]
+  ];
 }

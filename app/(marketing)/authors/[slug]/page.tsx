@@ -1,63 +1,63 @@
-import { allAuthors, allBlogPosts, allHelpPosts } from "content-collections"
-import { notFound } from "next/navigation"
-import Link from "next/link"
-import MaxWidthWrapper from "@/components/blog/max-width-wrapper"
-import { MDX } from "@/components/blog/mdx"
-import { Metadata } from "next"
-import { constructMetadata } from "@/lib/constructMetadata"
-import BlurImage from "@/lib/blog/blur-image"
-import { formatDate } from "@/lib/utils"
-import { Twitter, Linkedin, Github, Globe } from "lucide-react"
+import { allAuthors, allBlogPosts, allHelpPosts } from "content-collections";
+import { notFound } from "next/navigation";
+import Link from "next/link";
+import MaxWidthWrapper from "@/components/blog/max-width-wrapper";
+import { MDX } from "@/components/blog/mdx";
+import { Metadata } from "next";
+import { constructMetadata } from "@/lib/constructMetadata";
+import BlurImage from "@/lib/blog/blur-image";
+import { formatDate } from "@/lib/utils";
+import { Twitter, Linkedin, Github, Globe } from "lucide-react";
 
 export async function generateStaticParams() {
   return allAuthors.map((author) => ({
     slug: author.slug,
-  }))
+  }));
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata | undefined> {
-  const { slug } = await params
-  const author = allAuthors.find((author) => author.slug === slug)
+  const { slug } = await params;
+  const author = allAuthors.find((author) => author.slug === slug);
   if (!author) {
-    return
+    return;
   }
 
   return constructMetadata({
     title: `${author.name} - Author Profile`,
     description: author.bio,
     image: author.avatar,
-  })
+  });
 }
 
 export default async function AuthorProfile({
   params,
 }: {
   params: Promise<{
-    slug: string
-  }>
+    slug: string;
+  }>;
 }) {
-  const { slug } = await params
-  const author = allAuthors.find((author) => author.slug === slug)
+  const { slug } = await params;
+  const author = allAuthors.find((author) => author.slug === slug);
 
   if (!author) {
-    notFound()
+    notFound();
   }
 
   // Find all blog posts by this author
   const authorBlogPosts = allBlogPosts.filter(
     (post) => post.author === slug || post.author === author.name
-  )
+  );
 
   // Find all help articles by this author
   const authorHelpPosts = allHelpPosts.filter(
     (post) => post.author === slug || post.author === author.name
-  )
+  );
 
-  const totalArticles = authorBlogPosts.length + authorHelpPosts.length
+  const totalArticles = authorBlogPosts.length + authorHelpPosts.length;
 
   return (
     <MaxWidthWrapper className="py-28">
@@ -72,13 +72,9 @@ export default async function AuthorProfile({
             className="h-40 w-40 rounded-full object-cover ring-4 ring-gray-100"
           />
           <div className="flex-1">
-            <h1 className="font-display mb-2 text-4xl font-bold text-gray-900">
-              {author.name}
-            </h1>
+            <h1 className="font-display mb-2 text-4xl font-bold text-gray-900">{author.name}</h1>
             <p className="mb-4 text-xl text-gray-600">{author.role}</p>
-            <p className="mb-4 text-lg leading-relaxed text-gray-700">
-              {author.bio}
-            </p>
+            <p className="mb-4 text-lg leading-relaxed text-gray-700">{author.bio}</p>
 
             {/* Social Links */}
             <div className="flex items-center justify-center gap-4 sm:justify-start">
@@ -142,15 +138,11 @@ export default async function AuthorProfile({
             <p className="text-sm text-gray-600">Total Articles</p>
           </div>
           <div className="rounded-lg border border-gray-200 bg-white p-6 text-center">
-            <p className="text-4xl font-bold text-gray-900">
-              {authorBlogPosts.length}
-            </p>
+            <p className="text-4xl font-bold text-gray-900">{authorBlogPosts.length}</p>
             <p className="text-sm text-gray-600">Blog Posts</p>
           </div>
           <div className="rounded-lg border border-gray-200 bg-white p-6 text-center">
-            <p className="text-4xl font-bold text-gray-900">
-              {authorHelpPosts.length}
-            </p>
+            <p className="text-4xl font-bold text-gray-900">{authorHelpPosts.length}</p>
             <p className="text-sm text-gray-600">Help Articles</p>
           </div>
         </div>
@@ -171,9 +163,7 @@ export default async function AuthorProfile({
                   <h3 className="mb-2 font-semibold text-gray-900 group-hover:text-blue-600">
                     {post.title}
                   </h3>
-                  <p className="mb-4 line-clamp-2 text-sm text-gray-600">
-                    {post.summary}
-                  </p>
+                  <p className="mb-4 line-clamp-2 text-sm text-gray-600">{post.summary}</p>
                   <div className="flex items-center justify-between text-xs text-gray-500">
                     <span>{formatDate(post.publishedAt)}</span>
                     {post.readingTime && <span>{post.readingTime} min read</span>}
@@ -197,9 +187,7 @@ export default async function AuthorProfile({
         {/* Recent Help Articles */}
         {authorHelpPosts.length > 0 && (
           <div>
-            <h2 className="font-display mb-6 text-2xl font-bold text-gray-900">
-              Help Articles
-            </h2>
+            <h2 className="font-display mb-6 text-2xl font-bold text-gray-900">Help Articles</h2>
             <div className="grid gap-6 sm:grid-cols-2">
               {authorHelpPosts.slice(0, 6).map((post) => (
                 <Link
@@ -210,9 +198,7 @@ export default async function AuthorProfile({
                   <h3 className="mb-2 font-semibold text-gray-900 group-hover:text-blue-600">
                     {post.title}
                   </h3>
-                  <p className="mb-4 line-clamp-2 text-sm text-gray-600">
-                    {post.summary}
-                  </p>
+                  <p className="mb-4 line-clamp-2 text-sm text-gray-600">{post.summary}</p>
                   <div className="flex items-center justify-between text-xs text-gray-500">
                     <span>Updated {formatDate(post.updatedAt)}</span>
                     {post.readingTime && <span>{post.readingTime} min read</span>}
@@ -234,5 +220,5 @@ export default async function AuthorProfile({
         )}
       </div>
     </MaxWidthWrapper>
-  )
+  );
 }

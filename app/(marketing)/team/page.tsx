@@ -1,16 +1,15 @@
-import { allTeamMembers } from "content-collections"
-import MaxWidthWrapper from "@/components/blog/max-width-wrapper"
-import { Metadata } from "next"
-import { constructMetadata } from "@/lib/constructMetadata"
-import BlurImage from "@/lib/blog/blur-image"
-import { Twitter, Linkedin, Github, Mail } from "lucide-react"
-import Link from "next/link"
+import { allTeamMembers } from "content-collections";
+import MaxWidthWrapper from "@/components/blog/max-width-wrapper";
+import { Metadata } from "next";
+import { constructMetadata } from "@/lib/constructMetadata";
+import BlurImage from "@/lib/blog/blur-image";
+import { Twitter, Linkedin, Github, Mail } from "lucide-react";
+import Link from "next/link";
 
 export const metadata: Metadata = constructMetadata({
   title: "Our Team - Meet the People Behind HagenKit",
-  description:
-    "Meet the talented individuals building the future of collaboration at HagenKit.",
-})
+  description: "Meet the talented individuals building the future of collaboration at HagenKit.",
+});
 
 const departmentConfig = {
   executive: {
@@ -37,7 +36,7 @@ const departmentConfig = {
     title: "Operations",
     description: "Keeping everything running smoothly",
   },
-}
+};
 
 export default function TeamPage() {
   // Group team members by department and sort by order
@@ -46,20 +45,20 @@ export default function TeamPage() {
     .reduce(
       (acc, member) => {
         if (!acc[member.department]) {
-          acc[member.department] = []
+          acc[member.department] = [];
         }
-        acc[member.department].push(member)
-        return acc
+        acc[member.department].push(member);
+        return acc;
       },
       {} as Record<string, typeof allTeamMembers>
-    )
+    );
 
   // Order departments: executive first, then others alphabetically
   const orderedDepartments = Object.keys(teamByDepartment).sort((a, b) => {
-    if (a === "executive") return -1
-    if (b === "executive") return 1
-    return a.localeCompare(b)
-  })
+    if (a === "executive") return -1;
+    if (b === "executive") return 1;
+    return a.localeCompare(b);
+  });
 
   return (
     <MaxWidthWrapper className="py-28">
@@ -70,16 +69,15 @@ export default function TeamPage() {
             Meet Our Team
           </h1>
           <p className="mx-auto max-w-2xl text-xl text-gray-600">
-            We're a passionate group of individuals dedicated to building the
-            best collaboration platform for modern teams.
+            We're a passionate group of individuals dedicated to building the best collaboration
+            platform for modern teams.
           </p>
         </div>
 
         {/* Team Members by Department */}
         {orderedDepartments.map((department) => {
-          const config =
-            departmentConfig[department as keyof typeof departmentConfig]
-          const members = teamByDepartment[department]
+          const config = departmentConfig[department as keyof typeof departmentConfig];
+          const members = teamByDepartment[department];
 
           return (
             <div key={department} className="mb-16">
@@ -109,9 +107,7 @@ export default function TeamPage() {
                       <h3 className="font-display mb-1 text-xl font-bold text-gray-900">
                         {member.name}
                       </h3>
-                      <p className="mb-3 text-sm font-medium text-blue-600">
-                        {member.role}
-                      </p>
+                      <p className="mb-3 text-sm font-medium text-blue-600">{member.role}</p>
                       <p className="mb-4 line-clamp-3 text-sm leading-relaxed text-gray-600">
                         {member.bio}
                       </p>
@@ -166,17 +162,15 @@ export default function TeamPage() {
                 ))}
               </div>
             </div>
-          )
+          );
         })}
 
         {/* Join Us CTA */}
         <div className="mt-16 rounded-xl border border-gray-200 bg-gradient-to-br from-blue-50 to-indigo-50 p-12 text-center">
-          <h2 className="font-display mb-4 text-3xl font-bold text-gray-900">
-            Want to Join Us?
-          </h2>
+          <h2 className="font-display mb-4 text-3xl font-bold text-gray-900">Want to Join Us?</h2>
           <p className="mx-auto mb-8 max-w-2xl text-lg text-gray-600">
-            We're always looking for talented individuals to join our growing
-            team. Check out our open positions and apply today.
+            We're always looking for talented individuals to join our growing team. Check out our
+            open positions and apply today.
           </p>
           <Link
             href="/careers"
@@ -187,5 +181,5 @@ export default function TeamPage() {
         </div>
       </div>
     </MaxWidthWrapper>
-  )
+  );
 }

@@ -1,22 +1,22 @@
-"use client"
+"use client";
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react";
 
 interface MermaidProps {
-  chart: string
-  caption?: string
+  chart: string;
+  caption?: string;
 }
 
 export function Mermaid({ chart, caption }: MermaidProps) {
-  const elementRef = useRef<HTMLDivElement>(null)
-  const [isLoaded, setIsLoaded] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const elementRef = useRef<HTMLDivElement>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const renderChart = async () => {
       try {
         // Dynamically import mermaid
-        const mermaid = (await import("mermaid")).default
+        const mermaid = (await import("mermaid")).default;
 
         // Initialize mermaid with dark mode support
         mermaid.initialize({
@@ -30,36 +30,32 @@ export function Mermaid({ chart, caption }: MermaidProps) {
             secondaryColor: "#8b5cf6",
             tertiaryColor: "#ec4899",
           },
-        })
+        });
 
         if (elementRef.current) {
           const { svg } = await mermaid.render(
             `mermaid-${Math.random().toString(36).substr(2, 9)}`,
             chart
-          )
-          elementRef.current.innerHTML = svg
-          setIsLoaded(true)
+          );
+          elementRef.current.innerHTML = svg;
+          setIsLoaded(true);
         }
       } catch (err) {
-        console.error("Mermaid rendering error:", err)
-        setError("Failed to render diagram")
+        console.error("Mermaid rendering error:", err);
+        setError("Failed to render diagram");
       }
-    }
+    };
 
-    renderChart()
-  }, [chart])
+    renderChart();
+  }, [chart]);
 
   if (error) {
     return (
       <div className="my-8 rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-800 dark:bg-red-950">
-        <p className="text-sm text-red-600 dark:text-red-400">
-          {error}
-        </p>
-        <pre className="mt-2 overflow-x-auto text-xs text-red-500 dark:text-red-500">
-          {chart}
-        </pre>
+        <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+        <pre className="mt-2 overflow-x-auto text-xs text-red-500 dark:text-red-500">{chart}</pre>
       </div>
-    )
+    );
   }
 
   return (
@@ -82,5 +78,5 @@ export function Mermaid({ chart, caption }: MermaidProps) {
         </figcaption>
       )}
     </figure>
-  )
+  );
 }

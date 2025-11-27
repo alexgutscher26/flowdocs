@@ -1,6 +1,6 @@
-import { RocketIcon, ArrowUpRightIcon } from "lucide-react"
+import { RocketIcon, ArrowUpRightIcon } from "lucide-react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Empty,
   EmptyContent,
@@ -8,7 +8,7 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@/components/ui/empty"
+} from "@/components/ui/empty";
 
 export function DashboardEmptyState() {
   return (
@@ -19,8 +19,8 @@ export function DashboardEmptyState() {
         </EmptyMedia>
         <EmptyTitle>Welcome to HagenKit</EmptyTitle>
         <EmptyDescription>
-          This is your dashboard. Get started by adding your first project,
-          creating content, or exploring the features available to you.
+          This is your dashboard. Get started by adding your first project, creating content, or
+          exploring the features available to you.
         </EmptyDescription>
       </EmptyHeader>
       <EmptyContent>
@@ -33,16 +33,11 @@ export function DashboardEmptyState() {
           </Button>
         </div>
       </EmptyContent>
-      <Button
-        variant="link"
-        asChild
-        className="text-muted-foreground"
-        size="sm"
-      >
+      <Button variant="link" asChild className="text-muted-foreground" size="sm">
         <a href="#">
           View Documentation <ArrowUpRightIcon className="ml-1 h-4 w-4" />
         </a>
       </Button>
     </Empty>
-  )
+  );
 }

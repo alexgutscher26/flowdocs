@@ -18,9 +18,7 @@ function getResendClient(): Resend | null {
 
   if (!apiKey) {
     if (process.env.NODE_ENV === "development") {
-      console.warn(
-        "RESEND_API_KEY is not set. Emails will be logged to console."
-      );
+      console.warn("RESEND_API_KEY is not set. Emails will be logged to console.");
       return null;
     }
     throw new Error(
@@ -35,8 +33,7 @@ function getResendClient(): Resend | null {
  * Default sender email address
  * Override with SendEmailOptions.from if needed
  */
-const DEFAULT_FROM_EMAIL =
-  process.env.EMAIL_FROM || siteConfig.email.fromEmail;
+const DEFAULT_FROM_EMAIL = process.env.EMAIL_FROM || siteConfig.email.fromEmail;
 
 /**
  * Send an email using a template
@@ -84,7 +81,7 @@ Full HTML content logged above.
 In a real scenario, this would be sent via Resend.
 =================================================================
       `);
-      
+
       // If it's a magic link, try to extract and log the link specifically for easier access
       if (templateId === "magic-link" && (data as any).magicLinkUrl) {
         console.log(`
@@ -133,9 +130,7 @@ In a real scenario, this would be sent via Resend.
       id: "",
       success: false,
       error:
-        error instanceof Error
-          ? error.message
-          : "An unknown error occurred while sending email",
+        error instanceof Error ? error.message : "An unknown error occurred while sending email",
     };
   }
 }
@@ -221,9 +216,7 @@ In a real scenario, this would be sent via Resend.
       id: "",
       success: false,
       error:
-        error instanceof Error
-          ? error.message
-          : "An unknown error occurred while sending email",
+        error instanceof Error ? error.message : "An unknown error occurred while sending email",
     };
   }
 }

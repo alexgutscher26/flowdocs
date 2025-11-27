@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  motion,
-  MotionValue,
-  useMotionTemplate,
-  useMotionValue,
-} from "motion/react";
+import { motion, MotionValue, useMotionTemplate, useMotionValue } from "motion/react";
 import Link from "next/link";
 
 import { useId } from "react";
@@ -41,12 +36,7 @@ function GridPattern({
           <path d={`M.5 ${height}V.5H${width}`} fill="none" />
         </pattern>
       </defs>
-      <rect
-        width="100%"
-        height="100%"
-        strokeWidth={0}
-        fill={`url(#${patternId})`}
-      />
+      <rect width="100%" height="100%" strokeWidth={0} fill={`url(#${patternId})`} />
       {squares && (
         <svg x={x} y={y} className="overflow-visible">
           {squares.map(([x, y]) => (
@@ -79,7 +69,7 @@ function CardPattern({
 
   return (
     <div className="pointer-events-none">
-      <div className="absolute inset-0 rounded-2xl transition duration-300 [mask-image:linear-gradient(white,transparent)] group-hover:opacity-50">
+      <div className="absolute inset-0 rounded-2xl [mask-image:linear-gradient(white,transparent)] transition duration-300 group-hover:opacity-50">
         <GridPattern
           width={72}
           height={56}
@@ -148,10 +138,10 @@ export default function CategoryCard({
       className="group relative flex rounded-2xl bg-gray-50 transition-shadow hover:shadow-md hover:shadow-gray-900/5"
     >
       <CardPattern {...pattern} mouseX={mouseX} mouseY={mouseY} />
-      <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-gray-200 group-hover:ring-gray-900/10" />
+      <div className="absolute inset-0 rounded-2xl ring-1 ring-gray-200 ring-inset group-hover:ring-gray-900/10" />
       <div className="relative rounded-2xl p-6 pt-16">
         {icon}
-        <h3 className="mt-4 font-semibold leading-7 text-gray-900">
+        <h3 className="mt-4 leading-7 font-semibold text-gray-900">
           <Link href={href}>
             <span className="absolute inset-0 rounded-2xl" />
             {name}

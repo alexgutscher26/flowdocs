@@ -41,9 +41,7 @@ export async function generateMetadata({
   return constructMetadata({
     title: `${title} – HagenKit Help Center`,
     description: summary,
-    image: `/api/og/help?title=${encodeURIComponent(
-      title
-    )}&summary=${encodeURIComponent(summary)}`,
+    image: `/api/og/help?title=${encodeURIComponent(title)}&summary=${encodeURIComponent(summary)}`,
   });
 }
 
@@ -59,9 +57,7 @@ export default async function HelpArticle({
   if (!data) {
     notFound();
   }
-  const category = HELP_CATEGORIES.find(
-    (category) => data.categories[0] === category.slug
-  );
+  const category = HELP_CATEGORIES.find((category) => data.categories[0] === category.slug);
   if (!category) {
     notFound();
   }
@@ -93,24 +89,24 @@ export default async function HelpArticle({
     <>
       <StructuredData data={helpArticleStructuredData} />
       <StructuredData data={breadcrumbStructuredData} />
-      <MaxWidthWrapper className="flex max-w-screen-lg flex-col py-10 mt-28">
+      <MaxWidthWrapper className="mt-28 flex max-w-screen-lg flex-col py-10">
         <SearchButton />
       </MaxWidthWrapper>
 
-      <div className=" bg-white/50 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur-lg">
+      <div className="bg-white/50 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur-lg">
         <MaxWidthWrapper className="grid max-w-screen-lg grid-cols-4 gap-10 py-10">
           <div className="col-span-4 flex flex-col space-y-8 sm:col-span-3 sm:pr-10">
             <div className="flex items-center space-x-2">
               <Link
                 href="/help"
-                className="whitespace-nowrap text-sm font-medium text-gray-500 hover:text-gray-800"
+                className="text-sm font-medium whitespace-nowrap text-gray-500 hover:text-gray-800"
               >
                 All Categories
               </Link>
               <ChevronRight className="h-4 w-4 text-gray-400" />
               <Link
                 href={`/help/category/${category.slug}`}
-                className="whitespace-nowrap text-sm font-medium text-gray-500 hover:text-gray-800"
+                className="text-sm font-medium whitespace-nowrap text-gray-500 hover:text-gray-800"
               >
                 {category.title}
               </Link>
@@ -124,7 +120,7 @@ export default async function HelpArticle({
             </div>
             <div className="flex flex-col space-y-4">
               <Link href={`/help/article/${data.slug}`}>
-                <h1 className="font-display text-3xl font-bold !leading-snug sm:text-4xl">
+                <h1 className="font-display text-3xl !leading-snug font-bold sm:text-4xl">
                   {data.title}
                 </h1>
               </Link>
@@ -134,9 +130,7 @@ export default async function HelpArticle({
             <MDX code={data.mdx} images={images} />
             {relatedArticles.length > 0 && (
               <div className="flex flex-col space-y-4 border-t border-gray-200 pt-8">
-                <h2 className="font-display text-xl font-bold sm:text-2xl">
-                  Related Articles
-                </h2>
+                <h2 className="font-display text-xl font-bold sm:text-2xl">Related Articles</h2>
                 <div className="grid gap-2 rounded-xl border border-gray-200 bg-white p-4">
                   {relatedArticles.map((article) => (
                     <HelpArticleLink key={article.slug} article={article} />
@@ -147,9 +141,7 @@ export default async function HelpArticle({
             <Feedback />
           </div>
           <div className="sticky top-20 col-span-1 hidden flex-col space-y-10 divide-y divide-gray-200 self-start sm:flex">
-            {data.tableOfContents.length > 0 && (
-              <TableOfContents items={data.tableOfContents} />
-            )}
+            {data.tableOfContents.length > 0 && <TableOfContents items={data.tableOfContents} />}
             <div className="flex justify-center pt-5">
               <Link
                 href={`https://github.com/codehagen/hagenkit/blob/main/content/help/${slug}.mdx`}

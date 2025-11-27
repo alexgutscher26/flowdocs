@@ -65,18 +65,16 @@ async function UsersContent({ searchParams }: PageProps) {
 
 export default function UsersPage(props: PageProps) {
   return (
-    <div className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
+    <div className="container mx-auto px-4 py-8 sm:px-6 lg:px-8">
       <div className="flex flex-col gap-6">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">User Management</h1>
-            <p className="text-muted-foreground mt-1">
-              Manage user accounts and permissions
-            </p>
+            <p className="text-muted-foreground mt-1">Manage user accounts and permissions</p>
           </div>
           <UserCreateDialog>
             <Button>
-              <UserPlus className="h-4 w-4 mr-2" />
+              <UserPlus className="mr-2 h-4 w-4" />
               Add User
             </Button>
           </UserCreateDialog>
@@ -94,7 +92,7 @@ export default function UsersPage(props: PageProps) {
                 if (colIndex === 0) {
                   return (
                     <div className="flex items-center gap-3">
-                      <Skeleton className="h-8 w-8 rounded-full flex-shrink-0" />
+                      <Skeleton className="h-8 w-8 flex-shrink-0 rounded-full" />
                       <div className="flex flex-col gap-2">
                         <Skeleton className="h-4 w-[150px]" />
                         <Skeleton className="h-3 w-[200px]" />

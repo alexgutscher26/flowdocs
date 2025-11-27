@@ -39,9 +39,7 @@ export function WorkspacesDataTable({ data, pageCount, total }: WorkspacesDataTa
       {
         id: "name",
         accessorKey: "name",
-        header: ({ column }) => (
-          <DataTableColumnHeader column={column} label="Workspace" />
-        ),
+        header: ({ column }) => <DataTableColumnHeader column={column} label="Workspace" />,
         cell: ({ row }) => {
           const workspace = row.original;
           const initials = workspace.name
@@ -59,7 +57,7 @@ export function WorkspacesDataTable({ data, pageCount, total }: WorkspacesDataTa
               </Avatar>
               <div className="flex flex-col">
                 <span className="font-medium">{workspace.name}</span>
-                <span className="text-sm text-muted-foreground">/{workspace.slug}</span>
+                <span className="text-muted-foreground text-sm">/{workspace.slug}</span>
               </div>
             </div>
           );
@@ -75,9 +73,7 @@ export function WorkspacesDataTable({ data, pageCount, total }: WorkspacesDataTa
       {
         id: "slug",
         accessorKey: "slug",
-        header: ({ column }) => (
-          <DataTableColumnHeader column={column} label="Slug" />
-        ),
+        header: ({ column }) => <DataTableColumnHeader column={column} label="Slug" />,
         cell: ({ row }) => {
           const slug = row.getValue("slug") as string;
           return (
@@ -97,14 +93,12 @@ export function WorkspacesDataTable({ data, pageCount, total }: WorkspacesDataTa
       {
         id: "members",
         accessorFn: (row) => row._count?.members ?? 0,
-        header: ({ column }) => (
-          <DataTableColumnHeader column={column} label="Members" />
-        ),
+        header: ({ column }) => <DataTableColumnHeader column={column} label="Members" />,
         cell: ({ row }) => {
           const count = row.original._count?.members ?? 0;
           return (
             <div className="flex items-center gap-1">
-              <Users className="h-4 w-4 text-muted-foreground" />
+              <Users className="text-muted-foreground h-4 w-4" />
               <span className="text-sm">{count}</span>
             </div>
           );
@@ -114,9 +108,7 @@ export function WorkspacesDataTable({ data, pageCount, total }: WorkspacesDataTa
       {
         id: "invitations",
         accessorFn: (row) => row._count?.invitations ?? 0,
-        header: ({ column }) => (
-          <DataTableColumnHeader column={column} label="Pending Invites" />
-        ),
+        header: ({ column }) => <DataTableColumnHeader column={column} label="Pending Invites" />,
         cell: ({ row }) => {
           const count = row.original._count?.invitations ?? 0;
           return count > 0 ? (
@@ -130,9 +122,7 @@ export function WorkspacesDataTable({ data, pageCount, total }: WorkspacesDataTa
       {
         id: "createdAt",
         accessorKey: "createdAt",
-        header: ({ column }) => (
-          <DataTableColumnHeader column={column} label="Created" />
-        ),
+        header: ({ column }) => <DataTableColumnHeader column={column} label="Created" />,
         cell: ({ row }) => {
           const date = row.getValue("createdAt") as Date;
           return <span className="text-sm">{format(new Date(date), "MMM d, yyyy")}</span>;
@@ -161,7 +151,7 @@ export function WorkspacesDataTable({ data, pageCount, total }: WorkspacesDataTa
                     setEditDialogOpen(true);
                   }}
                 >
-                  <Pencil className="h-4 w-4 mr-2" />
+                  <Pencil className="mr-2 h-4 w-4" />
                   Edit workspace
                 </DropdownMenuItem>
                 <DropdownMenuItem
@@ -171,7 +161,7 @@ export function WorkspacesDataTable({ data, pageCount, total }: WorkspacesDataTa
                   }}
                   className="text-destructive"
                 >
-                  <Trash2 className="h-4 w-4 mr-2" />
+                  <Trash2 className="mr-2 h-4 w-4" />
                   Delete workspace
                 </DropdownMenuItem>
               </DropdownMenuContent>

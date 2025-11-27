@@ -22,15 +22,15 @@ export default function BlogLayoutHero() {
   return (
     <>
       <MaxWidthWrapper>
-        <div className="md:pb-15 max-w-screen-sm pb-16 pt-32 md:pt-40">
-          <h1 className="font-display text-3xl font-extrabold text-warm-white sm:text-4xl">
+        <div className="max-w-screen-sm pt-32 pb-16 md:pt-40 md:pb-15">
+          <h1 className="font-display text-warm-white text-3xl font-extrabold sm:text-4xl">
             {data?.title || "HagenKit Blog"}
           </h1>
-          <p className="mt-4 text-xl text-warm-white/80">
+          <p className="text-warm-white/80 mt-4 text-xl">
             {data?.description ||
               "Insights, product updates, and playbooks from the HagenKit team."}
           </p>
-          <nav className="mt-6 hidden w-fit items-center space-x-2 rounded-full border border-warm-grey/20 bg-warm-white/5 p-2 backdrop-blur-sm md:flex">
+          <nav className="border-warm-grey/20 bg-warm-white/5 mt-6 hidden w-fit items-center space-x-2 rounded-full border p-2 backdrop-blur-sm md:flex">
             <CategoryLink title="Overview" href="/blog" active={!slug} />
             {BLOG_CATEGORIES.map((category) => (
               <CategoryLink
@@ -44,7 +44,7 @@ export default function BlogLayoutHero() {
           </nav>
         </div>
       </MaxWidthWrapper>
-      <div className="border-t border-warm-grey/20 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur-lg">
+      <div className="border-warm-grey/20 border-t shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur-lg">
         <Popover
           content={
             <div className="w-full p-4">
@@ -87,7 +87,7 @@ export default function BlogLayoutHero() {
             onClick={() => {
               setOpenPopover(!openPopover);
             }}
-            className="flex w-full items-center space-x-2 border-t border-warm-grey/20 px-2.5 py-4 text-sm text-warm-white/80"
+            className="border-warm-grey/20 text-warm-white/80 flex w-full items-center space-x-2 border-t px-2.5 py-4 text-sm"
           >
             <IconList size={16} className="text-warm-white/60" />
             <p>Categories</p>
@@ -118,7 +118,7 @@ const CategoryLink = ({
         {...(setOpenPopover && {
           onClick: () => setOpenPopover(false),
         })}
-        className="flex w-full items-center justify-between rounded-md p-2 text-warm-white/80 transition-colors hover:bg-warm-white/5 active:bg-warm-white/10"
+        className="text-warm-white/80 hover:bg-warm-white/5 active:bg-warm-white/10 flex w-full items-center justify-between rounded-md p-2 transition-colors"
       >
         <p className="text-sm">{title}</p>
         {active && <IconCheck size={16} className="text-warm-white/60" />}
@@ -140,7 +140,7 @@ const CategoryLink = ({
       {active && (
         <motion.div
           layoutId="indicator"
-          className="absolute left-0 top-0 h-full w-full rounded-full bg-gradient-to-tr from-warm-grey/20 via-warm-grey/10 to-warm-grey/20"
+          className="from-warm-grey/20 via-warm-grey/10 to-warm-grey/20 absolute top-0 left-0 h-full w-full rounded-full bg-gradient-to-tr"
           style={{ zIndex: -1 }}
         />
       )}

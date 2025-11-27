@@ -57,9 +57,7 @@ export function ImpersonateUsersDataTable({
       {
         id: "name",
         accessorKey: "name",
-        header: ({ column }) => (
-          <DataTableColumnHeader column={column} label="User" />
-        ),
+        header: ({ column }) => <DataTableColumnHeader column={column} label="User" />,
         cell: ({ row }) => {
           const user = row.original;
           const initials = user.name
@@ -73,17 +71,12 @@ export function ImpersonateUsersDataTable({
           return (
             <div className="flex items-center gap-3">
               <Avatar className="h-8 w-8">
-                <AvatarImage
-                  src={user.image || undefined}
-                  alt={user.name || user.email}
-                />
+                <AvatarImage src={user.image || undefined} alt={user.name || user.email} />
                 <AvatarFallback>{initials}</AvatarFallback>
               </Avatar>
               <div className="flex flex-col">
                 <span className="font-medium">{user.name || "No name"}</span>
-                <span className="text-sm text-muted-foreground">
-                  {user.email}
-                </span>
+                <span className="text-muted-foreground text-sm">{user.email}</span>
               </div>
             </div>
           );
@@ -98,19 +91,11 @@ export function ImpersonateUsersDataTable({
       {
         id: "role",
         accessorKey: "role",
-        header: ({ column }) => (
-          <DataTableColumnHeader column={column} label="Role" />
-        ),
+        header: ({ column }) => <DataTableColumnHeader column={column} label="Role" />,
         cell: ({ row }) => {
           const role = row.getValue("role") as string;
           return (
-            <Badge
-              variant={
-                role === "admin"
-                  ? "destructive"
-                  : "secondary"
-              }
-            >
+            <Badge variant={role === "admin" ? "destructive" : "secondary"}>
               {role === "admin" && <Shield className="mr-1 h-3 w-3" />}
               {role === "user" && <UserCheck className="mr-1 h-3 w-3" />}
               {role}
@@ -131,19 +116,13 @@ export function ImpersonateUsersDataTable({
       {
         id: "status",
         accessorKey: "status",
-        header: ({ column }) => (
-          <DataTableColumnHeader column={column} label="Status" />
-        ),
+        header: ({ column }) => <DataTableColumnHeader column={column} label="Status" />,
         cell: ({ row }) => {
           const status = row.getValue("status") as string;
           return (
             <Badge
               variant={
-                status === "ACTIVE"
-                  ? "default"
-                  : status === "SUSPENDED"
-                    ? "outline"
-                    : "secondary"
+                status === "ACTIVE" ? "default" : status === "SUSPENDED" ? "outline" : "secondary"
               }
             >
               {status}
@@ -165,9 +144,7 @@ export function ImpersonateUsersDataTable({
       {
         id: "lastLoginAt",
         accessorKey: "lastLoginAt",
-        header: ({ column }) => (
-          <DataTableColumnHeader column={column} label="Last Login" />
-        ),
+        header: ({ column }) => <DataTableColumnHeader column={column} label="Last Login" />,
         cell: ({ row }) => {
           const date = row.getValue("lastLoginAt") as Date | null;
           return date ? (
@@ -175,7 +152,7 @@ export function ImpersonateUsersDataTable({
               {formatDistanceToNow(new Date(date), { addSuffix: true })}
             </span>
           ) : (
-            <span className="text-sm text-muted-foreground">Never</span>
+            <span className="text-muted-foreground text-sm">Never</span>
           );
         },
         enableSorting: true,

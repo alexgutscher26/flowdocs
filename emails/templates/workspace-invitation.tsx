@@ -1,19 +1,11 @@
 import * as React from "react";
 import { Section, Text } from "@react-email/components";
-import type {
-  EmailTemplateRenderResult,
-  EmailTemplateData,
-} from "@/lib/notifications/types";
+import type { EmailTemplateRenderResult, EmailTemplateData } from "@/lib/notifications/types";
 import { EmailTemplateId } from "@/lib/notifications/types";
 import { siteConfig } from "@/lib/config";
-import {
-  EmailLayout,
-  PrimaryButton,
-  SecondaryLink,
-} from "./components/email-layout";
+import { EmailLayout, PrimaryButton, SecondaryLink } from "./components/email-layout";
 
-type WorkspaceInvitationData =
-  EmailTemplateData[EmailTemplateId.WORKSPACE_INVITATION];
+type WorkspaceInvitationData = EmailTemplateData[EmailTemplateId.WORKSPACE_INVITATION];
 
 const paragraphStyle = {
   margin: 0,
@@ -41,26 +33,23 @@ export function WorkspaceInvitation({
       heading={`You've been invited!`}
     >
       <Text style={paragraphStyle}>
-        <strong>{inviterName}</strong> has invited you to join the{" "}
-        <strong>{workspaceName}</strong> workspace on {siteConfig.name}.
+        <strong>{inviterName}</strong> has invited you to join the <strong>{workspaceName}</strong>{" "}
+        workspace on {siteConfig.name}.
       </Text>
       <Text style={paragraphStyle}>
-        This invitation was sent to <strong>{inviteeEmail}</strong>. Accept the
-        invitation to start collaborating with your team.
+        This invitation was sent to <strong>{inviteeEmail}</strong>. Accept the invitation to start
+        collaborating with your team.
       </Text>
       <Section style={buttonContainerStyle}>
         <PrimaryButton href={acceptUrl}>Accept Invitation</PrimaryButton>
-        {declineUrl && (
-          <SecondaryLink href={declineUrl}>Decline</SecondaryLink>
-        )}
+        {declineUrl && <SecondaryLink href={declineUrl}>Decline</SecondaryLink>}
       </Section>
       <Text style={paragraphStyle}>
-        If you have any questions about this invitation, please contact{" "}
-        {inviterName} or reach out to our support team.
+        If you have any questions about this invitation, please contact {inviterName} or reach out
+        to our support team.
       </Text>
       <Text style={{ ...paragraphStyle, marginTop: "24px", fontSize: "14px", color: "#6B7280" }}>
-        If you weren&apos;t expecting this invitation, you can safely ignore
-        this email.
+        If you weren&apos;t expecting this invitation, you can safely ignore this email.
       </Text>
     </EmailLayout>
   );

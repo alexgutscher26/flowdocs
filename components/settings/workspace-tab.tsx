@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { WorkspaceSettingsForm } from "./workspace-settings-form";
 import type { WorkspaceWithRole } from "@/types/workspace";
 
@@ -19,9 +13,7 @@ export function WorkspaceTab({ workspace }: WorkspaceTabProps) {
     <Card>
       <CardHeader>
         <CardTitle>Workspace Settings</CardTitle>
-        <CardDescription>
-          Manage your workspace name and URL identifier
-        </CardDescription>
+        <CardDescription>Manage your workspace name and URL identifier</CardDescription>
       </CardHeader>
       <CardContent>
         <WorkspaceSettingsForm workspace={workspace} />

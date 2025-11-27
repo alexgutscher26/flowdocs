@@ -1,72 +1,72 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { IconCirclePlusFilled, IconMail, type Icon } from "@tabler/icons-react"
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { IconCirclePlusFilled, IconMail, type Icon } from "@tabler/icons-react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 
 type NavItem = {
-  title: string
-  url: string
-  icon?: Icon
-  match?: "exact" | "startsWith"
-}
+  title: string;
+  url: string;
+  icon?: Icon;
+  match?: "exact" | "startsWith";
+};
 
 const normalizePath = (path: string) => {
-  if (!path) return "/"
-  return path === "/" ? path : path.replace(/\/+$/, "")
-}
+  if (!path) return "/";
+  return path === "/" ? path : path.replace(/\/+$/, "");
+};
 
 const getMatchScore = (item: NavItem, currentPath: string) => {
-  const target = normalizePath(item.url)
-  const path = normalizePath(currentPath)
-  const match = item.match ?? "startsWith"
+  const target = normalizePath(item.url);
+  const path = normalizePath(currentPath);
+  const match = item.match ?? "startsWith";
 
   if (target === "/") {
-    return path === "/" ? Number.MAX_SAFE_INTEGER : -1
+    return path === "/" ? Number.MAX_SAFE_INTEGER : -1;
   }
 
   if (match === "exact") {
-    return path === target ? target.length + 100 : -1
+    return path === target ? target.length + 100 : -1;
   }
 
   if (path === target) {
-    return target.length + 100
+    return target.length + 100;
   }
 
   if (path.startsWith(`${target}/`)) {
-    return target.length
+    return target.length;
   }
 
-  return -1
-}
+  return -1;
+};
 
 const findActiveItem = (items: NavItem[], pathname: string) => {
-  let active: { item: NavItem; score: number } | null = null
+  let active: { item: NavItem; score: number } | null = null;
 
   for (const item of items) {
-    if (!item.url || item.url === "#") continue
-    const score = getMatchScore(item, pathname)
-    if (score < 0) continue
+    if (!item.url || item.url === "#") continue;
+    const score = getMatchScore(item, pathname);
+    if (score < 0) continue;
     if (!active || score > active.score) {
-      active = { item, score }
+      active = { item, score };
     }
   }
 
-  return active?.item
-}
+  return active?.item;
+};
 
 export function NavMain({ items }: { items: NavItem[] }) {
-  const pathname = usePathname()
-  const activeItem = findActiveItem(items, pathname)
+  const pathname = usePathname();
+  const activeItem = findActiveItem(items, pathname);
 
   return (
     <SidebarGroup>
@@ -92,7 +92,7 @@ export function NavMain({ items }: { items: NavItem[] }) {
         </SidebarMenu>
         <SidebarMenu>
           {items.map((item) => {
-            const active = activeItem?.url === item.url
+            const active = activeItem?.url === item.url;
 
             return (
               <SidebarMenuItem key={item.title}>
@@ -108,10 +108,10 @@ export function NavMain({ items }: { items: NavItem[] }) {
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-            )
+            );
           })}
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>
-  )
+  );
 }

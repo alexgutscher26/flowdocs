@@ -38,12 +38,10 @@ export function SettingsNavigation({ isAdmin }: SettingsNavigationProps) {
   // Filter navigation items based on admin status
   const navigationItems = isAdmin
     ? allNavigationItems
-    : allNavigationItems.filter(
-        (item) => item.id === "profile" || item.id === "account"
-      );
+    : allNavigationItems.filter((item) => item.id === "profile" || item.id === "account");
 
   return (
-    <nav className="space-y-1 rounded-lg border border-border bg-muted/30 p-2">
+    <nav className="border-border bg-muted/30 space-y-1 rounded-lg border p-2">
       {navigationItems.map((item) => {
         const Icon = item.icon;
         return (

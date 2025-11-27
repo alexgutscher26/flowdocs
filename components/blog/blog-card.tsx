@@ -54,10 +54,8 @@ export default function BlogCard({
         </div>
 
         <div className="grid gap-3 p-0.5">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <time dateTime={data.publishedAt}>
-              {formatDate(data.publishedAt)}
-            </time>
+          <div className="text-muted-foreground flex items-center gap-2 text-sm">
+            <time dateTime={data.publishedAt}>{formatDate(data.publishedAt)}</time>
             {data.readingTime && (
               <>
                 <span>•</span>
@@ -65,10 +63,8 @@ export default function BlogCard({
               </>
             )}
           </div>
-          <h2 className="text-foreground text-balance text-lg font-semibold md:text-xl">
-            <Link
-              href={`/blog/${data.slug}`}
-              className="before:absolute before:inset-0">
+          <h2 className="text-foreground text-lg font-semibold text-balance md:text-xl">
+            <Link href={`/blog/${data.slug}`} className="before:absolute before:inset-0">
               {data.title}
             </Link>
           </h2>
@@ -78,7 +74,7 @@ export default function BlogCard({
             <div className="space-y-2">
               {authors[data.author] && (
                 <div className="grid grid-cols-[auto_1fr] items-center gap-2">
-                  <div className="ring-border-illustration bg-card aspect-square size-6 overflow-hidden rounded-md border border-transparent shadow-md shadow-black/15 ring-1">
+                  <div className="ring-border-illustration bg-card aspect-square size-6 overflow-hidden rounded-md border border-transparent shadow-md ring-1 shadow-black/15">
                     <img
                       src={authors[data.author].image}
                       alt={authors[data.author].name}
@@ -98,7 +94,8 @@ export default function BlogCard({
             <div className="flex h-6 items-center">
               <span
                 aria-label={`Read ${data.title}`}
-                className="text-primary group-hover:text-foreground flex items-center gap-1 text-sm font-medium transition-colors duration-200">
+                className="text-primary group-hover:text-foreground flex items-center gap-1 text-sm font-medium transition-colors duration-200"
+              >
                 Read
                 <ChevronRight
                   strokeWidth={2.5}

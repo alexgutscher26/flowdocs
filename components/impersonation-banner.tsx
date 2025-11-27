@@ -13,9 +13,7 @@ interface ImpersonationBannerProps {
   impersonationStatus: ImpersonationStatus;
 }
 
-export function ImpersonationBanner({
-  impersonationStatus,
-}: ImpersonationBannerProps) {
+export function ImpersonationBanner({ impersonationStatus }: ImpersonationBannerProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [isVisible, setIsVisible] = useState(true);
@@ -71,10 +69,8 @@ export function ImpersonationBanner({
         </AlertTitle>
         <AlertDescription className="text-yellow-800 dark:text-yellow-300">
           You are currently viewing the application as{" "}
-          <strong className="font-semibold">
-            {user?.name || "Unknown User"}
-          </strong>{" "}
-          ({user?.email}). All actions will be performed on behalf of this user.
+          <strong className="font-semibold">{user?.name || "Unknown User"}</strong> ({user?.email}).
+          All actions will be performed on behalf of this user.
         </AlertDescription>
       </Alert>
     </div>

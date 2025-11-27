@@ -49,13 +49,10 @@ export default function Feedback() {
               setReaction(label);
               // toast.success("Feedback registered – thank you!")
             }}
-            className={cn(
-              "text-4xl transition-all duration-75 hover:scale-110 active:scale-100",
-              {
-                "scale-90 grayscale": reaction && reaction !== label,
-                "scale-110": reaction === label,
-              }
-            )}
+            className={cn("text-4xl transition-all duration-75 hover:scale-110 active:scale-100", {
+              "scale-90 grayscale": reaction && reaction !== label,
+              "scale-110": reaction === label,
+            })}
           >
             {emoji}
           </button>

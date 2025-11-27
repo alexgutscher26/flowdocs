@@ -1,15 +1,15 @@
-import type { BlogPost, HelpPost } from "content-collections"
+import type { BlogPost, HelpPost } from "content-collections";
 
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://hagenkit.com"
-const organizationName = "HagenKit"
-const organizationLogo = `${baseUrl}/logo.png`
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://hagenkit.com";
+const organizationName = "HagenKit";
+const organizationLogo = `${baseUrl}/logo.png`;
 
 interface Author {
-  name: string
-  role?: string
-  avatar?: string
-  twitter?: string
-  linkedin?: string
+  name: string;
+  role?: string;
+  avatar?: string;
+  twitter?: string;
+  linkedin?: string;
 }
 
 export function generateBlogPostStructuredData(post: BlogPost, author?: Author) {
@@ -48,9 +48,9 @@ export function generateBlogPostStructuredData(post: BlogPost, author?: Author) 
     keywords: post.seoKeywords?.join(", "),
     articleSection: post.categories?.join(", "),
     timeRequired: post.readingTime ? `PT${post.readingTime}M` : undefined,
-  }
+  };
 
-  return structuredData
+  return structuredData;
 }
 
 export function generateHelpArticleStructuredData(post: HelpPost, author?: Author) {
@@ -88,14 +88,12 @@ export function generateHelpArticleStructuredData(post: HelpPost, author?: Autho
     keywords: post.seoKeywords?.join(", "),
     articleSection: post.categories?.join(", "),
     timeRequired: post.readingTime ? `PT${post.readingTime}M` : undefined,
-  }
+  };
 
-  return structuredData
+  return structuredData;
 }
 
-export function generateBreadcrumbStructuredData(
-  items: Array<{ name: string; url: string }>
-) {
+export function generateBreadcrumbStructuredData(items: Array<{ name: string; url: string }>) {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -105,7 +103,7 @@ export function generateBreadcrumbStructuredData(
       name: item.name,
       item: `${baseUrl}${item.url}`,
     })),
-  }
+  };
 }
 
 export function generateOrganizationStructuredData() {
@@ -121,7 +119,7 @@ export function generateOrganizationStructuredData() {
       "https://linkedin.com/company/yourcompany",
       "https://github.com/yourcompany",
     ],
-  }
+  };
 }
 
 export function generateWebsiteStructuredData() {
@@ -138,12 +136,10 @@ export function generateWebsiteStructuredData() {
       },
       "query-input": "required name=search_term_string",
     },
-  }
+  };
 }
 
-export function generateFAQStructuredData(
-  faqs: Array<{ question: string; answer: string }>
-) {
+export function generateFAQStructuredData(faqs: Array<{ question: string; answer: string }>) {
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -155,15 +151,15 @@ export function generateFAQStructuredData(
         text: faq.answer,
       },
     })),
-  }
+  };
 }
 
 export function generateHowToStructuredData(props: {
-  name: string
-  description: string
-  steps: Array<{ name: string; text: string; image?: string }>
-  totalTime?: string
-  estimatedCost?: string
+  name: string;
+  description: string;
+  steps: Array<{ name: string; text: string; image?: string }>;
+  totalTime?: string;
+  estimatedCost?: string;
 }) {
   return {
     "@context": "https://schema.org",
@@ -185,15 +181,12 @@ export function generateHowToStructuredData(props: {
       text: step.text,
       image: step.image ? `${baseUrl}${step.image}` : undefined,
     })),
-  }
+  };
 }
 
 // Helper to inject structured data into page
 export function StructuredData({ data }: { data: object }) {
   return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
-    />
-  )
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />
+  );
 }

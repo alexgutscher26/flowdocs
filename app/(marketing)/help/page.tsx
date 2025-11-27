@@ -29,9 +29,7 @@ export default function HelpCenter() {
         <div className="absolute top-28 h-full w-full border border-gray-200 bg-white/50 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur-lg" />
         <MaxWidthWrapper className="max-w-screen-lg pb-20">
           <div className="relative mb-10 rounded-xl border border-gray-200 bg-white px-4 py-6">
-            <h2 className="px-4 font-display text-2xl font-bold text-gray-700">
-              Popular Articles
-            </h2>
+            <h2 className="font-display px-4 text-2xl font-bold text-gray-700">Popular Articles</h2>
             <div className="mt-4 grid gap-2 md:grid-cols-2">
               {popularArticles.map((article) => (
                 <HelpArticleLink key={article.slug} article={article} />
