@@ -10,6 +10,9 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 
+/**
+ * Renders the empty state component for Dashboard Pro.
+ */
 export function DashboardProEmptyState() {
   return (
     <Empty>
