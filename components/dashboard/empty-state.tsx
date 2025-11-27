@@ -10,6 +10,9 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 
+/**
+ * Renders the empty state of the dashboard with a welcome message and action buttons.
+ */
 export function DashboardEmptyState() {
   return (
     <Empty>
