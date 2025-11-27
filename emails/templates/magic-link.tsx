@@ -1,4 +1,3 @@
-import * as React from "react";
 import { Section, Text } from "@react-email/components";
 import type { EmailTemplateRenderResult, EmailTemplateData } from "@/lib/notifications/types";
 import { EmailTemplateId } from "@/lib/notifications/types";
@@ -55,7 +54,7 @@ export const magicLinkTemplate = {
 
 MagicLink.PreviewProps = {
   firstName: "Alex",
-  magicLinkUrl: `${siteConfig.url}/magic-link?token=abc123`,
+  magicLinkUrl: `https://flowdocs.com/magic-link?token=abc123`,
   expiresInMinutes: 10,
 } satisfies MagicLinkData;
 

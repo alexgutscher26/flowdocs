@@ -1,4 +1,3 @@
-import * as React from "react";
 import { Section, Text } from "@react-email/components";
 import type { EmailTemplateRenderResult, EmailTemplateData } from "@/lib/notifications/types";
 import { EmailTemplateId } from "@/lib/notifications/types";
@@ -59,7 +58,7 @@ export const emailVerificationTemplate = {
 
 EmailVerification.PreviewProps = {
   firstName: "Alex",
-  verificationUrl: `${siteConfig.url}/verify-email?token=abc123`,
+  verificationUrl: `https://flowdocs.com/verify-email?token=abc123`,
 } satisfies EmailVerificationData;
 
 export default EmailVerification;

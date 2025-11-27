@@ -5,6 +5,7 @@ import {
   WebSocketMessagePayload,
   WebSocketTypingPayload,
   WebSocketPresencePayload,
+  PresenceStatus,
 } from "@/types/chat";
 
 interface UseWebSocketOptions {
@@ -149,9 +150,9 @@ export function useWebSocket({ workspaceId, userId, enabled = true }: UseWebSock
   const onPresence = useCallback((callback: (payload: WebSocketPresencePayload) => void) => {
     if (socketRef.current) {
       const handleOnline = (payload: WebSocketPresencePayload) =>
-        callback({ ...payload, status: "online" });
+        callback({ ...payload, status: PresenceStatus.ONLINE });
       const handleOffline = (payload: WebSocketPresencePayload) =>
-        callback({ ...payload, status: "offline" });
+        callback({ ...payload, status: PresenceStatus.OFFLINE });
 
       socketRef.current.on(WebSocketEvent.USER_ONLINE, handleOnline);
       socketRef.current.on(WebSocketEvent.USER_OFFLINE, handleOffline);

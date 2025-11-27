@@ -288,6 +288,7 @@ export function ChatLayout({
         <ThreadView
           workspaceId={workspaceId}
           channelId={activeChannelId!}
+          channelName={activeChannel!.name}
           parentMessage={threadMessage}
           currentUserId={userId}
           onClose={handleCloseThread}

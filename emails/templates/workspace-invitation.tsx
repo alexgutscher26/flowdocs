@@ -67,8 +67,8 @@ WorkspaceInvitation.PreviewProps = {
   inviterName: "Sarah Johnson",
   workspaceName: "Acme Corp",
   inviteeEmail: "john@example.com",
-  acceptUrl: `${siteConfig.url}/accept-invitation?token=abc123`,
-  declineUrl: `${siteConfig.url}/decline-invitation?token=abc123`,
+  acceptUrl: `https://flowdocs.com/accept-invitation?token=abc123`,
+  declineUrl: `https://flowdocs.com/decline-invitation?token=abc123`,
 } satisfies WorkspaceInvitationData;
 
 export default WorkspaceInvitation;

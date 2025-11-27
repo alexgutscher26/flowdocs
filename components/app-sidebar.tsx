@@ -5,15 +5,12 @@ import {
   IconCamera,
   IconChartBar,
   IconDashboard,
-  IconDatabase,
   IconFileAi,
   IconFileDescription,
-  IconFileWord,
   IconFolder,
   IconHelp,
   IconInnerShadowTop,
   IconListDetails,
-  IconReport,
   IconSearch,
   IconSettings,
   IconUsers,
@@ -177,9 +174,9 @@ export function AppSidebar({
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:!p-1.5">
-              <a href="/" aria-label="HagenKit home">
+              <a href="/" aria-label="Flowdocs home">
                 <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">HagenKit</span>
+                <span className="text-base font-semibold">Flowdocs</span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>

@@ -1,48 +1,43 @@
 export const siteConfig = {
-  name: "HagenKit",
-  title: "HagenKit – Production-ready SaaS boilerplate",
+  name: "FlowDocs",
+  title: "FlowDocs – Team Communication & Knowledge Base Hybrid",
   description:
-    "HagenKit by Codehagen is a production-ready boilerplate for SaaS apps, combining design, auth, and billing into a unified starter kit.",
-  url: "https://www.prismstack.com/hagenkit",
+    "FlowDocs by snackforcode is a production-ready boilerplate for SaaS apps, combining design, auth, and billing into a unified starter kit.",
   ogImage: "/og.png",
-  upgrade: {
-    label: "Upgrade to HagenKit Pro",
-    href: "https://www.prismstack.com/hagenkit/pro",
-  },
   links: {
-    twitter: "https://x.com/codehagen",
-    linkedin: "https://www.linkedin.com/company/codehagen",
+    twitter: "https://x.com/snackforcode",
   },
   keywords: [
-    "SaaS boilerplate",
-    "Next.js starter kit",
-    "Codehagen",
-    "subscription billing",
-    "frontend design system",
-    "authentication templates",
-    "SaaS infrastructure",
-    "productized boilerplate",
-    "SaaS launch platform",
+    "snackforcode",
+    "FlowDocs",
+    "Chat that becomes documentation automatically",
+    "no more lost context in endless Slack threads",
+    "team communication & knowledge base hybrid",
+    "communication",
+    "knowledge",
+    "knowledge base",
+    "slack",
+    "notion"
   ],
   authors: [
     {
-      name: "Codehagen",
-      url: "https://www.prismstack.com",
+      name: "snackforcode",
+      url: "https://www.flowdocs.com",
     },
   ],
-  creator: "Codehagen",
-  publisher: "Codehagen",
+  creator: "snackforcode",
+  publisher: "snackforcode",
   twitterHandle: "@codehagen",
   locale: "en_US",
   category: "Software",
   // Email branding configuration
   email: {
-    brandName: "HagenKit",
+    brandName: "FlowDocs",
     tagline:
-      "Production-ready SaaS boilerplate with authentication, billing, and design system built-in.",
-    supportEmail: "support@prismstack.com",
-    fromEmail: "noreply@prismstack.com",
-    fromName: "HagenKit",
+      "Chat that becomes documentation automatically—no more lost context in endless Slack threads.",
+    supportEmail: "support@flowdocs.com",
+    fromEmail: "noreply@flowdocs.com",
+    fromName: "FlowDocs",
   },
 };
 

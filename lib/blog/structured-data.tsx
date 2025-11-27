@@ -1,7 +1,7 @@
 import type { BlogPost, HelpPost } from "content-collections";
 
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://hagenkit.com";
-const organizationName = "HagenKit";
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://flowdocs.com";
+const organizationName = "FlowDocs";
 const organizationLogo = `${baseUrl}/logo.png`;
 
 interface Author {
@@ -23,16 +23,16 @@ export function generateBlogPostStructuredData(post: BlogPost, author?: Author) 
     dateModified: post.publishedAt,
     author: author
       ? {
-          "@type": "Person",
-          name: author.name,
-          jobTitle: author.role,
-          image: author.avatar ? `${baseUrl}${author.avatar}` : undefined,
-          sameAs: [author.twitter, author.linkedin].filter(Boolean),
-        }
+        "@type": "Person",
+        name: author.name,
+        jobTitle: author.role,
+        image: author.avatar ? `${baseUrl}${author.avatar}` : undefined,
+        sameAs: [author.twitter, author.linkedin].filter(Boolean),
+      }
       : {
-          "@type": "Person",
-          name: post.author,
-        },
+        "@type": "Person",
+        name: post.author,
+      },
     publisher: {
       "@type": "Organization",
       name: organizationName,
@@ -63,16 +63,16 @@ export function generateHelpArticleStructuredData(post: HelpPost, author?: Autho
     dateModified: post.updatedAt,
     author: author
       ? {
-          "@type": "Person",
-          name: author.name,
-          jobTitle: author.role,
-          image: author.avatar ? `${baseUrl}${author.avatar}` : undefined,
-          sameAs: [author.twitter, author.linkedin].filter(Boolean),
-        }
+        "@type": "Person",
+        name: author.name,
+        jobTitle: author.role,
+        image: author.avatar ? `${baseUrl}${author.avatar}` : undefined,
+        sameAs: [author.twitter, author.linkedin].filter(Boolean),
+      }
       : {
-          "@type": "Person",
-          name: post.author,
-        },
+        "@type": "Person",
+        name: post.author,
+      },
     publisher: {
       "@type": "Organization",
       name: organizationName,
@@ -115,9 +115,7 @@ export function generateOrganizationStructuredData() {
     logo: organizationLogo,
     sameAs: [
       // Add your social media URLs here
-      "https://twitter.com/yourcompany",
-      "https://linkedin.com/company/yourcompany",
-      "https://github.com/yourcompany",
+      "https://twitter.com/snackforcode",
     ],
   };
 }
@@ -169,10 +167,10 @@ export function generateHowToStructuredData(props: {
     totalTime: props.totalTime,
     estimatedCost: props.estimatedCost
       ? {
-          "@type": "MonetaryAmount",
-          currency: "USD",
-          value: props.estimatedCost,
-        }
+        "@type": "MonetaryAmount",
+        currency: "USD",
+        value: props.estimatedCost,
+      }
       : undefined,
     step: props.steps.map((step, index) => ({
       "@type": "HowToStep",

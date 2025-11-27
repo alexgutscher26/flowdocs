@@ -48,7 +48,7 @@ export const BLOG_CATEGORIES = [
   },
 ];
 
-export const POPULAR_ARTICLES = ["what-is-hagenkit", "organize-with-labels", "azure-saml-sso"];
+export const POPULAR_ARTICLES = ["what-is-flowdocs", "organize-with-labels", "azure-saml-sso"];
 
 export const HELP_CATEGORIES: {
   title: string;
@@ -56,49 +56,49 @@ export const HELP_CATEGORIES: {
   description: string;
   icon: React.ReactNode;
 }[] = [
-  {
-    title: "HagenKit Overview",
-    slug: "overview",
-    description:
-      "Understand the HagenKit platform, core capabilities, and the problems it solves for modern teams.",
-    icon: <IconBuildingSkyscraper className="h-6 w-6 text-gray-500" />,
-  },
-  {
-    title: "Getting Started",
-    slug: "getting-started",
-    description:
-      "Launch quickly with setup checklists, workspace walkthroughs, and best practices for connecting your first HagenKit projects and inviting collaborators.",
-    icon: <IconChartBar className="h-6 w-6 text-gray-500" />,
-  },
-  {
-    title: "Key Concepts",
-    slug: "terms",
-    description:
-      "Build fluency with HagenKit terminology, core objects, and workspace roles so every teammate knows how launches, automations, and permissions connect.",
-    icon: <IconBook2 className="h-6 w-6 text-gray-500" />,
-  },
-  {
-    title: "Agency Playbooks",
-    slug: "for-investors",
-    description:
-      "Detailed playbooks for agencies orchestrating multiple HagenKit clients, with templates, automation tips, and workflow handoffs that scale.",
-    icon: <IconFileAnalytics className="h-6 w-6 text-gray-500" />,
-  },
-  {
-    title: "AI Insights",
-    slug: "analysis",
-    description:
-      "Dive into HagenKit AI workflows, enrichment techniques, and automation explainers to understand how data powers each step of your launch process.",
-    icon: <IconChartPie className="h-6 w-6 text-gray-500" />,
-  },
-  {
-    title: "Optimization Guides",
-    slug: "valuation",
-    description:
-      "Optimize live HagenKit sites with guidance on performance tuning, design refinements, copy testing, and analytics workflows that keep launches improving.",
-    icon: <IconScale className="h-6 w-6 text-gray-500" />,
-  },
-];
+    {
+      title: "FlowDocs Overview",
+      slug: "overview",
+      description:
+        "Understand how FlowDocs transforms team conversations into searchable documentation automatically, eliminating lost context in endless chat threads.",
+      icon: <IconBuildingSkyscraper className="h-6 w-6 text-gray-500" />,
+    },
+    {
+      title: "Getting Started",
+      slug: "getting-started",
+      description:
+        "Set up your workspace, create channels, and learn how to convert your first chat thread into a wiki page with our quick-start guide.",
+      icon: <IconChartBar className="h-6 w-6 text-gray-500" />,
+    },
+    {
+      title: "Key Concepts",
+      slug: "terms",
+      description:
+        "Master FlowDocs terminology including workspaces, channels, threads, wiki pages, and version control to collaborate effectively with your team.",
+      icon: <IconBook2 className="h-6 w-6 text-gray-500" />,
+    },
+    {
+      title: "Team Collaboration",
+      slug: "for-investors",
+      description:
+        "Best practices for organizing team knowledge, managing permissions, and creating a culture of documentation that scales with your organization.",
+      icon: <IconFileAnalytics className="h-6 w-6 text-gray-500" />,
+    },
+    {
+      title: "Wiki Features",
+      slug: "analysis",
+      description:
+        "Explore wiki editing, markdown formatting, version history, tagging, and search capabilities to build a comprehensive knowledge base from your conversations.",
+      icon: <IconChartPie className="h-6 w-6 text-gray-500" />,
+    },
+    {
+      title: "Advanced Workflows",
+      slug: "valuation",
+      description:
+        "Optimize your documentation workflow with nested pages, cross-references, automated tagging, and integration strategies for maximum team productivity.",
+      icon: <IconScale className="h-6 w-6 text-gray-500" />,
+    },
+  ];
 
 export const getPopularArticles = () => {
   const popularArticles = POPULAR_ARTICLES.map((slug) => {

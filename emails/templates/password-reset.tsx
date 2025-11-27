@@ -1,4 +1,3 @@
-import * as React from "react";
 import { Section, Text } from "@react-email/components";
 import type { EmailTemplateRenderResult, EmailTemplateData } from "@/lib/notifications/types";
 import { EmailTemplateId } from "@/lib/notifications/types";
@@ -62,7 +61,7 @@ export const passwordResetTemplate = {
 
 PasswordReset.PreviewProps = {
   firstName: "Alex",
-  resetUrl: `${siteConfig.url}/reset-password?token=abc123`,
+  resetUrl: `https://flowdocs.com/reset-password?token=abc123`,
   expiresInMinutes: 60,
 } satisfies PasswordResetData;
 

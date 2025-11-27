@@ -29,6 +29,7 @@ interface ConvertToWikiButtonProps {
   threadTitle?: string;
   channelId: string;
   channelName: string;
+  workspaceId: string;
   currentUserId: string;
   threadStarterId?: string;
   isAdmin?: boolean;
@@ -43,6 +44,7 @@ export function ConvertToWikiButton({
   threadTitle,
   channelId,
   channelName,
+  workspaceId,
   currentUserId,
   threadStarterId,
   isAdmin = false,
@@ -107,6 +109,7 @@ export function ConvertToWikiButton({
           tags: editedTags,
           sourceMessageId: messages[0]?.id,
           channelId,
+          workspaceId,
           metadata: conversionResult?.metadata,
         }),
       });
@@ -116,15 +119,18 @@ export function ConvertToWikiButton({
       }
 
       const data = await response.json();
-      setWikiPageUrl(`/wiki/${data.slug}`);
+      setWikiPageUrl(`/dashboard/wiki/${workspaceId}/${data.slug}`);
       setStep("success");
 
       // Update the original thread with wiki link
-      await fetch(`/api/chat/messages/${messages[0]?.id}/link-wiki`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ wikiPageId: data.id }),
-      });
+      await fetch(
+        `/api/chat/${workspaceId}/channels/${channelId}/messages/${messages[0]?.id}/link-wiki`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ wikiPageId: data.id }),
+        }
+      );
 
       toast({
         title: "Wiki page created!",

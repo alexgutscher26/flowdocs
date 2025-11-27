@@ -1,13 +1,13 @@
 <a href="https://www.prismstack.com/hagenkit">
-  <h1 align="center">HagenKit: Production-Ready SaaS Boilerplate</h1>
+  <h1 align="center">FlowDocs: Team Communication & Knowledge Base Hybrid</h1>
 </a>
 
 <p align="center">
-  Launch enterprise-grade SaaS experiences faster with a cohesive Next.js foundation for marketing surfaces, authenticated dashboards, and admin tooling.
+  Chat that becomes documentation automatically—no more lost context in endless Slack threads.
 </p>
 
 <p align="center">
-  <img width="1200" alt="HagenKit dashboard mockup" src="public/hero.png" />
+  <img width="1200" alt="FlowDocs dashboard mockup" src="public/hero.png" />
 </p>
 
 <p align="center">

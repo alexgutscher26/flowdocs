@@ -1,4 +1,3 @@
-import * as React from "react";
 import { Section, Text } from "@react-email/components";
 import type { EmailTemplateRenderResult, EmailTemplateData } from "@/lib/notifications/types";
 import { EmailTemplateId } from "@/lib/notifications/types";
@@ -51,7 +50,7 @@ export const welcomeEmailTemplate = {
 
 WelcomeEmail.PreviewProps = {
   firstName: "Alex",
-  dashboardUrl: `${siteConfig.url}/dashboard`,
+  dashboardUrl: `https://flowdocs.com/dashboard`,
 } satisfies WelcomeEmailData;
 
 export default WelcomeEmail;

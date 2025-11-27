@@ -1,5 +1,5 @@
+import { siteConfig } from "../config";
 import type { EmailTemplateId, EmailTemplateData } from "./types";
-import { siteConfig } from "@/lib/config";
 
 /**
  * Build a dashboard URL for the application
@@ -7,7 +7,7 @@ import { siteConfig } from "@/lib/config";
 export function buildDashboardUrl(path: string = ""): string {
   const baseUrl =
     process.env.NEXT_PUBLIC_APP_URL ||
-    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : siteConfig.url);
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://flowdocs.com");
 
   return `${baseUrl}${path.startsWith("/") ? path : `/${path}`}`;
 }

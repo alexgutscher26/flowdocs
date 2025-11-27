@@ -3,6 +3,7 @@
 import { ExtendedMessage } from "@/types/chat";
 import { MessageList } from "./message-list";
 import { MessageInput } from "./message-input";
+import { ConvertToWikiButton } from "./convert-to-wiki-button";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { useChatMessages } from "@/hooks/use-chat-messages";
@@ -12,6 +13,7 @@ import { Separator } from "@/components/ui/separator";
 interface ThreadViewProps {
   workspaceId: string;
   channelId: string;
+  channelName: string;
   parentMessage: ExtendedMessage;
   currentUserId: string;
   onClose: () => void;
@@ -21,6 +23,7 @@ interface ThreadViewProps {
 export function ThreadView({
   workspaceId,
   channelId,
+  channelName,
   parentMessage,
   currentUserId,
   onClose,
@@ -56,9 +59,20 @@ export function ThreadView({
             {parentMessage.user.name || parentMessage.user.email}
           </p>
         </div>
-        <Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={onClose}>
-          <X className="h-4 w-4" />
-        </Button>
+        <div className="flex items-center gap-2">
+          <ConvertToWikiButton
+            messages={[parentMessage, ...messages]}
+            threadTitle={`Thread from ${parentMessage.user.name || parentMessage.user.email}`}
+            channelId={channelId}
+            channelName={channelName}
+            workspaceId={workspaceId}
+            currentUserId={currentUserId}
+            threadStarterId={parentMessage.userId}
+          />
+          <Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={onClose}>
+            <X className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
 
       {/* Parent message */}
@@ -99,7 +113,7 @@ export function ThreadView({
               updateMessage(msg.id, newContent);
             }
           }}
-          messagesEndRef={messagesEndRef}
+          messagesEndRef={messagesEndRef as React.RefObject<HTMLDivElement>}
         />
 
         {/* Reply input */}
