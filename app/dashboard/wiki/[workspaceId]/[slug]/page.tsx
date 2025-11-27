@@ -121,7 +121,12 @@ async function getWikiPage(workspaceId: string, slug: string, userId: string) {
     createdAt: page.createdAt,
     updatedAt: page.updatedAt,
     publishedAt: page.publishedAt || undefined,
-    author: page.author,
+    author: {
+      id: page.author.id,
+      name: page.author.name || undefined,
+      email: page.author.email,
+      image: page.author.image || undefined,
+    },
     tags: page.tags.map((pt) => ({
       id: pt.tag.id,
       name: pt.tag.name,
@@ -130,13 +135,18 @@ async function getWikiPage(workspaceId: string, slug: string, userId: string) {
     })),
     sourceMessage: page.message
       ? {
-          id: page.message.id,
-          channelId: page.message.channelId,
-          channelName: page.message.channel.name,
-          messageCount: page.message._count.replies + 1,
-        }
+        id: page.message.id,
+        channelId: page.message.channelId,
+        channelName: page.message.channel.name,
+        messageCount: page.message._count.replies + 1,
+      }
       : undefined,
-    relatedPages,
+    relatedPages: relatedPages.map((rp) => ({
+      id: rp.id,
+      title: rp.title,
+      slug: rp.slug,
+      excerpt: rp.excerpt || undefined,
+    })),
     versions: page.versions.map((v) => ({
       id: v.id,
       title: v.title,
@@ -144,7 +154,12 @@ async function getWikiPage(workspaceId: string, slug: string, userId: string) {
       excerpt: v.excerpt || undefined,
       version: v.version,
       changeNote: v.changeNote || undefined,
-      author: v.author,
+      author: {
+        id: v.author.id,
+        name: v.author.name || undefined,
+        email: v.author.email,
+        image: v.author.image || undefined,
+      },
       createdAt: v.createdAt,
     })),
     currentVersion: page.versions[0]?.version,
@@ -192,8 +207,71 @@ export default async function WikiPage({ params }: WikiPageProps) {
 
   const handleVersionRestore = async (versionId: string) => {
     "use server";
-    // This would restore a version - implement as needed
-    console.log("Restore version:", versionId);
+
+    try {
+      // Get the version to restore
+      const versionToRestore = await prisma.wikiVersion.findUnique({
+        where: { id: versionId },
+        include: {
+          page: true,
+        },
+      });
+
+      if (!versionToRestore) {
+        throw new Error("Version not found");
+      }
+
+      // Verify user has permission to edit this page
+      const workspaceMember = await prisma.workspaceMember.findFirst({
+        where: {
+          workspaceId: versionToRestore.page.workspaceId,
+          userId: session!.user.id,
+        },
+      });
+
+      if (!workspaceMember) {
+        throw new Error("Unauthorized");
+      }
+
+      // Get the current highest version number
+      const latestVersion = await prisma.wikiVersion.findFirst({
+        where: { pageId: versionToRestore.pageId },
+        orderBy: { version: "desc" },
+      });
+
+      const newVersionNumber = (latestVersion?.version || 0) + 1;
+
+      // Update the page with the restored content
+      await prisma.wikiPage.update({
+        where: { id: versionToRestore.pageId },
+        data: {
+          title: versionToRestore.title,
+          content: versionToRestore.content,
+          excerpt: versionToRestore.excerpt,
+          updatedAt: new Date(),
+        },
+      });
+
+      // Create a new version entry for the restore
+      await prisma.wikiVersion.create({
+        data: {
+          pageId: versionToRestore.pageId,
+          title: versionToRestore.title,
+          content: versionToRestore.content,
+          excerpt: versionToRestore.excerpt,
+          version: newVersionNumber,
+          changeNote: `Restored from version ${versionToRestore.version}`,
+          authorId: session!.user.id,
+        },
+      });
+
+      // Revalidate the page
+      const { revalidatePath } = await import("next/cache");
+      revalidatePath(`/dashboard/wiki/${workspaceId}/${slug}`);
+    } catch (error) {
+      console.error("Error restoring version:", error);
+      throw error;
+    }
   };
 
   return (
