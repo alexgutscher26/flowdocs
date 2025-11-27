@@ -28,10 +28,22 @@ export async function getCurrentUser(): Promise<CurrentUser> {
         emailVerified: true,
         onboardingCompleted: true,
         createdAt: true,
+        defaultWorkspaceId: true,
+        defaultWorkspace: {
+          select: {
+            slug: true,
+          },
+        },
       },
     });
 
-    return user;
+    if (!user) return null;
+
+    // Flatten the structure for the return type
+    return {
+      ...user,
+      defaultWorkspaceSlug: user.defaultWorkspace?.slug ?? null,
+    };
   } catch (error) {
     console.error("Error fetching current user:", error);
     return null;

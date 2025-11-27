@@ -17,6 +17,7 @@ import {
   IconSearch,
   IconSettings,
   IconUsers,
+  IconMessageCircle,
 } from "@tabler/icons-react";
 import type { SidebarUser } from "@/types/user";
 
@@ -40,34 +41,6 @@ const data = {
     email: "m@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
-  navMain: [
-    {
-      title: "Dashboard",
-      url: "/dashboard",
-      icon: IconDashboard,
-      match: "exact" as const,
-    },
-    {
-      title: "Lifecycle",
-      url: "/dashboard/lifecycle",
-      icon: IconListDetails,
-    },
-    {
-      title: "Analytics",
-      url: "/dashboard/analytics",
-      icon: IconChartBar,
-    },
-    {
-      title: "Projects",
-      url: "/dashboard/projects",
-      icon: IconFolder,
-    },
-    {
-      title: "Team",
-      url: "/dashboard/team",
-      icon: IconUsers,
-    },
-  ],
   navClouds: [
     {
       title: "Capture",
@@ -158,6 +131,40 @@ export function AppSidebar({
 }: React.ComponentProps<typeof Sidebar> & {
   user: SidebarUser;
 }) {
+  const navMain = [
+    {
+      title: "Dashboard",
+      url: "/dashboard",
+      icon: IconDashboard,
+      match: "exact" as const,
+    },
+    {
+      title: "Lifecycle",
+      url: "/dashboard/lifecycle",
+      icon: IconListDetails,
+    },
+    {
+      title: "Analytics",
+      url: "/dashboard/analytics",
+      icon: IconChartBar,
+    },
+    {
+      title: "Projects",
+      url: "/dashboard/projects",
+      icon: IconFolder,
+    },
+    {
+      title: "Team",
+      url: "/dashboard/team",
+      icon: IconUsers,
+    },
+    {
+      title: "Chat",
+      url: `/dashboard/chat/${user?.defaultWorkspaceSlug || user?.defaultWorkspaceId || "default"}`,
+      icon: IconMessageCircle,
+    },
+  ];
+
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -176,7 +183,7 @@ export function AppSidebar({
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain items={navMain} />
         {user?.role === "admin" && <NavDocuments items={data.admin} />}
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>

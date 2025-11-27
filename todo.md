@@ -21,59 +21,59 @@
   - **Acceptance**: Database can store channels, messages, threads, and members
 
 #### WebSocket Infrastructure
-- [ ] **File**: `lib/websocket.ts` (new)
-  - [ ] Set up Socket.IO server with Redis adapter
-  - [ ] Implement room-based messaging (workspace + channel)
-  - [ ] Add user presence tracking
-  - [ ] Build message broadcasting system
-  - [ ] Create typing indicators
-  - [ ] Implement online user lists
+- [x] **File**: `lib/websocket.ts` (new)
+  - [x] Set up Socket.IO server with Redis adapter
+  - [x] Implement room-based messaging (workspace + channel)
+  - [x] Add user presence tracking
+  - [x] Build message broadcasting system
+  - [x] Create typing indicators
+  - [x] Implement online user lists
   - **Acceptance**: Real-time messages sync across multiple clients
 
 #### Chat API Endpoints
-- [ ] **File**: `app/api/chat/[workspaceId]/channels/route.ts` (new)
-  - [ ] `GET /api/chat/[workspaceId]/channels` - List channels
-  - [ ] `POST /api/chat/[workspaceId]/channels` - Create channel
-  - [ ] `GET /api/chat/[workspaceId]/channels/[channelId]` - Get channel details
-  - [ ] `PUT /api/chat/[workspaceId]/channels/[channelId]` - Update channel
-  - [ ] `DELETE /api/chat/[workspaceId]/channels/[channelId]` - Archive channel
+- [x] **File**: `app/api/chat/[workspaceId]/channels/route.ts` (new)
+  - [x] `GET /api/chat/[workspaceId]/channels` - List channels
+  - [x] `POST /api/chat/[workspaceId]/channels` - Create channel
+  - [x] `GET /api/chat/[workspaceId]/channels/[channelId]` - Get channel details
+  - [x] `PUT /api/chat/[workspaceId]/channels/[channelId]` - Update channel
+  - [x] `DELETE /api/chat/[workspaceId]/channels/[channelId]` - Archive channel
   - **Acceptance**: Full channel CRUD operations working
 
-- [ ] **File**: `app/api/chat/[workspaceId]/channels/[channelId]/messages/route.ts` (new)
-  - [ ] `GET /api/chat/[workspaceId]/channels/[channelId]/messages` - List with pagination
-  - [ ] `POST /api/chat/[workspaceId]/channels/[channelId]/messages` - Send message
-  - [ ] `PUT /api/chat/[workspaceId]/channels/[channelId]/messages/[messageId]` - Edit message
-  - [ ] `DELETE /api/chat/[workspaceId]/channels/[channelId]/messages/[messageId]` - Delete message
-  - [ ] Add message threading support (threadId parameter)
+- [x] **File**: `app/api/chat/[workspaceId]/channels/[channelId]/messages/route.ts` (new)
+  - [x] `GET /api/chat/[workspaceId]/channels/[channelId]/messages` - List with pagination
+  - [x] `POST /api/chat/[workspaceId]/channels/[channelId]/messages` - Send message
+  - [x] `PUT /api/chat/[workspaceId]/channels/[channelId]/messages/[messageId]` - Edit message
+  - [x] `DELETE /api/chat/[workspaceId]/channels/[channelId]/messages/[messageId]` - Delete message
+  - [x] Add message threading support (threadId parameter)
   - **Acceptance**: Messages can be sent, edited, deleted, and threaded
 
 #### Chat UI Components
-- [ ] **File**: `components/chat/chat-layout.tsx` (new)
-  - [ ] Channel sidebar with unread counts
-  - [ ] Message list with infinite scroll
-  - [ ] Message input with file upload area
-  - [ ] Real-time WebSocket integration
-  - [ ] Thread view overlay
-  - [ ] User presence indicators
+- [x] **File**: `components/chat/chat-layout.tsx` (new)
+  - [x] Channel sidebar with unread counts
+  - [x] Message list with infinite scroll
+  - [x] Message input with file upload area
+  - [x] Real-time WebSocket integration
+  - [x] Thread view overlay
+  - [x] User presence indicators
   - **Acceptance**: Complete chat interface similar to Slack
 
-- [ ] **File**: `components/chat/message-list.tsx` (new)
-  - [ ] Message bubbles with user avatars and info
-  - [ ] Thread expansion/collapse functionality
-  - [ ] Reply threading UI
-  - [ ] Message reactions (emoji reactions)
-  - [ ] File attachment previews
-  - [ ] Timestamp formatting (relative time)
-  - [ ] Read receipts indicator
+- [x] **File**: `components/chat/message-list.tsx` (new)
+  - [x] Message bubbles with user avatars and info
+  - [x] Thread expansion/collapse functionality
+  - [x] Reply threading UI
+  - [x] Message reactions (emoji reactions)
+  - [x] File attachment previews
+  - [x] Timestamp formatting (relative time)
+  - [x] Read receipts indicator
   - **Acceptance**: Messages display correctly with all interactive elements
 
-- [ ] **File**: `components/chat/message-input.tsx` (new)
-  - [ ] Rich text with markdown preview
-  - [ ] File drag-and-drop upload
-  - [ ] Emoji picker integration
-  - [ ] @mention autocomplete with user search
-  - [ ] Channel/link autocomplete
-  - [ ] Message preview before sending
+- [x] **File**: `components/chat/message-input.tsx` (new)
+  - [x] Rich text with markdown preview
+  - [x] File drag-and-drop upload
+  - [x] Emoji picker integration
+  - [x] @mention autocomplete with user search
+  - [x] Channel/link autocomplete
+  - [x] Message preview before sending
   - **Acceptance**: Users can compose and send messages with rich features
 
 ### Epic 2: Thread-to-Wiki Conversion System

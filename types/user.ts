@@ -15,6 +15,8 @@ export type CurrentUser = {
   emailVerified: boolean;
   onboardingCompleted: boolean;
   createdAt: Date;
+  defaultWorkspaceId: string | null;
+  defaultWorkspaceSlug?: string | null;
 } | null;
 
 /**
@@ -25,6 +27,8 @@ export type SidebarUser = {
   email: string;
   image?: string | null;
   role?: "user" | "admin";
+  defaultWorkspaceId?: string | null;
+  defaultWorkspaceSlug?: string | null;
 } | null;
 
 /**
@@ -38,5 +42,7 @@ export function toSidebarUser(user: CurrentUser): SidebarUser {
     email: user.email,
     image: user.image,
     role: user.role,
+    defaultWorkspaceId: user.defaultWorkspaceId,
+    defaultWorkspaceSlug: user.defaultWorkspaceSlug,
   };
 }
