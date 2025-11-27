@@ -4,6 +4,18 @@ import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
 
 // PUT /api/chat/[workspaceId]/channels/[channelId]/messages/[messageId] - Edit message
+/**
+ * Handles the PUT request to update a message in a specific channel.
+ *
+ * This function retrieves the workspaceId, channelId, and messageId from the request parameters, verifies the user's session,
+ * checks if the message belongs to the user, and updates the message content if valid. It also handles various error cases
+ * such as unauthorized access, message not found, and missing content.
+ *
+ * @param request - The NextRequest object containing the request data.
+ * @param params - A promise that resolves to an object containing workspaceId, channelId, and messageId.
+ * @returns The updated message object in JSON format.
+ * @throws Error If an internal server error occurs during the update process.
+ */
 export async function PUT(
     request: NextRequest,
     {
