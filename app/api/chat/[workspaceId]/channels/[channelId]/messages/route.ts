@@ -97,6 +97,16 @@ export async function GET(
 }
 
 // POST /api/chat/[workspaceId]/channels/[channelId]/messages - Send message
+/**
+ * Handles the creation of a message in a specified channel.
+ *
+ * This function first retrieves the workspaceId and channelId from the request parameters. It then checks the user's session for authentication. If the user is not authenticated or not a member of the specified channel, appropriate error responses are returned. If the message content is valid, a new message is created in the database, and a success response is returned. Any errors during this process are caught and logged, returning a 500 status response.
+ *
+ * @param request - The NextRequest object containing the request data.
+ * @param params - An object containing a Promise that resolves to an object with workspaceId and channelId.
+ * @returns A JSON response containing the created message or an error message.
+ * @throws Error If an internal server error occurs during message creation.
+ */
 export async function POST(
     request: NextRequest,
     { params }: { params: Promise<{ workspaceId: string; channelId: string }> }
