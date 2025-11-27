@@ -24,7 +24,6 @@ import {
   Heading3,
   Quote,
   Save,
-  History,
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -60,7 +59,7 @@ export function WikiEditor({
   const [isSaving, setIsSaving] = useState(false);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const autoSaveTimerRef = useRef<NodeJS.Timeout>();
+  const autoSaveTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Auto-save functionality
   useEffect(() => {

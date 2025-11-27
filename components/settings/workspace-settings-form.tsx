@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button";
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { updateWorkspace } from "@/app/actions/workspace-settings";
-import { updateWorkspaceSchema } from "@/lib/validations/workspace";
 import type { WorkspaceWithRole } from "@/types/workspace";
 import { z } from "zod";
 

@@ -180,16 +180,3 @@ chatFileUploader: f({
 ## License
 
 MIT
-
-### Future Features
-
-Message Reactions: Add emoji reactions to messages
-Message Search: Search within channel messages
-Rich Text Editor: Add formatting toolbar (bold, italic, code)
-Mentions: @mention users with autocomplete
-Link Previews: Automatically generate previews for URLs
-Read Receipts: Track who has read messages
-Message Pinning: Pin important messages to channel
-Channel Settings: Edit channel name, description, members
-Notifications: Desktop/push notifications for new messages
-Voice/Video: Integrate voice/video calling

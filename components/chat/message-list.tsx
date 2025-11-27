@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { ExtendedMessage } from "@/types/chat";
 import { MessageItem } from "./message-item";
 import { groupMessagesByDate } from "@/lib/message-utils";

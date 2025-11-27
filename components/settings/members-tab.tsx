@@ -6,7 +6,6 @@ import { Loader2, Link2, Check } from "lucide-react";
 import { IconTrash } from "@tabler/icons-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { MemberInviteDialog } from "./member-invite-dialog";
 import { MembersDataTable } from "./members-data-table";
 import { getWorkspaceMembers } from "@/app/actions/workspace-members";
