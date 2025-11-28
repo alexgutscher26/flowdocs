@@ -16,6 +16,8 @@ interface ChannelSidebarProps {
   onChannelSelect: (channelId: string) => void;
   onCreateChannel?: () => void;
   refreshTrigger?: number; // Used to force refresh
+  onlineUsers?: Set<string>;
+  currentUserId?: string;
 }
 
 export function ChannelSidebar({
@@ -24,6 +26,8 @@ export function ChannelSidebar({
   onChannelSelect,
   onCreateChannel,
   refreshTrigger,
+  onlineUsers,
+  currentUserId,
 }: ChannelSidebarProps) {
   const [channels, setChannels] = useState<ExtendedChannel[]>([]);
   const [loading, setLoading] = useState(true);
@@ -96,6 +100,14 @@ export function ChannelSidebar({
     const isActive = channel.id === activeChannelId;
     const hasUnread = (channel.unreadCount || 0) > 0;
 
+    let isOnline = false;
+    if (channel.type === ChannelType.DM && currentUserId && onlineUsers) {
+      const otherMember = channel.members.find((m) => m.userId !== currentUserId);
+      if (otherMember) {
+        isOnline = onlineUsers.has(otherMember.userId);
+      }
+    }
+
     return (
       <button
         onClick={() => onChannelSelect(channel.id)}
@@ -106,7 +118,12 @@ export function ChannelSidebar({
             : "hover:bg-muted text-muted-foreground hover:text-foreground"
         )}
       >
-        {getChannelIcon(channel.type)}
+        <div className="relative flex items-center">
+          {getChannelIcon(channel.type)}
+          {isOnline && (
+            <span className="absolute -bottom-0.5 -right-0.5 block h-2 w-2 rounded-full bg-green-500 ring-1 ring-white dark:ring-zinc-950" />
+          )}
+        </div>
         <span className={cn("flex-1 truncate text-left", hasUnread && "font-semibold")}>
           {channel.name}
         </span>

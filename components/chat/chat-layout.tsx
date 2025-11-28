@@ -37,12 +37,14 @@ export function ChatLayout({
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [channelRefreshTrigger, setChannelRefreshTrigger] = useState(0);
 
+  const [onlineUsers, setOnlineUsers] = useState<Set<string>>(new Set());
+
   // WebSocket connection
-  const { connected, joinChannel, leaveChannel, startTyping, stopTyping, onMessage, onTyping } =
+  const { connected, joinChannel, leaveChannel, startTyping, stopTyping, onMessage, onTyping, onPresence } =
     useWebSocket({
       workspaceId,
       userId,
-      enabled: !!activeChannelId,
+      enabled: true,
     });
 
   // Chat messages
@@ -113,6 +115,25 @@ export function ChatLayout({
 
     return unsubscribe;
   }, [connected, onTyping, activeChannelId, userId]);
+
+  // Subscribe to presence updates
+  useEffect(() => {
+    if (!connected) return;
+
+    const unsubscribe = onPresence?.((payload) => {
+      setOnlineUsers((prev) => {
+        const newSet = new Set(prev);
+        if (payload.status === "online") {
+          newSet.add(payload.userId);
+        } else {
+          newSet.delete(payload.userId);
+        }
+        return newSet;
+      });
+    });
+
+    return unsubscribe;
+  }, [connected, onPresence]);
 
   // Handle message send
   const handleSendMessage = async (content: string, attachments?: any[]) => {
@@ -198,6 +219,8 @@ export function ChatLayout({
         onChannelSelect={setActiveChannelId}
         onCreateChannel={() => setCreateDialogOpen(true)}
         refreshTrigger={channelRefreshTrigger}
+        onlineUsers={onlineUsers}
+        currentUserId={userId}
       />
 
       {/* Main Chat Area */}

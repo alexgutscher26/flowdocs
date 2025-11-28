@@ -194,7 +194,7 @@
   - [x] Channel search functionality
   - [x] Channel categories/custom groups
   - [x] Direct messages section
-  - [ ] Online status indicators
+  - [x] Online status indicators
   - [ ] Channel settings access
   - **Acceptance**: Easy channel navigation and management
 

@@ -94,6 +94,12 @@ export const initSocketServer = (httpServer: HttpServer) => {
     socket.join(`workspace:${workspaceId}`);
     console.log(`User ${userId} joined workspace ${workspaceId}`);
 
+    // Broadcast online status to workspace
+    socket.to(`workspace:${workspaceId}`).emit(WebSocketEvent.USER_ONLINE, {
+      userId,
+      status: "online",
+    });
+
     // Handle channel join
     socket.on(WebSocketEvent.JOIN_CHANNEL, ({ channelId }) => {
       console.log(`User ${userId} joining channel ${channelId}`);
