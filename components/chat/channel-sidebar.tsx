@@ -54,10 +54,32 @@ export function ChannelSidebar({
     channel.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Group channels by type
+  // Group channels by type and category
   const publicChannels = filteredChannels.filter((c) => c.type === ChannelType.PUBLIC);
   const privateChannels = filteredChannels.filter((c) => c.type === ChannelType.PRIVATE);
   const dmChannels = filteredChannels.filter((c) => c.type === ChannelType.DM);
+
+  // Group public and private channels by category
+  const groupChannelsByCategory = (channels: ExtendedChannel[]) => {
+    const groups: Record<string, ExtendedChannel[]> = {};
+    const uncategorized: ExtendedChannel[] = [];
+
+    channels.forEach((channel) => {
+      if (channel.category) {
+        if (!groups[channel.category]) {
+          groups[channel.category] = [];
+        }
+        groups[channel.category].push(channel);
+      } else {
+        uncategorized.push(channel);
+      }
+    });
+
+    return { groups, uncategorized };
+  };
+
+  const { groups: publicGroups, uncategorized: publicUncategorized } = groupChannelsByCategory(publicChannels);
+  const { groups: privateGroups, uncategorized: privateUncategorized } = groupChannelsByCategory(privateChannels);
 
   const getChannelIcon = (type: ChannelType) => {
     switch (type) {
@@ -153,8 +175,19 @@ export function ChannelSidebar({
       {/* Channel list */}
       <ScrollArea className="flex-1">
         <div className="p-2">
-          <ChannelGroup title="Public Channels" channels={publicChannels} />
-          <ChannelGroup title="Private Channels" channels={privateChannels} />
+          {/* Public Channels - Categorized */}
+          {Object.entries(publicGroups).map(([category, channels]) => (
+            <ChannelGroup key={`public-${category}`} title={category} channels={channels} />
+          ))}
+          <ChannelGroup title="Public Channels" channels={publicUncategorized} />
+
+          {/* Private Channels - Categorized */}
+          {Object.entries(privateGroups).map(([category, channels]) => (
+            <ChannelGroup key={`private-${category}`} title={`${category} (Private)`} channels={channels} />
+          ))}
+          <ChannelGroup title="Private Channels" channels={privateUncategorized} />
+
+          {/* Direct Messages */}
           <ChannelGroup title="Direct Messages" channels={dmChannels} />
 
           {filteredChannels.length === 0 && (

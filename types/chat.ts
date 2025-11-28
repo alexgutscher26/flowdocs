@@ -13,6 +13,7 @@ export interface Channel {
   id: string;
   name: string;
   description: string | null;
+  category?: string | null;
   type: ChannelType;
   workspaceId: string;
   createdAt: Date;

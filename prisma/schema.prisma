@@ -190,6 +190,7 @@ model Channel {
   id          String    @id @default(cuid())
   name        String
   description String?
+  category    String?     // For custom grouping
   type        ChannelType @default(PUBLIC)
   workspaceId String
   workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)

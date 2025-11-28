@@ -39,6 +39,7 @@ export function CreateChannelDialog({
 }: CreateChannelDialogProps) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("");
   const [type, setType] = useState<ChannelType>(ChannelType.PUBLIC);
   const [creating, setCreating] = useState(false);
 
@@ -59,6 +60,7 @@ export function CreateChannelDialog({
         body: JSON.stringify({
           name: name.trim(),
           description: description.trim() || undefined,
+          category: category.trim() || undefined,
           type,
         }),
       });
@@ -74,6 +76,7 @@ export function CreateChannelDialog({
       // Reset form
       setName("");
       setDescription("");
+      setCategory("");
       setType(ChannelType.PUBLIC);
       onOpenChange(false);
 
@@ -127,6 +130,21 @@ export function CreateChannelDialog({
           </div>
 
           <div className="space-y-2">
+            <Label htmlFor="category">Category (optional)</Label>
+            <Input
+              id="category"
+              placeholder="e.g. Projects, Teams, Random"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              maxLength={50}
+              disabled={creating}
+            />
+            <p className="text-muted-foreground text-xs">
+              Group related channels together in the sidebar
+            </p>
+          </div>
+
+          <div className="space-y-2">
             <Label htmlFor="type">Visibility</Label>
             <Select
               value={type}
@@ -164,6 +182,7 @@ export function CreateChannelDialog({
             onClick={() => {
               setName("");
               setDescription("");
+              setCategory("");
               setType(ChannelType.PUBLIC);
               onOpenChange(false);
             }}

@@ -94,7 +94,7 @@ export async function POST(
     }
 
     const body = await request.json();
-    const { name, description, type } = body;
+    const { name, description, type, category } = body;
 
     if (!name) {
       return NextResponse.json({ error: "Channel name is required" }, { status: 400 });
@@ -105,6 +105,7 @@ export async function POST(
       data: {
         name,
         description,
+        category,
         type: type || ChannelType.PUBLIC,
         workspaceId,
         members: {
