@@ -26,6 +26,19 @@ interface ChannelBrowserDialogProps {
     onChannelJoined?: (channelId: string) => void;
 }
 
+/**
+ * Renders a dialog for browsing and joining public channels in a workspace.
+ *
+ * This component fetches public channels from the API when opened, allows users to search through the channels,
+ * and provides functionality to join a selected channel. It manages loading states and updates the channel list
+ * upon joining a channel. The component also handles user membership status for each channel.
+ *
+ * @param open - A boolean indicating whether the dialog is open.
+ * @param onOpenChange - A callback function to handle changes in the dialog's open state.
+ * @param workspaceId - The ID of the workspace from which to fetch channels.
+ * @param currentUserId - The ID of the current user to check membership status.
+ * @param onChannelJoined - A callback function invoked when a channel is successfully joined.
+ */
 export function ChannelBrowserDialog({
     open,
     onOpenChange,
@@ -63,6 +76,16 @@ export function ChannelBrowserDialog({
         fetchChannels();
     }, [workspaceId, open]);
 
+    /**
+     * Handles the process of joining a chat channel.
+     *
+     * This function sets the joining channel ID, makes a POST request to join the specified channel,
+     * and handles the response. If successful, it updates the channel list and notifies the user.
+     * In case of an error, it logs the error and displays a notification. Finally, it resets the joining channel ID.
+     *
+     * @param channelId - The ID of the channel to join.
+     * @returns Promise<void>
+     */
     const handleJoin = async (channelId: string) => {
         setJoiningChannelId(channelId);
         try {
@@ -100,6 +123,7 @@ export function ChannelBrowserDialog({
         channel.description?.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+    /** Checks if the current user is a member of the given channel. */
     const isUserMember = (channel: ExtendedChannel) => {
         return channel.members?.some((m) => m.userId === currentUserId) || false;
     };

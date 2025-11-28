@@ -21,6 +21,21 @@ interface ChannelSidebarProps {
   currentUserId?: string;
 }
 
+/**
+ * Renders the Channel Sidebar component, displaying a list of channels.
+ *
+ * This component fetches channels from an API based on the provided workspaceId and refreshTrigger.
+ * It filters channels by search query and groups them by type and category.
+ * The component also handles the display of loading states, channel selection, and the creation of new channels.
+ *
+ * @param workspaceId - The ID of the workspace to fetch channels from.
+ * @param activeChannelId - The ID of the currently active channel.
+ * @param onChannelSelect - Callback function to handle channel selection.
+ * @param onCreateChannel - Callback function to handle the creation of a new channel.
+ * @param refreshTrigger - A trigger to refresh the channel list.
+ * @param onlineUsers - A set of online user IDs for direct message channels.
+ * @param currentUserId - The ID of the current user.
+ */
 export function ChannelSidebar({
   workspaceId,
   activeChannelId,
