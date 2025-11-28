@@ -67,6 +67,19 @@ export async function GET(
 }
 
 // POST /api/chat/[workspaceId]/channels - Create channel
+/**
+ * Handles the creation of a new channel within a specified workspace.
+ *
+ * This function first retrieves the workspaceId from the request parameters and checks the user's session for authentication.
+ * It verifies that the user is a member of the workspace before proceeding to create a channel with the provided details.
+ * If any validation fails, appropriate error responses are returned.
+ * Finally, it creates the channel and returns the channel data upon success.
+ *
+ * @param request - The NextRequest object containing the request data.
+ * @param params - An object containing a promise that resolves to the workspaceId.
+ * @returns A JSON response containing the created channel data or an error message.
+ * @throws Error If an internal error occurs during channel creation.
+ */
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ workspaceId: string }> }
