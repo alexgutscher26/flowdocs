@@ -20,6 +20,21 @@ interface ChannelSidebarProps {
   currentUserId?: string;
 }
 
+/**
+ * Render the Channel Sidebar component displaying channels for a workspace.
+ *
+ * This component fetches channels from an API based on the provided workspaceId and refreshTrigger.
+ * It filters channels based on a search query and groups them by type (public, private, direct messages).
+ * The component also handles loading states and allows users to select channels or create new ones.
+ *
+ * @param workspaceId - The ID of the workspace to fetch channels from.
+ * @param activeChannelId - The ID of the currently active channel.
+ * @param onChannelSelect - Callback function to handle channel selection.
+ * @param onCreateChannel - Callback function to handle channel creation.
+ * @param refreshTrigger - A trigger to refresh the channel list.
+ * @param onlineUsers - A set of online user IDs for direct message channels.
+ * @param currentUserId - The ID of the current user.
+ */
 export function ChannelSidebar({
   workspaceId,
   activeChannelId,
@@ -96,6 +111,16 @@ export function ChannelSidebar({
     }
   };
 
+  /**
+   * Renders a button for a channel item with its status and unread count.
+   *
+   * The function checks if the channel is active and if there are any unread messages.
+   * It also determines if the other member in a direct message channel is online.
+   * The button displays the channel's name, an icon, and a badge for unread messages if applicable.
+   *
+   * @param channel - An object representing the channel, including its id, type, name, and unreadCount.
+   * @returns A JSX element representing the channel item button.
+   */
   const ChannelItem = ({ channel }: { channel: ExtendedChannel }) => {
     const isActive = channel.id === activeChannelId;
     const hasUnread = (channel.unreadCount || 0) > 0;
