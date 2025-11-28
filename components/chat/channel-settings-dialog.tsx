@@ -44,6 +44,20 @@ interface ChannelSettingsDialogProps {
     onChannelUpdated?: () => void;
 }
 
+/**
+ * Renders the Channel Settings dialog for managing channel properties and members.
+ *
+ * This component allows users to view and edit channel settings, including the channel name and description.
+ * It fetches workspace users for inviting new members and handles saving changes, inviting members, and removing members.
+ * The dialog also displays channel information and a list of current members, with appropriate permissions checks for admin actions.
+ *
+ * @param open - A boolean indicating whether the dialog is open.
+ * @param onOpenChange - A function to handle changes to the dialog's open state.
+ * @param channel - The channel object containing details such as name, description, and members.
+ * @param workspaceId - The ID of the workspace to which the channel belongs.
+ * @param currentUserId - The ID of the current user for permission checks.
+ * @param onChannelUpdated - A callback function to be called when the channel is updated.
+ */
 export function ChannelSettingsDialog({
     open,
     onOpenChange,
@@ -70,6 +84,13 @@ export function ChannelSettingsDialog({
     useEffect(() => {
         if (!open || channel.type !== ChannelType.PRIVATE) return;
 
+        /**
+         * Fetches the users of the current workspace.
+         *
+         * This asynchronous function retrieves the members of a workspace by making a fetch request to the API endpoint.
+         * If the response is successful, it parses the JSON data and updates the state with the list of workspace users.
+         * In case of an error during the fetch operation, it logs the error to the console.
+         */
         async function fetchWorkspaceUsers() {
             try {
                 const response = await fetch(`/api/workspaces/${workspaceId}/members`);
@@ -85,6 +106,20 @@ export function ChannelSettingsDialog({
         fetchWorkspaceUsers();
     }, [open, workspaceId, channel.type]);
 
+    /**
+     * Handles the saving of channel details by making an API request.
+     *
+     * This function first checks if the channel name is provided, displaying an error if not. It then sets a saving state to true and attempts to update the channel details via a PUT request to the API. If the response is not successful, it throws an error with the appropriate message. Upon successful update, it triggers a success notification and calls the onChannelUpdated callback. Finally, it ensures the saving state is reset regardless of the outcome.
+     *
+     * @param {string} name - The name of the channel to be updated.
+     * @param {string} description - The description of the channel to be updated.
+     * @param {string} workspaceId - The ID of the workspace containing the channel.
+     * @param {Object} channel - The channel object containing the ID and other properties.
+     * @param {Function} onChannelUpdated - Optional callback function to be called after the channel is updated.
+     * @param {Function} onOpenChange - Function to change the open state of the channel.
+     * @returns {Promise<void>} A promise that resolves when the save operation is complete.
+     * @throws Error If the channel name is not provided or if the API request fails.
+     */
     const handleSave = async () => {
         if (!name.trim()) {
             toast.error("Channel name is required");
@@ -121,6 +156,16 @@ export function ChannelSettingsDialog({
         }
     };
 
+    /**
+     * Handles the invitation of a member to a channel.
+     *
+     * This function sets the inviting state to true, then attempts to send a POST request to invite a user
+     * by their userId to a specific channel within a workspace. If the request is successful, it displays a
+     * success message, triggers an optional channel update, and closes the invite dialog. In case of an error,
+     * it logs the error and shows an error message to the user. Finally, it resets the inviting state.
+     *
+     * @param userId - The ID of the user to be invited to the channel.
+     */
     const handleInviteMember = async (userId: string) => {
         setInviting(true);
         try {
@@ -148,6 +193,15 @@ export function ChannelSettingsDialog({
         }
     };
 
+    /**
+     * Handles the removal of a member from a channel.
+     *
+     * This function sets the removing member ID, attempts to send a DELETE request to the server to remove the specified member,
+     * and handles the response. If the removal is successful, it displays a success message and triggers the onChannelUpdated callback.
+     * In case of an error, it logs the error and displays an error message. Finally, it resets the removing member ID.
+     *
+     * @param memberId - The ID of the member to be removed from the channel.
+     */
     const handleRemoveMember = async (memberId: string) => {
         setRemovingMemberId(memberId);
         try {
@@ -173,6 +227,13 @@ export function ChannelSettingsDialog({
         }
     };
 
+    /**
+     * Returns the appropriate icon component based on the channel type.
+     *
+     * The function checks the type of the channel and returns a corresponding icon component:
+     * a hash icon for public channels, a lock icon for private channels, and a users icon for direct messages.
+     * It utilizes the `ChannelType` enumeration to determine the channel type.
+     */
     const getChannelIcon = () => {
         switch (channel.type) {
             case ChannelType.PUBLIC:

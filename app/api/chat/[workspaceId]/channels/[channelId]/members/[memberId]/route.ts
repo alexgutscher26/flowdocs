@@ -5,6 +5,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
 
 // DELETE /api/chat/[workspaceId]/channels/[channelId]/members/[memberId] - Remove member from channel
+/**
+ * Handles the deletion of a channel member.
+ *
+ * This function first retrieves the session to ensure the requester is authenticated. It then checks if the requester has the necessary permissions (admin or owner) to remove a member. If the member to be removed is found and is not the owner, the function proceeds to delete the member from the channel. Appropriate error responses are returned for unauthorized access, insufficient permissions, and member not found scenarios.
+ *
+ * @param request - The NextRequest object representing the incoming request.
+ * @param params - An object containing a Promise that resolves to an object with workspaceId, channelId, and memberId.
+ * @returns A JSON response indicating success or an error message with the corresponding HTTP status.
+ */
 export async function DELETE(
     request: NextRequest,
     { params }: { params: Promise<{ workspaceId: string; channelId: string; memberId: string }> }
