@@ -31,6 +31,16 @@ interface CreateChannelDialogProps {
   onChannelCreated?: (channelId: string) => void;
 }
 
+/**
+ * Create a dialog for creating a new channel.
+ *
+ * This function manages the state for the channel's name, description, category, and type. It handles the creation process by sending a POST request to the server with the channel details. If the creation is successful, it resets the form and notifies the parent component. Error handling is included to manage any issues during the request.
+ *
+ * @param open - A boolean indicating whether the dialog is open.
+ * @param onOpenChange - A function to handle changes to the dialog's open state.
+ * @param workspaceId - The ID of the workspace where the channel will be created.
+ * @param onChannelCreated - A callback function that is called when a channel is successfully created.
+ */
 export function CreateChannelDialog({
   open,
   onOpenChange,
@@ -43,6 +53,22 @@ export function CreateChannelDialog({
   const [type, setType] = useState<ChannelType>(ChannelType.PUBLIC);
   const [creating, setCreating] = useState(false);
 
+  /**
+   * Handles the creation of a new chat channel.
+   *
+   * This function validates the channel name, sets the creating state, and makes a POST request to the API to create the channel.
+   * It processes the response, handles errors, and resets the form fields upon successful creation.
+   * Additionally, it notifies the parent component of the newly created channel.
+   *
+   * @param {string} name - The name of the channel to be created.
+   * @param {string} description - The description of the channel (optional).
+   * @param {string} category - The category of the channel (optional).
+   * @param {ChannelType} type - The type of the channel.
+   * @param {function} onOpenChange - A function to handle the open state change.
+   * @param {function} onChannelCreated - A callback function invoked with the new channel's ID upon successful creation.
+   * @returns {Promise<void>} A promise that resolves when the channel creation process is complete.
+   * @throws Error If the channel creation fails due to an invalid response or other issues.
+   */
   const handleCreate = async () => {
     if (!name.trim()) {
       toast.error("Channel name is required");
