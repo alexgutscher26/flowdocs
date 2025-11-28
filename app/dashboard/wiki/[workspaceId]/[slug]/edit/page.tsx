@@ -13,6 +13,16 @@ interface EditWikiPageProps {
   }>;
 }
 
+/**
+ * Edit a wiki page based on the provided parameters.
+ *
+ * This function retrieves the workspace ID and slug from the parameters, checks the user's session for authentication,
+ * and verifies the user's permissions within the specified workspace. If the user is authorized, it fetches the wiki page
+ * and renders the edit client. If the page is not found, it displays a "Page Not Found" message with a link to return to the wiki.
+ *
+ * @param {EditWikiPageProps} params - The parameters containing workspaceId and slug for the wiki page.
+ * @returns A JSX element representing the edit wiki page or a "Page Not Found" message.
+ */
 export default async function EditWikiPage({ params }: EditWikiPageProps) {
   const { workspaceId, slug } = await params;
 
