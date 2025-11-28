@@ -22,6 +22,22 @@ interface ChatLayoutProps {
   className?: string;
 }
 
+/**
+ * Renders the chat layout component for a messaging application.
+ *
+ * This component manages the state of the active channel, handles WebSocket connections for real-time messaging,
+ * and provides functionalities for sending messages, managing typing indicators, and displaying online users.
+ * It also fetches channel details and updates the UI based on user interactions, such as joining channels and
+ * sending reactions to messages. The component integrates various subcomponents for message input, message list,
+ * and channel sidebar, ensuring a cohesive chat experience.
+ *
+ * @param workspaceId - The ID of the workspace to which the chat belongs.
+ * @param userId - The ID of the current user.
+ * @param userName - The name of the current user.
+ * @param initialChannelId - The ID of the channel to be initially active.
+ * @param onCreateChannel - Callback function to be called when a new channel is created.
+ * @param className - Additional CSS classes to apply to the component.
+ */
 export function ChatLayout({
   workspaceId,
   userId,

@@ -54,6 +54,14 @@ let io: SocketIOServer<
   SocketData
 > | null = null;
 
+/**
+ * Initialize the Socket.IO server with the given HTTP server.
+ *
+ * This function sets up a Socket.IO server, configures a Redis adapter if a REDIS_URL is provided, and handles various socket events such as connection, channel join/leave, message sending, and presence updates. It ensures that clients are properly managed within their respective workspaces and channels, broadcasting relevant events to other connected clients.
+ *
+ * @param httpServer - The HTTP server instance to attach the Socket.IO server to.
+ * @returns The initialized Socket.IO server instance.
+ */
 export const initSocketServer = (httpServer: HttpServer) => {
   if (io) return io;
 
