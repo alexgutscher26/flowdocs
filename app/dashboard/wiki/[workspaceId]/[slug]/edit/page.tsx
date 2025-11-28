@@ -1,12 +1,10 @@
-"use client";
-
-import { useState, useEffect, use } from "react";
-import { useRouter } from "next/navigation";
-import { WikiEditor } from "@/components/wiki";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
+import prisma from "@/lib/prisma";
+import { EditWikiClient } from "./edit-wiki-client";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { useToast } from "@/hooks/use-toast";
 
 interface EditWikiPageProps {
   params: Promise<{
@@ -15,91 +13,46 @@ interface EditWikiPageProps {
   }>;
 }
 
-export default function EditWikiPage({ params }: EditWikiPageProps) {
-  const { workspaceId, slug } = use(params);
-  const router = useRouter();
-  const { toast } = useToast();
-  const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState<any>(null);
-  const [saving, setSaving] = useState(false);
+export default async function EditWikiPage({ params }: EditWikiPageProps) {
+  const { workspaceId, slug } = await params;
 
-  useEffect(() => {
-    fetchPage();
-  }, [workspaceId, slug]);
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-  const fetchPage = async () => {
-    try {
-      const response = await fetch(`/api/wiki/${workspaceId}/${slug}`);
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch page");
-      }
-
-      const data = await response.json();
-      setPage(data);
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to load wiki page",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleSave = async (data: {
-    title: string;
-    content: string;
-    tags: string[];
-    published: boolean;
-  }) => {
-    setSaving(true);
-    try {
-      const response = await fetch(`/api/wiki/${workspaceId}/${slug}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...data,
-          changeNote: "Updated via editor",
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to save page");
-      }
-
-      toast({
-        title: "Success",
-        description: "Wiki page updated successfully",
-      });
-
-      // Redirect to view page
-      router.push(`/dashboard/wiki/${workspaceId}/${slug}`);
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to save wiki page",
-        variant: "destructive",
-      });
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const handleCancel = () => {
-    router.push(`/dashboard/wiki/${workspaceId}/${slug}`);
-  };
-
-  if (loading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin" />
-      </div>
-    );
+  if (!session?.user) {
+    redirect("/sign-in");
   }
+
+  // Verify workspace access and permissions
+  const workspaceMember = await prisma.workspaceMember.findFirst({
+    where: {
+      workspaceId,
+      userId: session.user.id,
+    },
+  });
+
+  if (!workspaceMember || !["OWNER", "ADMIN", "MEMBER"].includes(workspaceMember.role)) {
+    // Redirect to view page if not authorized
+    redirect(`/dashboard/wiki/${workspaceId}/${slug}`);
+  }
+
+  // Fetch page
+  const page = await prisma.wikiPage.findUnique({
+    where: {
+      workspaceId_slug: {
+        workspaceId,
+        slug,
+      },
+    },
+    include: {
+      tags: {
+        include: {
+          tag: true,
+        },
+      },
+    },
+  });
 
   if (!page) {
     return (
@@ -112,27 +65,5 @@ export default function EditWikiPage({ params }: EditWikiPageProps) {
     );
   }
 
-  const tags = page.tags?.map((t: any) => t.tag?.name || t.name) || [];
-
-  return (
-    <div className="p-6">
-      <div className="mb-6">
-        <Button variant="ghost" asChild>
-          <Link href={`/dashboard/wiki/${workspaceId}/${slug}`}>
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Page
-          </Link>
-        </Button>
-      </div>
-
-      <WikiEditor
-        initialTitle={page.title}
-        initialContent={page.content}
-        initialTags={tags}
-        onSave={handleSave}
-        onCancel={handleCancel}
-        autoSave={false}
-      />
-    </div>
-  );
+  return <EditWikiClient workspaceId={workspaceId} slug={slug} page={page} />;
 }

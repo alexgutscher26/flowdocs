@@ -194,6 +194,21 @@ export async function PUT(
       return NextResponse.json({ error: "Wiki page not found" }, { status: 404 });
     }
 
+    // Verify workspace access and permissions
+    const workspaceMember = await prisma.workspaceMember.findFirst({
+      where: {
+        workspaceId,
+        userId: session.user.id,
+      },
+    });
+
+    if (!workspaceMember || !["OWNER", "ADMIN", "MEMBER"].includes(workspaceMember.role)) {
+      return NextResponse.json(
+        { error: "You do not have permission to edit this page" },
+        { status: 403 }
+      );
+    }
+
     const body = await request.json();
     const { title, content, excerpt, tags, published, changeNote } = body;
 

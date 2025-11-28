@@ -92,6 +92,8 @@ export interface WikiPageData {
 interface WikiPageViewProps {
   page: WikiPageData;
   workspaceName?: string;
+  workspaceId?: string;
+  canEdit?: boolean;
   currentUserId?: string;
   onEdit?: () => void;
   onVersionRestore?: (versionId: string) => void;
@@ -120,6 +122,8 @@ function generateGradient(str: string) {
 export function WikiPageView({
   page,
   workspaceName,
+  workspaceId,
+  canEdit = false,
   currentUserId,
   onEdit,
   onVersionRestore,
@@ -128,7 +132,6 @@ export function WikiPageView({
   const [showVersionHistory, setShowVersionHistory] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("");
 
-  const isOwner = currentUserId === page.author.id;
   const coverGradient = useMemo(() => generateGradient(page.id), [page.id]);
 
   // Generate table of contents from markdown headings
@@ -234,11 +237,26 @@ export function WikiPageView({
               <h1 className="text-foreground text-4xl font-bold tracking-tight">{page.title}</h1>
 
               {/* Action Toolbar */}
-              <div className="flex items-center gap-2 opacity-0 transition-opacity group-hover:opacity-100">
-                {isOwner && onEdit && (
-                  <Button onClick={onEdit} variant="ghost" size="sm" className="h-8">
-                    <Edit className="mr-2 h-4 w-4" />
-                    Edit
+              <div className="flex items-center gap-2">
+                {canEdit && (onEdit || workspaceId) && (
+                  <Button
+                    onClick={onEdit}
+                    variant="ghost"
+                    size="sm"
+                    className="h-8"
+                    asChild={!onEdit && !!workspaceId}
+                  >
+                    {onEdit ? (
+                      <>
+                        <Edit className="mr-2 h-4 w-4" />
+                        Edit
+                      </>
+                    ) : (
+                      <a href={`/dashboard/wiki/${workspaceId}/${page.slug}/edit`}>
+                        <Edit className="mr-2 h-4 w-4" />
+                        Edit
+                      </a>
+                    )}
                   </Button>
                 )}
                 <DropdownMenu>

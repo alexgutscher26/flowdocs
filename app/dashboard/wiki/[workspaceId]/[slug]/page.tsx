@@ -196,6 +196,9 @@ export default async function WikiPage({ params }: WikiPageProps) {
     redirect("/dashboard");
   }
 
+  // Check edit permissions (OWNER, ADMIN, MEMBER can edit; VIEWER cannot)
+  const canEdit = ["OWNER", "ADMIN", "MEMBER"].includes(workspaceMember.role);
+
   const page = await getWikiPage(workspaceId, slug, session.user.id);
 
   if (!page) {
@@ -236,7 +239,7 @@ export default async function WikiPage({ params }: WikiPageProps) {
         },
       });
 
-      if (!workspaceMember) {
+      if (!workspaceMember || !["OWNER", "ADMIN", "MEMBER"].includes(workspaceMember.role)) {
         throw new Error("Unauthorized");
       }
 
@@ -285,6 +288,8 @@ export default async function WikiPage({ params }: WikiPageProps) {
     <WikiPageView
       page={page}
       workspaceName={workspaceMember.workspace.name}
+      workspaceId={workspaceId}
+      canEdit={canEdit}
       currentUserId={session.user.id}
       onVersionRestore={handleVersionRestore}
     />

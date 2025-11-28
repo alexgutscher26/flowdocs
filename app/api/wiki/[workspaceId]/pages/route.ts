@@ -133,7 +133,7 @@ export async function POST(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Verify workspace access
+    // Verify workspace access and permissions
     const workspaceMember = await prisma.workspaceMember.findFirst({
       where: {
         workspaceId,
@@ -141,8 +141,11 @@ export async function POST(
       },
     });
 
-    if (!workspaceMember) {
-      return NextResponse.json({ error: "Not a member of this workspace" }, { status: 403 });
+    if (!workspaceMember || !["OWNER", "ADMIN", "MEMBER"].includes(workspaceMember.role)) {
+      return NextResponse.json(
+        { error: "You do not have permission to create pages in this workspace" },
+        { status: 403 }
+      );
     }
 
     const body = await request.json();
