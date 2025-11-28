@@ -14,6 +14,18 @@ interface SearchResultCardProps {
     workspaceId: string;
 }
 
+/**
+ * Renders a search result card based on the provided type and data.
+ *
+ * The function determines the appropriate icon, title, content, and link based on the type of the search result (message, wiki, file, or user). It utilizes helper functions to extract and format the necessary information from the data and highlight objects. The card displays the result with relevant metadata, including a timestamp and an action button or badge, depending on the type.
+ *
+ * @param {Object} props - The properties for the search result card.
+ * @param {string} props.type - The type of the search result (message, wiki, file, or user).
+ * @param {Object} props.data - The data associated with the search result.
+ * @param {Object} [props.highlight] - Optional highlight data for enhanced display.
+ * @param {string} props.workspaceId - The ID of the workspace for generating links.
+ * @returns {JSX.Element} The rendered search result card component.
+ */
 export function SearchResultCard({ type, data, highlight, workspaceId }: SearchResultCardProps) {
     const getIcon = () => {
         switch (type) {
@@ -54,6 +66,13 @@ export function SearchResultCard({ type, data, highlight, workspaceId }: SearchR
         return null;
     };
 
+    /**
+     * Generate a link based on the specified type and associated data.
+     *
+     * The function evaluates the type and constructs a URL accordingly. It handles different cases such as 'message', 'wiki', 'file', and 'user', returning the appropriate link for each. If the type is 'file' and no URL is provided, it defaults to returning a placeholder. The function does not handle an unrecognized type.
+     *
+     * @returns A string representing the constructed link based on the input type and data.
+     */
     const getLink = () => {
         switch (type) {
             case 'message':
