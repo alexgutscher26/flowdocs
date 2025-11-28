@@ -195,16 +195,16 @@
   - [x] Channel categories/custom groups
   - [x] Direct messages section
   - [x] Online status indicators
-  - [ ] Channel settings access
+  - [x] Channel settings access
   - **Acceptance**: Easy channel navigation and management
 
 #### Channel Types Implementation
 
-- [x] **Public Channels**:
-  - [x] Accessible to all workspace members
-  - [x] Discoverable in channel browser
-  - [x] Messages indexed in search
-  - [x] Join/leave functionality
+- [] **Public Channels**:
+  - [] Accessible to all workspace members
+  - [] Discoverable in channel browser
+  - [] Messages indexed in search
+  - [] Join/leave functionality
   - **Acceptance**: Public channels work like Slack public channels
 
 - [x] **Private Channels**:

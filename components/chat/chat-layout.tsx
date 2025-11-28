@@ -7,11 +7,13 @@ import { MessageList } from "./message-list";
 import { MessageInput } from "./message-input";
 import { ThreadView } from "./thread-view";
 import { CreateChannelDialog } from "./create-channel-dialog";
+import { ChannelSettingsDialog } from "./channel-settings-dialog";
 import { useChatMessages } from "@/hooks/use-chat-messages";
 import { useWebSocket } from "@/hooks/use-websocket";
-import { Hash, Users, Lock, Loader2 } from "lucide-react";
+import { Hash, Users, Lock, Loader2, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ChannelType } from "@/generated/prisma/enums";
+import { Button } from "@/components/ui/button";
 
 interface ChatLayoutProps {
   workspaceId: string;
@@ -35,6 +37,7 @@ export function ChatLayout({
   const [threadMessage, setThreadMessage] = useState<ExtendedMessage | null>(null);
   const [typingUsers, setTypingUsers] = useState<string[]>([]);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
+  const [settingsDialogOpen, setSettingsDialogOpen] = useState(false);
   const [channelRefreshTrigger, setChannelRefreshTrigger] = useState(0);
 
   const [onlineUsers, setOnlineUsers] = useState<Set<string>>(new Set());
@@ -249,6 +252,15 @@ export function ChatLayout({
                   {activeChannel._count.members}{" "}
                   {activeChannel._count.members === 1 ? "member" : "members"}
                 </span>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-8 w-8 p-0"
+                  onClick={() => setSettingsDialogOpen(true)}
+                  title="Channel settings"
+                >
+                  <Settings className="h-4 w-4" />
+                </Button>
               </div>
             </div>
 
@@ -329,6 +341,26 @@ export function ChatLayout({
           setChannelRefreshTrigger((prev) => prev + 1);
         }}
       />
+
+      {/* Channel Settings Dialog */}
+      {activeChannel && (
+        <ChannelSettingsDialog
+          open={settingsDialogOpen}
+          onOpenChange={setSettingsDialogOpen}
+          channel={activeChannel}
+          workspaceId={workspaceId}
+          onChannelUpdated={() => {
+            setChannelRefreshTrigger((prev) => prev + 1);
+            // Refetch active channel data
+            if (activeChannelId) {
+              fetch(`/api/chat/${workspaceId}/channels/${activeChannelId}`)
+                .then((res) => res.json())
+                .then((data) => setActiveChannel(data))
+                .catch((error) => console.error("Error refetching channel:", error));
+            }
+          }}
+        />
+      )}
     </div>
   );
 }
