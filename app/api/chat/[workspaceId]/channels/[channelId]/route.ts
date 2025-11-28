@@ -62,9 +62,11 @@ export async function GET(
       return NextResponse.json({ error: "Channel not found" }, { status: 404 });
     }
 
-    // Check if user has access (public channel or member)
+    // Check if user has access (public channel, member, or workspace admin)
     const isMember = channel.members.some((m) => m.userId === session.user.id);
-    if (channel.type !== ChannelType.PUBLIC && !isMember) {
+    const isWorkspaceAdmin = membership.role === "ADMIN" || membership.role === "OWNER";
+
+    if (channel.type !== ChannelType.PUBLIC && !isMember && !isWorkspaceAdmin) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 

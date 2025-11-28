@@ -207,18 +207,18 @@
   - [x] Join/leave functionality
   - **Acceptance**: Public channels work like Slack public channels
 
-- [] **Private Channels**:
-  - [] Invite-only access control
-  - [] Hidden from non-members
-  - [ ] Workspace admin visibility
-  - [ ] Member management interface
+- [x] **Private Channels**:
+  - [x] Invite-only access control
+  - [x] Hidden from non-members
+  - [x] Workspace admin visibility
+  - [x] Member management interface
   - **Acceptance**: Private channels are secure and exclusive
 
 - [x] **Direct Messages**:
   - [x] One-on-one conversations
   - [x] Auto-creation on first message
   - [x] No separate channel entity
-  - [ ] Message privacy controls
+  - [ ] Message privacy controls65
   - **Acceptance**: DMs work seamlessly without channel overhead
 
 #### Channel Settings

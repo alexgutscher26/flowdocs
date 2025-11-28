@@ -349,6 +349,7 @@ export function ChatLayout({
           onOpenChange={setSettingsDialogOpen}
           channel={activeChannel}
           workspaceId={workspaceId}
+          currentUserId={userId}
           onChannelUpdated={() => {
             setChannelRefreshTrigger((prev) => prev + 1);
             // Refetch active channel data

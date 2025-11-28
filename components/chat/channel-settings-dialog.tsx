@@ -17,9 +17,21 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+    Command,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+} from "@/components/ui/command";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover";
 import { ExtendedChannel } from "@/types/chat";
 import { ChannelType } from "@/generated/prisma/enums";
-import { Loader2, Hash, Lock, Users, Calendar } from "lucide-react";
+import { Loader2, Hash, Lock, Users, Calendar, UserPlus, X } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
 
@@ -28,6 +40,7 @@ interface ChannelSettingsDialogProps {
     onOpenChange: (open: boolean) => void;
     channel: ExtendedChannel;
     workspaceId: string;
+    currentUserId: string;
     onChannelUpdated?: () => void;
 }
 
@@ -36,17 +49,41 @@ export function ChannelSettingsDialog({
     onOpenChange,
     channel,
     workspaceId,
+    currentUserId,
     onChannelUpdated,
 }: ChannelSettingsDialogProps) {
     const [name, setName] = useState(channel.name);
     const [description, setDescription] = useState(channel.description || "");
     const [saving, setSaving] = useState(false);
+    const [workspaceUsers, setWorkspaceUsers] = useState<any[]>([]);
+    const [inviteOpen, setInviteOpen] = useState(false);
+    const [inviting, setInviting] = useState(false);
+    const [removingMemberId, setRemovingMemberId] = useState<string | null>(null);
 
     // Reset form when channel changes
     useEffect(() => {
         setName(channel.name);
         setDescription(channel.description || "");
     }, [channel]);
+
+    // Fetch workspace users for invite functionality
+    useEffect(() => {
+        if (!open || channel.type !== ChannelType.PRIVATE) return;
+
+        async function fetchWorkspaceUsers() {
+            try {
+                const response = await fetch(`/api/workspaces/${workspaceId}/members`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setWorkspaceUsers(data);
+                }
+            } catch (error) {
+                console.error("Error fetching workspace users:", error);
+            }
+        }
+
+        fetchWorkspaceUsers();
+    }, [open, workspaceId, channel.type]);
 
     const handleSave = async () => {
         if (!name.trim()) {
@@ -84,6 +121,58 @@ export function ChannelSettingsDialog({
         }
     };
 
+    const handleInviteMember = async (userId: string) => {
+        setInviting(true);
+        try {
+            const response = await fetch(`/api/chat/${workspaceId}/channels/${channel.id}/invite`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ userId }),
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || "Failed to invite member");
+            }
+
+            toast.success("Member invited successfully");
+            onChannelUpdated?.();
+            setInviteOpen(false);
+        } catch (error) {
+            console.error("Error inviting member:", error);
+            toast.error(error instanceof Error ? error.message : "Failed to invite member");
+        } finally {
+            setInviting(false);
+        }
+    };
+
+    const handleRemoveMember = async (memberId: string) => {
+        setRemovingMemberId(memberId);
+        try {
+            const response = await fetch(
+                `/api/chat/${workspaceId}/channels/${channel.id}/members/${memberId}`,
+                {
+                    method: "DELETE",
+                }
+            );
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || "Failed to remove member");
+            }
+
+            toast.success("Member removed successfully");
+            onChannelUpdated?.();
+        } catch (error) {
+            console.error("Error removing member:", error);
+            toast.error(error instanceof Error ? error.message : "Failed to remove member");
+        } finally {
+            setRemovingMemberId(null);
+        }
+    };
+
     const getChannelIcon = () => {
         switch (channel.type) {
             case ChannelType.PUBLIC:
@@ -108,6 +197,16 @@ export function ChannelSettingsDialog({
 
     const hasChanges = name !== channel.name || description !== (channel.description || "");
 
+    // Check if current user is admin/owner
+    const currentUserMember = channel.members.find((m) => m.userId === currentUserId);
+    const isChannelAdmin =
+        currentUserMember?.role === "OWNER" || currentUserMember?.role === "ADMIN";
+
+    // Get non-members for invite list
+    const nonMembers = workspaceUsers.filter(
+        (user) => !channel.members.some((m) => m.userId === user.userId)
+    );
+
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-[600px]">
@@ -116,9 +215,7 @@ export function ChannelSettingsDialog({
                         {getChannelIcon()}
                         <div>
                             <DialogTitle>Channel Settings</DialogTitle>
-                            <DialogDescription>
-                                Manage settings for #{channel.name}
-                            </DialogDescription>
+                            <DialogDescription>Manage settings for #{channel.name}</DialogDescription>
                         </div>
                     </div>
                 </DialogHeader>
@@ -197,26 +294,94 @@ export function ChannelSettingsDialog({
 
                         {/* Members List */}
                         <div className="space-y-4">
-                            <h3 className="text-sm font-semibold">Members ({channel.members.length})</h3>
+                            <div className="flex items-center justify-between">
+                                <h3 className="text-sm font-semibold">Members ({channel.members.length})</h3>
+                                {channel.type === ChannelType.PRIVATE && isChannelAdmin && (
+                                    <Popover open={inviteOpen} onOpenChange={setInviteOpen}>
+                                        <PopoverTrigger asChild>
+                                            <Button variant="outline" size="sm">
+                                                <UserPlus className="mr-2 h-3 w-3" />
+                                                Invite
+                                            </Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-[300px] p-0" align="end">
+                                            <Command>
+                                                <CommandInput placeholder="Search users..." />
+                                                <CommandEmpty>No users found.</CommandEmpty>
+                                                <CommandGroup>
+                                                    <ScrollArea className="h-[200px]">
+                                                        {nonMembers.map((user) => (
+                                                            <CommandItem
+                                                                key={user.userId}
+                                                                onSelect={() => handleInviteMember(user.userId)}
+                                                                disabled={inviting}
+                                                            >
+                                                                <Avatar className="mr-2 h-6 w-6">
+                                                                    <AvatarImage src={user.user?.image || undefined} />
+                                                                    <AvatarFallback>
+                                                                        {user.user?.name?.charAt(0).toUpperCase() ||
+                                                                            user.user?.email.charAt(0).toUpperCase()}
+                                                                    </AvatarFallback>
+                                                                </Avatar>
+                                                                <div className="flex-1">
+                                                                    <p className="text-sm">
+                                                                        {user.user?.name || user.user?.email}
+                                                                    </p>
+                                                                    <p className="text-xs text-muted-foreground">
+                                                                        {user.user?.email}
+                                                                    </p>
+                                                                </div>
+                                                            </CommandItem>
+                                                        ))}
+                                                    </ScrollArea>
+                                                </CommandGroup>
+                                            </Command>
+                                        </PopoverContent>
+                                    </Popover>
+                                )}
+                            </div>
 
                             <div className="space-y-2">
                                 {channel.members.map((member) => (
-                                    <div key={member.id} className="flex items-center gap-3 rounded-md p-2 hover:bg-muted">
+                                    <div
+                                        key={member.id}
+                                        className="flex items-center gap-3 rounded-md p-2 hover:bg-muted"
+                                    >
                                         <Avatar className="h-8 w-8">
                                             <AvatarImage src={member.user.image || undefined} />
                                             <AvatarFallback>
-                                                {member.user.name?.charAt(0).toUpperCase() || member.user.email.charAt(0).toUpperCase()}
+                                                {member.user.name?.charAt(0).toUpperCase() ||
+                                                    member.user.email.charAt(0).toUpperCase()}
                                             </AvatarFallback>
                                         </Avatar>
                                         <div className="flex-1 min-w-0">
                                             <p className="text-sm font-medium truncate">
                                                 {member.user.name || member.user.email}
                                             </p>
-                                            <p className="text-xs text-muted-foreground truncate">{member.user.email}</p>
+                                            <p className="text-xs text-muted-foreground truncate">
+                                                {member.user.email}
+                                            </p>
                                         </div>
                                         <Badge variant="outline" className="text-xs">
                                             {member.role}
                                         </Badge>
+                                        {isChannelAdmin &&
+                                            member.role !== "OWNER" &&
+                                            member.userId !== currentUserId && (
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    className="h-7 w-7 p-0"
+                                                    onClick={() => handleRemoveMember(member.id)}
+                                                    disabled={removingMemberId === member.id}
+                                                >
+                                                    {removingMemberId === member.id ? (
+                                                        <Loader2 className="h-3 w-3 animate-spin" />
+                                                    ) : (
+                                                        <X className="h-3 w-3" />
+                                                    )}
+                                                </Button>
+                                            )}
                                     </div>
                                 ))}
                             </div>

@@ -31,20 +31,26 @@ export async function GET(
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    // Get channels where user is a member or public channels
+    // Workspace admins can see all channels, others see public channels + channels they're members of
+    const isWorkspaceAdmin = membership.role === "ADMIN" || membership.role === "OWNER";
+
     const channels = await prisma.channel.findMany({
       where: {
         workspaceId,
-        OR: [
-          { type: ChannelType.PUBLIC },
-          {
-            members: {
-              some: {
-                userId: session.user.id,
+        ...(isWorkspaceAdmin
+          ? {} // Admins see all channels
+          : {
+            OR: [
+              { type: ChannelType.PUBLIC },
+              {
+                members: {
+                  some: {
+                    userId: session.user.id,
+                  },
+                },
               },
-            },
-          },
-        ],
+            ],
+          }),
       },
       include: {
         _count: {
