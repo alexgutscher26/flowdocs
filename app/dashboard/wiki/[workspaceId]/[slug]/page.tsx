@@ -166,6 +166,18 @@ async function getWikiPage(workspaceId: string, slug: string, userId: string) {
   };
 }
 
+/**
+ * Renders a wiki page and handles version restoration.
+ *
+ * This function retrieves the workspace and user session, verifies access permissions,
+ * and fetches the specified wiki page. If the page is found, it provides functionality
+ * to restore a previous version of the page. It also handles user authorization and
+ * updates the page content accordingly, while ensuring proper revalidation of the page.
+ *
+ * @param {WikiPageProps} params - The parameters containing workspaceId and slug for the wiki page.
+ * @returns {JSX.Element} The rendered wiki page view or a not found message if the page does not exist.
+ * @throws Error If the user is unauthorized or if the version to restore is not found.
+ */
 export default async function WikiPage({ params }: WikiPageProps) {
   const { workspaceId, slug } = await params;
 
