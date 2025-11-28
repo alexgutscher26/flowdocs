@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import prisma from "@/lib/prisma";
 import { convertThreadToWiki } from "@/lib/wiki-converter";
+import { indexWikiPage } from "@/lib/search";
 
 /**
  * POST /api/wiki/convert
@@ -154,6 +155,11 @@ export async function POST(request: NextRequest) {
         },
       },
     });
+
+    // Index wiki page in Typesense
+    if (completePage) {
+      await indexWikiPage(completePage);
+    }
 
     return NextResponse.json(completePage, { status: 201 });
   } catch (error) {

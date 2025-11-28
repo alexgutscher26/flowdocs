@@ -1,6 +1,7 @@
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { indexFile } from "@/lib/search";
 
 const f = createUploadthing();
 
@@ -31,6 +32,17 @@ export const ourFileRouter = {
     .onUploadComplete(async ({ metadata, file }) => {
       console.log("Upload complete for userId:", metadata.userId);
       console.log("file url", file.url);
+
+      // Index file in Typesense
+      await indexFile({
+        id: file.key,
+        name: file.name,
+        type: file.name.split('.').pop() || 'unknown',
+        workspaceId: 'unknown', // TODO: Pass workspaceId from client
+        uploadedBy: metadata.userId,
+        createdAt: new Date(),
+        content: '', // Content extraction to be implemented
+      });
 
       return { url: file.url, name: file.name, size: file.size, key: file.key };
     }),

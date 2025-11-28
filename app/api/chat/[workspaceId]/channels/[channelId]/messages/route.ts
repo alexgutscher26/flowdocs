@@ -1,5 +1,6 @@
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { indexMessage } from "@/lib/search";
 import { MessageType } from "@/generated/prisma/enums";
 import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
@@ -148,6 +149,9 @@ export async function POST(
 
     // TODO: Broadcast via WebSocket
     // getIO().to(channelId).emit('message', message)
+
+    // Index message in Typesense
+    await indexMessage(message);
 
     return NextResponse.json(message, { status: 201 });
   } catch (error) {

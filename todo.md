@@ -140,48 +140,48 @@
 
 #### Search Infrastructure Setup
 
-- [ ] **File**: `lib/search.ts` (new)
-  - [ ] Set up Typesense search service
-  - [ ] Configure search indexes for messages and wiki pages
-  - [ ] Implement message indexing (content + metadata)
-  - [ ] Implement wiki page indexing with tags
-  - [ ] Add file content indexing capabilities
-  - [ ] Set up user search index for mentions
+- [x] **File**: `lib/search.ts` (new)
+  - [x] Set up Typesense search service
+  - [x] Configure search indexes for messages and wiki pages
+  - [x] Implement message indexing (content + metadata)
+  - [x] Implement wiki page indexing with tags
+  - [x] Add file content indexing capabilities
+  - [x] Set up user search index for mentions
   - **Environment variables**: `TYPESENSE_API_KEY`, `TYPESENSE_HOST`, `TYPESENSE_PORT`
   - **Acceptance**: All content types are searchable via Typesense
 
 #### Search API Endpoints
 
-- [ ] **File**: `app/api/search/route.ts` (new)
-  - [ ] Universal search endpoint with query parameters
-  - [ ] Support for content type filtering (message|wiki|file|user)
-  - [ ] Channel and author filtering
-  - [ ] Date range filtering
-  - [ ] Wiki tag filtering
-  - [ ] Result highlighting and snippets
-  - [ ] Faceted search results (counts by type, channel)
+- [x] **File**: `app/api/search/route.ts` (new)
+  - [x] Universal search endpoint with query parameters
+  - [x] Support for content type filtering (message|wiki|file|user)
+  - [x] Channel and author filtering
+  - [x] Date range filtering
+  - [x] Wiki tag filtering
+  - [x] Result highlighting and snippets
+  - [x] Faceted search results (counts by type, channel)
   - **Acceptance**: Search returns relevant, filtered results quickly
 
 #### Search UI Components
 
-- [ ] **File**: `components/search/search-modal.tsx` (new)
-  - [ ] Keyboard shortcut trigger (Cmd+K/Ctrl+K)
-  - [ ] Real-time search as user types
-  - [ ] Result categorization (messages, wiki, files)
-  - [ ] Keyboard navigation through results
-  - [ ] Advanced filters sidebar
-  - [ ] Recent searches history
-  - [ ] "Did you mean?" suggestions
-  - [ ] Result preview on hover
+- [x] **File**: `components/search/search-modal.tsx` (new)
+  - [x] Keyboard shortcut trigger (Cmd+K/Ctrl+K)
+  - [x] Real-time search as user types
+  - [x] Result categorization (messages, wiki, files)
+  - [x] Keyboard navigation through results
+  - [x] Advanced filters sidebar
+  - [x] Recent searches history
+  - [x] "Did you mean?" suggestions
+  - [x] Result preview on hover
   - **Acceptance**: Fast, intuitive search experience
 
-- [ ] **File**: `components/search/search-results-page.tsx` (new)
-  - [ ] Full-page search at `/dashboard/search`
-  - [ ] Persistent search state in URL
-  - [ ] Advanced filtering sidebar
-  - [ ] Result sorting options (relevance, date, author)
-  - [ ] Export search results functionality
-  - [ ] Save search queries feature
+- [x] **File**: `components/search/search-results-page.tsx` (new)
+  - [x] Full-page search at `/dashboard/search`
+  - [x] Persistent search state in URL
+  - [x] Advanced filtering sidebar
+  - [x] Result sorting options (relevance, date, author)
+  - [x] Export search results functionality
+  - [x] Save search queries feature
   - **Acceptance**: Comprehensive search interface for power users
 
 ### Epic 4: Channels and Direct Messages

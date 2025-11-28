@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import prisma from "@/lib/prisma";
+import { indexWikiPage } from "@/lib/search";
 
 /**
  * GET /api/wiki/[workspaceId]/pages
@@ -252,6 +253,25 @@ export async function POST(
           },
         });
       }
+    }
+
+
+
+    // Index wiki page in Typesense
+    // Fetch complete page with tags for indexing
+    const completePage = await prisma.wikiPage.findUnique({
+      where: { id: page.id },
+      include: {
+        tags: {
+          include: {
+            tag: true,
+          },
+        },
+      },
+    });
+
+    if (completePage) {
+      await indexWikiPage(completePage);
     }
 
     return NextResponse.json(page, { status: 201 });

@@ -5,6 +5,7 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
 import { admin, magicLink } from "better-auth/plugins";
 import { sendPasswordResetEmail, sendMagicLinkEmail } from "@/app/actions/email";
+import { indexUser } from "@/lib/search";
 
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL!,
@@ -29,6 +30,9 @@ export const auth = betterAuth({
             };
           }
           return { data: user };
+        },
+        after: async (user) => {
+          await indexUser(user);
         },
       },
     },
