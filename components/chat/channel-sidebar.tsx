@@ -7,8 +7,9 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Hash, Lock, Plus, Search, Users } from "lucide-react";
+import { Hash, Lock, Plus, Search, Users, Compass } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ChannelBrowserDialog } from "./channel-browser-dialog";
 
 interface ChannelSidebarProps {
   workspaceId: string;
@@ -32,6 +33,7 @@ export function ChannelSidebar({
   const [channels, setChannels] = useState<ExtendedChannel[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [browserDialogOpen, setBrowserDialogOpen] = useState(false);
 
   // Fetch channels
   useEffect(() => {
@@ -170,11 +172,22 @@ export function ChannelSidebar({
       <div className="border-b p-4">
         <div className="mb-3 flex items-center justify-between">
           <h2 className="font-semibold">Channels</h2>
-          {onCreateChannel && (
-            <Button variant="ghost" size="sm" className="h-7 w-7 p-0" onClick={onCreateChannel}>
-              <Plus className="h-4 w-4" />
+          <div className="flex items-center gap-1">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-7 w-7 p-0"
+              onClick={() => setBrowserDialogOpen(true)}
+              title="Browse channels"
+            >
+              <Compass className="h-4 w-4" />
             </Button>
-          )}
+            {onCreateChannel && (
+              <Button variant="ghost" size="sm" className="h-7 w-7 p-0" onClick={onCreateChannel}>
+                <Plus className="h-4 w-4" />
+              </Button>
+            )}
+          </div>
         </div>
 
         {/* Search */}
@@ -216,6 +229,25 @@ export function ChannelSidebar({
           )}
         </div>
       </ScrollArea>
+
+      {/* Channel Browser Dialog */}
+      {currentUserId && (
+        <ChannelBrowserDialog
+          open={browserDialogOpen}
+          onOpenChange={setBrowserDialogOpen}
+          workspaceId={workspaceId}
+          currentUserId={currentUserId}
+          onChannelJoined={(channelId) => {
+            onChannelSelect(channelId);
+            // Trigger refresh
+            setChannels([]);
+            fetch(`/api/chat/${workspaceId}/channels`)
+              .then((res) => res.json())
+              .then((data) => setChannels(data))
+              .catch((error) => console.error("Error refetching channels:", error));
+          }}
+        />
+      )}
     </div>
   );
 }

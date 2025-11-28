@@ -200,16 +200,16 @@
 
 #### Channel Types Implementation
 
-- [] **Public Channels**:
-  - [] Accessible to all workspace members
-  - [] Discoverable in channel browser
-  - [] Messages indexed in search
-  - [] Join/leave functionality
+- [x] **Public Channels**:
+  - [x] Accessible to all workspace members
+  - [x] Discoverable in channel browser
+  - [x] Messages indexed in search
+  - [x] Join/leave functionality
   - **Acceptance**: Public channels work like Slack public channels
 
-- [x] **Private Channels**:
-  - [x] Invite-only access control
-  - [x] Hidden from non-members
+- [] **Private Channels**:
+  - [] Invite-only access control
+  - [] Hidden from non-members
   - [ ] Workspace admin visibility
   - [ ] Member management interface
   - **Acceptance**: Private channels are secure and exclusive

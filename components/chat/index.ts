@@ -6,5 +6,6 @@ export { MessageInput } from "./message-input";
 export { ThreadView } from "./thread-view";
 export { CreateChannelDialog } from "./create-channel-dialog";
 export { ChannelSettingsDialog } from "./channel-settings-dialog";
+export { ChannelBrowserDialog } from "./channel-browser-dialog";
 export { ConvertToWikiButton } from "./convert-to-wiki-button";
 export { UserPresence } from "./user-presence";
