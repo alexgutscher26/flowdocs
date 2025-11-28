@@ -14,11 +14,30 @@ interface EditWikiClientProps {
     page: any; // Using any to match previous implementation, but should ideally be typed
 }
 
+/**
+ * Edit a wiki page within a specified workspace.
+ *
+ * This function manages the editing of a wiki page by providing a save and cancel functionality. It utilizes the useRouter hook for navigation and the useToast hook for displaying notifications. The handleSave function sends a PUT request to update the wiki page and handles the response, while handleCancel redirects the user back to the page view. The component also initializes the wiki editor with the current page's title, content, and tags.
+ *
+ * @param workspaceId - The ID of the workspace containing the wiki.
+ * @param slug - The unique identifier for the wiki page.
+ * @param page - The current page data including title, content, and tags.
+ * @returns A JSX element representing the edit wiki client interface.
+ */
 export function EditWikiClient({ workspaceId, slug, page }: EditWikiClientProps) {
     const router = useRouter();
     const { toast } = useToast();
     const [saving, setSaving] = useState(false);
 
+    /**
+     * Handles the saving of wiki page data.
+     *
+     * This function sets a saving state, attempts to send a PUT request to update the wiki page with the provided data,
+     * and manages the response. If the request is successful, it displays a success message and redirects to the view page.
+     * In case of an error, it shows an error message. The saving state is reset in the finally block.
+     *
+     * @param data - An object containing the title, content, tags, and published status of the wiki page.
+     */
     const handleSave = async (data: {
         title: string;
         content: string;
@@ -60,6 +79,9 @@ export function EditWikiClient({ workspaceId, slug, page }: EditWikiClientProps)
         }
     };
 
+    /**
+     * Navigates to the specified wiki page in the dashboard.
+     */
     const handleCancel = () => {
         router.push(`/dashboard/wiki/${workspaceId}/${slug}`);
     };
