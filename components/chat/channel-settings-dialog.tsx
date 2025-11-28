@@ -48,6 +48,21 @@ export function ChannelSettingsDialog({
         setDescription(channel.description || "");
     }, [channel]);
 
+    /**
+     * Handles the saving of channel information.
+     *
+     * This function validates the channel name, sets a saving state, and makes an asynchronous PUT request to update the channel details.
+     * It handles potential errors by displaying appropriate messages and ensures the saving state is reset after the operation.
+     *
+     * @param {string} name - The name of the channel to be updated.
+     * @param {string} description - The description of the channel to be updated.
+     * @param {string} workspaceId - The ID of the workspace containing the channel.
+     * @param {Object} channel - The channel object that contains the channel ID.
+     * @param {Function} onChannelUpdated - Optional callback function to be called after the channel is updated.
+     * @param {Function} onOpenChange - Function to change the open state of the channel.
+     * @returns {Promise<void>} A promise that resolves when the save operation is complete.
+     * @throws Error If the channel name is empty or if the update request fails.
+     */
     const handleSave = async () => {
         if (!name.trim()) {
             toast.error("Channel name is required");
@@ -95,6 +110,14 @@ export function ChannelSettingsDialog({
         }
     };
 
+    /**
+     * Returns a badge component representing the type of the channel.
+     *
+     * The function checks the type of the channel and returns a corresponding
+     * Badge component with the appropriate label. It handles three types of
+     * channels: PUBLIC, PRIVATE, and DM (Direct Message). If the channel type
+     * does not match any of these, it will return undefined.
+     */
     const getChannelTypeBadge = () => {
         switch (channel.type) {
             case ChannelType.PUBLIC:
