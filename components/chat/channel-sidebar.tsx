@@ -18,6 +18,17 @@ interface ChannelSidebarProps {
   refreshTrigger?: number; // Used to force refresh
 }
 
+/**
+ * Renders a sidebar for channel management within a workspace.
+ *
+ * This component fetches channels from an API based on the provided workspaceId and refreshTrigger. It filters channels based on a search query and groups them by type (public, private, direct messages) and category. The sidebar also includes functionality for selecting channels and creating new ones, while displaying loading states and handling empty channel scenarios.
+ *
+ * @param workspaceId - The ID of the workspace to fetch channels from.
+ * @param activeChannelId - The ID of the currently active channel.
+ * @param onChannelSelect - Callback function to handle channel selection.
+ * @param onCreateChannel - Callback function to handle channel creation.
+ * @param refreshTrigger - A trigger to refresh the channel list.
+ */
 export function ChannelSidebar({
   workspaceId,
   activeChannelId,
@@ -60,6 +71,9 @@ export function ChannelSidebar({
   const dmChannels = filteredChannels.filter((c) => c.type === ChannelType.DM);
 
   // Group public and private channels by category
+  /**
+   * Groups channels by their category and separates uncategorized channels.
+   */
   const groupChannelsByCategory = (channels: ExtendedChannel[]) => {
     const groups: Record<string, ExtendedChannel[]> = {};
     const uncategorized: ExtendedChannel[] = [];
@@ -81,6 +95,15 @@ export function ChannelSidebar({
   const { groups: publicGroups, uncategorized: publicUncategorized } = groupChannelsByCategory(publicChannels);
   const { groups: privateGroups, uncategorized: privateUncategorized } = groupChannelsByCategory(privateChannels);
 
+  /**
+   * Returns the appropriate icon component based on the channel type.
+   *
+   * The function takes a ChannelType and uses a switch statement to determine
+   * which icon to return. It handles three cases: PUBLIC, PRIVATE, and DM,
+   * each returning a different icon component with specified class names.
+   *
+   * @param {ChannelType} type - The type of the channel for which to get the icon.
+   */
   const getChannelIcon = (type: ChannelType) => {
     switch (type) {
       case ChannelType.PUBLIC:
