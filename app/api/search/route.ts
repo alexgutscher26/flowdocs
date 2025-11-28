@@ -150,32 +150,39 @@ export async function GET(request: NextRequest) {
             facets.byType.wikiPages = wikiPages.length;
         }
 
-        // Search users
+        // Search users (with workspace role)
         if (type === 'all' || type === 'user') {
-            const users = await prisma.user.findMany({
+            const workspaceMembers = await prisma.workspaceMember.findMany({
                 where: {
-                    OR: [
-                        { name: { contains: query, mode: 'insensitive' } },
-                        { email: { contains: query, mode: 'insensitive' } },
-                    ],
+                    workspaceId,
+                    user: {
+                        OR: [
+                            { name: { contains: query, mode: 'insensitive' } },
+                            { email: { contains: query, mode: 'insensitive' } },
+                        ],
+                    },
                 },
                 take: limit,
+                include: {
+                    user: true,
+                },
             });
 
-            results.users = users.map((user) => ({
+            results.users = workspaceMembers.map((member) => ({
                 document: {
-                    id: user.id,
-                    name: user.name,
-                    email: user.email,
-                    createdAt: user.createdAt.getTime(),
+                    id: member.user.id,
+                    name: member.user.name,
+                    email: member.user.email,
+                    role: member.role,
+                    createdAt: member.user.createdAt.getTime(),
                 },
                 highlight: {
-                    name: { snippet: user.name },
-                    email: { snippet: user.email },
+                    name: { snippet: member.user.name },
+                    email: { snippet: member.user.email },
                 },
             }));
 
-            facets.byType.users = users.length;
+            facets.byType.users = workspaceMembers.length;
         }
 
         const total =

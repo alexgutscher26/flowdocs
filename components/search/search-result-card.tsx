@@ -60,10 +60,10 @@ export function SearchResultCard({ type, data, highlight, workspaceId }: SearchR
                 return `/dashboard/chat/${workspaceId}/channels/${data.channelId}?message=${data.id}`;
             case 'wiki':
                 return `/dashboard/wiki/${workspaceId}/${data.slug}`;
-            case 'user':
-                return `/dashboard/profile/${data.id}`;
             case 'file':
                 return data.url || '#';
+            case 'user':
+                return '#'; // No profile page
         }
     };
 
@@ -97,12 +97,18 @@ export function SearchResultCard({ type, data, highlight, workspaceId }: SearchR
                             <span>{formatDistanceToNow(date, { addSuffix: true })}</span>
                         </div>
 
-                        <Button asChild size="sm" variant="outline">
-                            <Link href={getLink()}>
-                                <ExternalLink className="h-4 w-4 mr-2" />
-                                Open
-                            </Link>
-                        </Button>
+                        {type !== 'user' ? (
+                            <Button asChild size="sm" variant="outline">
+                                <Link href={getLink()}>
+                                    <ExternalLink className="h-4 w-4 mr-2" />
+                                    Open
+                                </Link>
+                            </Button>
+                        ) : (
+                            <Badge variant="secondary" className="capitalize">
+                                {data.role || 'Member'}
+                            </Badge>
+                        )}
                     </div>
                 </div>
             </div>
