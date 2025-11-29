@@ -9,6 +9,16 @@ import { ImpersonationBanner } from "@/components/impersonation-banner";
 
 export const dynamic = "force-dynamic";
 
+/**
+ * Renders the admin layout with necessary protections and components.
+ *
+ * This function retrieves the current user and checks their role to ensure they are an admin.
+ * If the user is not an admin, they are redirected to the dashboard. It also checks the impersonation
+ * status and sets up the layout with a sidebar and header, passing the necessary props to the components.
+ *
+ * @param {Object} props - The properties for the AdminLayout component.
+ * @param {React.ReactNode} props.children - The child components to be rendered within the layout.
+ */
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const currentUser = await getCurrentUser();
 
