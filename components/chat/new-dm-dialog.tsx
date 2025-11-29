@@ -29,6 +29,18 @@ interface NewDmDialogProps {
     onDmCreated: (channelId: string) => void;
 }
 
+/**
+ * Renders a dialog for creating a new direct message (DM) with users from a workspace.
+ *
+ * The function fetches the list of workspace members excluding the current user when the dialog is opened.
+ * It allows the user to select a member to initiate a DM, handling the creation process and updating the UI accordingly.
+ *
+ * @param open - A boolean indicating whether the dialog is open.
+ * @param onOpenChange - A callback function to handle changes in the dialog's open state.
+ * @param workspaceId - The ID of the workspace from which to fetch members.
+ * @param currentUserId - The ID of the current user to exclude from the member list.
+ * @param onDmCreated - A callback function to be called when a DM is successfully created.
+ */
 export function NewDmDialog({
     open,
     onOpenChange,
@@ -44,6 +56,13 @@ export function NewDmDialog({
     useEffect(() => {
         if (!open) return;
 
+        /**
+         * Fetches the users from the workspace members API.
+         *
+         * This asynchronous function sets the loading state to true, makes a fetch request to retrieve the members of a workspace,
+         * and filters out the current user from the results. If the fetch is successful, it updates the users state with the filtered data.
+         * In case of an error during the fetch, it logs the error to the console. Finally, it ensures that the loading state is set to false.
+         */
         async function fetchUsers() {
             try {
                 setLoading(true);
@@ -63,6 +82,16 @@ export function NewDmDialog({
         fetchUsers();
     }, [open, workspaceId, currentUserId]);
 
+    /**
+     * Handles the creation of a direct message (DM) channel for a specified user.
+     *
+     * The function sets a loading state, makes a POST request to create a DM channel with the given targetUserId,
+     * and processes the response. If the response is successful, it triggers the onDmCreated callback with the new channel ID
+     * and closes the open state. In case of an error, it logs the error and displays a toast notification.
+     * Finally, it resets the loading state.
+     *
+     * @param targetUserId - The ID of the user to whom the DM is being created.
+     */
     const handleSelectUser = async (targetUserId: string) => {
         setCreating(true);
         try {
