@@ -111,15 +111,48 @@ export async function PUT(
     const body = await request.json();
     const { name, description, type } = body;
 
-    const channel = await prisma.channel.update({
+    // If changing type, require owner permission
+    if (type !== undefined) {
+      // Get channel to check current type
+      const channel = await prisma.channel.findUnique({
+        where: { id: channelId },
+      });
+
+      if (!channel) {
+        return NextResponse.json({ error: "Channel not found" }, { status: 404 });
+      }
+
+      // Only allow type changes by owner, and not for DM channels
+      if (type !== channel.type) {
+        if (channelMember.role !== ChannelRole.OWNER) {
+          return NextResponse.json(
+            { error: "Only channel owner can change channel type" },
+            { status: 403 }
+          );
+        }
+
+        if (channel.type === ChannelType.DM || type === ChannelType.DM) {
+          return NextResponse.json(
+            { error: "Cannot change type of Direct Message channels" },
+            { status: 400 }
+          );
+        }
+
+        if (type !== ChannelType.PUBLIC && type !== ChannelType.PRIVATE) {
+          return NextResponse.json({ error: "Invalid channel type" }, { status: 400 });
+        }
+      }
+    }
+
+    const updatedChannel = await prisma.channel.update({
       where: {
         id: channelId,
         workspaceId,
       },
       data: {
-        ...(name && { name }),
-        ...(description !== undefined && { description }),
-        ...(type && { type }),
+        ...(name !== undefined && { name: name.trim() }),
+        ...(description !== undefined && { description: description.trim() || null }),
+        ...(type !== undefined && { type }),
       },
       include: {
         _count: {
@@ -131,7 +164,7 @@ export async function PUT(
       },
     });
 
-    return NextResponse.json(channel);
+    return NextResponse.json(updatedChannel);
   } catch (error) {
     console.error("Error updating channel:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

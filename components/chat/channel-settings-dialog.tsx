@@ -31,7 +31,8 @@ import {
 } from "@/components/ui/popover";
 import { ExtendedChannel } from "@/types/chat";
 import { ChannelType } from "@/generated/prisma/enums";
-import { Loader2, Hash, Lock, Users, Calendar, UserPlus, X, Trash2 } from "lucide-react";
+import { Loader2, Hash, Lock, Users, Calendar, UserPlus, X, Trash2, Archive, ArchiveRestore } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { format } from "date-fns";
 
@@ -55,11 +56,14 @@ export function ChannelSettingsDialog({
 }: ChannelSettingsDialogProps) {
     const [name, setName] = useState(channel.name);
     const [description, setDescription] = useState(channel.description || "");
+    const [channelType, setChannelType] = useState(channel.type);
     const [saving, setSaving] = useState(false);
     const [workspaceUsers, setWorkspaceUsers] = useState<any[]>([]);
     const [inviteOpen, setInviteOpen] = useState(false);
     const [inviting, setInviting] = useState(false);
     const [removingMemberId, setRemovingMemberId] = useState<string | null>(null);
+    const [changingRoleMemberId, setChangingRoleMemberId] = useState<string | null>(null);
+    const [archiving, setArchiving] = useState(false);
     const [deleting, setDeleting] = useState(false);
     const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
 
@@ -67,6 +71,7 @@ export function ChannelSettingsDialog({
     useEffect(() => {
         setName(channel.name);
         setDescription(channel.description || "");
+        setChannelType(channel.type);
     }, [channel]);
 
     // Fetch workspace users for invite functionality
@@ -105,6 +110,7 @@ export function ChannelSettingsDialog({
                 body: JSON.stringify({
                     name: name.trim(),
                     description: description.trim() || null,
+                    type: channelType,
                 }),
             });
 
@@ -205,6 +211,64 @@ export function ChannelSettingsDialog({
         }
     };
 
+    const handleChangeRole = async (memberId: string, newRole: string) => {
+        setChangingRoleMemberId(memberId);
+        try {
+            const response = await fetch(
+                `/api/chat/${workspaceId}/channels/${channel.id}/members/${memberId}/role`,
+                {
+                    method: "PATCH",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ role: newRole }),
+                }
+            );
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || "Failed to change member role");
+            }
+
+            toast.success("Member role updated successfully");
+            onChannelUpdated?.();
+        } catch (error) {
+            console.error("Error changing member role:", error);
+            toast.error(error instanceof Error ? error.message : "Failed to change member role");
+        } finally {
+            setChangingRoleMemberId(null);
+        }
+    };
+
+    const handleArchive = async () => {
+        setArchiving(true);
+        try {
+            const response = await fetch(
+                `/api/chat/${workspaceId}/channels/${channel.id}/archive`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ archived: !channel.archived }),
+                }
+            );
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || "Failed to archive channel");
+            }
+
+            toast.success(channel.archived ? "Channel unarchived" : "Channel archived");
+            onChannelUpdated?.();
+        } catch (error) {
+            console.error("Error archiving channel:", error);
+            toast.error(error instanceof Error ? error.message : "Failed to archive channel");
+        } finally {
+            setArchiving(false);
+        }
+    };
+
     const getChannelIcon = () => {
         switch (channel.type) {
             case ChannelType.PUBLIC:
@@ -227,7 +291,10 @@ export function ChannelSettingsDialog({
         }
     };
 
-    const hasChanges = name !== channel.name || description !== (channel.description || "");
+    const hasChanges =
+        name !== channel.name ||
+        description !== (channel.description || "") ||
+        channelType !== channel.type;
 
     // Check if current user is admin/owner
     const currentUserMember = channel.members.find((m) => m.userId === currentUserId);
@@ -307,6 +374,27 @@ export function ChannelSettingsDialog({
                                         placeholder="What's this channel about?"
                                     />
                                 </div>
+
+                                {/* Channel Type - Owner only, not for DMs */}
+                                {currentUserMember?.role === "OWNER" && channel.type !== ChannelType.DM && (
+                                    <div className="space-y-2">
+                                        <Label htmlFor="channel-type">Channel Type</Label>
+                                        <Select value={channelType} onValueChange={(value) => setChannelType(value as ChannelType)}>
+                                            <SelectTrigger id="channel-type">
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value={ChannelType.PUBLIC}>Public</SelectItem>
+                                                <SelectItem value={ChannelType.PRIVATE}>Private</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                        <p className="text-muted-foreground text-xs">
+                                            {channelType === ChannelType.PUBLIC
+                                                ? "Public channels are visible to all workspace members"
+                                                : "Private channels are only visible to invited members"}
+                                        </p>
+                                    </div>
+                                )}
                             </div>
 
                             <Separator />
@@ -342,6 +430,42 @@ export function ChannelSettingsDialog({
                                     </div>
                                 </div>
                             </div>
+
+                            <Separator />
+
+                            {/* Archive Channel - Owner only, not for DMs */}
+                            {currentUserMember?.role === "OWNER" && channel.type !== ChannelType.DM && (
+                                <div className="space-y-4">
+                                    <h3 className="text-sm font-semibold">Archive Channel</h3>
+                                    <div className="flex items-center justify-between rounded-md border p-3">
+                                        <div className="space-y-0.5">
+                                            <p className="text-sm font-medium">
+                                                {channel.archived ? "Unarchive this channel" : "Archive this channel"}
+                                            </p>
+                                            <p className="text-xs text-muted-foreground">
+                                                {channel.archived
+                                                    ? "Restore this channel to active status"
+                                                    : "Archived channels are read-only and hidden from the sidebar"}
+                                            </p>
+                                        </div>
+                                        <Button
+                                            variant={channel.archived ? "default" : "outline"}
+                                            size="sm"
+                                            onClick={handleArchive}
+                                            disabled={archiving}
+                                        >
+                                            {archiving ? (
+                                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                            ) : channel.archived ? (
+                                                <ArchiveRestore className="mr-2 h-4 w-4" />
+                                            ) : (
+                                                <Archive className="mr-2 h-4 w-4" />
+                                            )}
+                                            {channel.archived ? "Unarchive" : "Archive"}
+                                        </Button>
+                                    </div>
+                                </div>
+                            )}
 
                             <Separator />
 
@@ -415,9 +539,26 @@ export function ChannelSettingsDialog({
                                                     {member.user.email}
                                                 </p>
                                             </div>
-                                            <Badge variant="outline" className="text-xs">
-                                                {member.role}
-                                            </Badge>
+                                            {/* Role badge/selector */}
+                                            {isChannelAdmin && member.role !== "OWNER" && channel.type !== ChannelType.DM ? (
+                                                <Select
+                                                    value={member.role}
+                                                    onValueChange={(role) => handleChangeRole(member.id, role)}
+                                                    disabled={changingRoleMemberId === member.id}
+                                                >
+                                                    <SelectTrigger className="w-[100px] h-7">
+                                                        <SelectValue />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectItem value="ADMIN">Admin</SelectItem>
+                                                        <SelectItem value="MEMBER">Member</SelectItem>
+                                                    </SelectContent>
+                                                </Select>
+                                            ) : (
+                                                <Badge variant="outline" className="text-xs">
+                                                    {member.role}
+                                                </Badge>
+                                            )}
                                             {isChannelAdmin &&
                                                 member.role !== "OWNER" &&
                                                 member.userId !== currentUserId && (

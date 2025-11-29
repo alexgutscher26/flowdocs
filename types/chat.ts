@@ -15,6 +15,8 @@ export interface Channel {
   description: string | null;
   category?: string | null;
   type: ChannelType;
+  archived: boolean;
+  archivedAt: Date | null;
   workspaceId: string;
   createdAt: Date;
   updatedAt: Date;

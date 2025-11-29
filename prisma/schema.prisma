@@ -192,6 +192,8 @@ model Channel {
   description String?
   category    String?     // For custom grouping
   type        ChannelType @default(PUBLIC)
+  archived    Boolean     @default(false)
+  archivedAt  DateTime?
   workspaceId String
   workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   createdAt   DateTime  @default(now())

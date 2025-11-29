@@ -224,14 +224,13 @@
 
 #### Channel Settings
 
-- [ ] **File**: `components/chat/channel-settings.tsx` (new)
-  - [ ] Channel name and description editing
-  - [ ] Public/private toggle
-  - [ ] Member management (add/remove users)
-  - [ ] Role assignments (admin/member)
-  - [ ] Channel archival with message preservation
-  - [ ] Notification preferences per user
-  - [ ] Integration settings per channel
+- [x] **File**: `components/chat/channel-settings-dialog.tsx`
+  - [x] Channel name and description editing
+  - [x] Member management (add/remove users for private channels)
+  - [x] Channel deletion
+  - [x] Public/private toggle
+  - [x] Role assignments (promote/demote between ADMIN and MEMBER)
+  - [x] Channel archival with message preservation
   - **Acceptance**: Complete channel management capabilities
 
 ### Epic 5: File Attachments and Integrations
