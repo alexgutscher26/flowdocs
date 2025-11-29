@@ -214,10 +214,10 @@
   - [x] Member management interface
   - **Acceptance**: Private channels are secure and exclusive
 
-- [x] **Direct Messages**:
-  - [x] One-on-one conversations
-  - [x] Auto-creation on first message
-  - [x] No separate channel entity
+- [ ] **Direct Messages**:
+  - [ ] One-on-one conversations
+  - [ ] Auto-creation on first message
+  - [ ] No separate channel entity
   - [ ] Message privacy controls65
   - **Acceptance**: DMs work seamlessly without channel overhead
 
