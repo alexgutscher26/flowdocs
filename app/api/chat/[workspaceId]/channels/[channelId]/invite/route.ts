@@ -5,6 +5,18 @@ import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
 
 // POST /api/chat/[workspaceId]/channels/[channelId]/invite - Invite user to channel
+/**
+ * Handles the POST request to invite a user to a channel.
+ *
+ * This function first retrieves the workspace and channel IDs from the request parameters and checks the user's session for authorization.
+ * It then validates the invited user's ID, checks if the requester has the necessary permissions, verifies the invited user's membership in the workspace,
+ * and ensures the user is not already a member of the channel. If all checks pass, it adds the user as a member and returns the updated channel information.
+ *
+ * @param request - The NextRequest object containing the request data.
+ * @param params - An object containing a promise that resolves to the workspaceId and channelId.
+ * @returns The updated channel information with all members.
+ * @throws Error If an internal server error occurs during the process.
+ */
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ workspaceId: string; channelId: string }> }
