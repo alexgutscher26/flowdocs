@@ -34,6 +34,18 @@ interface WorkspaceSettingsFormProps {
   workspace: WorkspaceWithRole;
 }
 
+/**
+ * Renders a form for updating workspace settings.
+ *
+ * This component manages the state of the form, handles submission, and provides feedback to the user.
+ * It utilizes the useForm hook for form management and integrates with the updateWorkspace function to
+ * submit the form data. The form includes fields for the workspace logo, name, and slug, and displays
+ * appropriate error messages and loading indicators during the submission process.
+ *
+ * @param {WorkspaceSettingsFormProps} props - The properties for the WorkspaceSettingsForm component.
+ * @param {Workspace} props.workspace - The current workspace data to populate the form.
+ * @returns {JSX.Element} The rendered form component.
+ */
 export function WorkspaceSettingsForm({ workspace }: WorkspaceSettingsFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
