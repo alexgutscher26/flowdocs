@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { completeOnboarding } from "@/app/actions/onboarding";
+import { inviteMember } from "@/app/actions/workspace-invitations";
 import { toast } from "sonner";
-import { IconInnerShadowTop, IconFolder, IconCheck, IconRocket } from "@tabler/icons-react";
+import { IconInnerShadowTop, IconFolder, IconCheck, IconRocket, IconMail, IconX } from "@tabler/icons-react";
 import Link from "next/link";
 import Image from "next/image";
 import confetti from "canvas-confetti";
@@ -53,6 +54,8 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
   const [businessName, setBusinessName] = useState("");
   const [isBusinessNameCustomized, setIsBusinessNameCustomized] = useState(false);
   const [businessPhone, setBusinessPhone] = useState("");
+  const [createdWorkspaceId, setCreatedWorkspaceId] = useState("");
+  const [inviteEmails, setInviteEmails] = useState([""]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
@@ -77,6 +80,7 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
       });
 
       if (result.success) {
+        setCreatedWorkspaceId(result.workspace.id);
         setCurrentStep(4);
         toast.success("Workspace created successfully!");
       }
@@ -88,9 +92,64 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
     }
   };
 
+  const handleInvitations = async () => {
+    setIsLoading(true);
+    setError("");
+
+    try {
+      // Filter out empty emails
+      const validEmails = inviteEmails.filter((email) => email.trim() !== "");
+
+      // Send invitations
+      if (validEmails.length > 0) {
+        const invitePromises = validEmails.map((email) =>
+          inviteMember({
+            workspaceId: createdWorkspaceId,
+            email: email.trim(),
+            role: "MEMBER",
+          })
+        );
+
+        const results = await Promise.allSettled(invitePromises);
+        const successCount = results.filter((r) => r.status === "fulfilled" && r.value.success).length;
+        const failureCount = results.length - successCount;
+
+        if (successCount > 0) {
+          toast.success(`${successCount} invitation${successCount > 1 ? "s" : ""} sent successfully!`);
+        }
+        if (failureCount > 0) {
+          toast.error(`${failureCount} invitation${failureCount > 1 ? "s" : ""} failed to send`);
+        }
+      }
+
+      // Move to success step
+      setCurrentStep(5);
+    } catch (err: unknown) {
+      setError((err as Error).message || "Failed to send invitations");
+      toast.error((err as Error).message || "Failed to send invitations");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const addEmailField = () => {
+    setInviteEmails([...inviteEmails, ""]);
+  };
+
+  const removeEmailField = (index: number) => {
+    const newEmails = inviteEmails.filter((_, i) => i !== index);
+    setInviteEmails(newEmails.length > 0 ? newEmails : [""]);
+  };
+
+  const updateEmailField = (index: number, value: string) => {
+    const newEmails = [...inviteEmails];
+    newEmails[index] = value;
+    setInviteEmails(newEmails);
+  };
+
   // Trigger confetti on completion step
   useEffect(() => {
-    if (currentStep === 4) {
+    if (currentStep === 5) {
       const duration = 5 * 1000;
       const animationEnd = Date.now() + duration;
       const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
@@ -190,11 +249,10 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
                           key={roleOption.value}
                           onClick={() => setRole(roleOption.value)}
                           type="button"
-                          className={`rounded-lg border-2 p-4 text-left transition-all ${
-                            role === roleOption.value
+                          className={`rounded-lg border-2 p-4 text-left transition-all ${role === roleOption.value
                               ? "border-primary bg-primary/5"
                               : "border-border hover:border-primary/50"
-                          }`}
+                            }`}
                         >
                           <span className="font-medium">{roleOption.label}</span>
                         </button>
@@ -249,11 +307,10 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
                           key={useCaseOption.value}
                           onClick={() => setUseCase(useCaseOption.value)}
                           type="button"
-                          className={`rounded-lg border-2 p-4 text-left transition-all ${
-                            useCase === useCaseOption.value
+                          className={`rounded-lg border-2 p-4 text-left transition-all ${useCase === useCaseOption.value
                               ? "border-primary bg-primary/5"
                               : "border-border hover:border-primary/50"
-                          }`}
+                            }`}
                         >
                           <span className="text-sm font-medium">{useCaseOption.label}</span>
                         </button>
@@ -269,11 +326,10 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
                           key={source.value}
                           onClick={() => setDiscoverySource(source.value)}
                           type="button"
-                          className={`rounded-lg border-2 p-4 text-left transition-all ${
-                            discoverySource === source.value
+                          className={`rounded-lg border-2 p-4 text-left transition-all ${discoverySource === source.value
                               ? "border-primary bg-primary/5"
                               : "border-border hover:border-primary/50"
-                          }`}
+                            }`}
                         >
                           <span className="text-sm font-medium">{source.label}</span>
                         </button>
@@ -428,8 +484,103 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
             </>
           )}
 
-          {/* Step 4: Success */}
+          {/* Step 4: Invite Teammates */}
           {currentStep === 4 && (
+            <>
+              <div className="flex flex-col space-y-2 text-center">
+                <h1 className="text-2xl font-semibold tracking-tight">Invite your teammates</h1>
+                <p className="text-muted-foreground text-sm">
+                  Collaborate better by inviting your team members to join your workspace
+                </p>
+              </div>
+
+              <div className="grid gap-6">
+                <div className="grid gap-4">
+                  <div className="bg-secondary/50 rounded-lg p-4">
+                    <div className="mb-3 flex items-center gap-2">
+                      <IconMail className="text-primary h-5 w-5" />
+                      <h3 className="font-medium">Email Invitations</h3>
+                    </div>
+                    <p className="text-muted-foreground mb-4 text-sm">
+                      Enter email addresses to send invitations. You can always invite more people later
+                      from the workspace settings.
+                    </p>
+
+                    <div className="space-y-3">
+                      {inviteEmails.map((email, index) => (
+                        <div key={index} className="flex gap-2">
+                          <Input
+                            type="email"
+                            placeholder="colleague@example.com"
+                            value={email}
+                            onChange={(e) => updateEmailField(index, e.target.value)}
+                            disabled={isLoading}
+                            className="flex-1"
+                          />
+                          {inviteEmails.length > 1 && (
+                            <Button
+                              variant="outline"
+                              size="icon"
+                              onClick={() => removeEmailField(index)}
+                              disabled={isLoading}
+                              type="button"
+                            >
+                              <IconX className="h-4 w-4" />
+                            </Button>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+
+                    <Button
+                      variant="outline"
+                      onClick={addEmailField}
+                      disabled={isLoading}
+                      className="mt-3 w-full"
+                      type="button"
+                    >
+                      + Add another email
+                    </Button>
+                  </div>
+
+                  {error && <p className="text-destructive text-sm">{error}</p>}
+
+                  <div className="flex gap-3">
+                    <Button
+                      variant="outline"
+                      onClick={() => setCurrentStep(5)}
+                      disabled={isLoading}
+                      className="flex-1"
+                    >
+                      Skip for now
+                    </Button>
+                    <Button
+                      onClick={handleInvitations}
+                      disabled={isLoading}
+                      className="flex-1"
+                    >
+                      {isLoading ? "Sending..." : "Send Invitations"}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              <p className="text-muted-foreground px-8 text-center text-sm">
+                Need help? Message us{" "}
+                <a
+                  href={siteConfig.links.twitter}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-primary underline underline-offset-4"
+                >
+                  {siteConfig.links.twitter.replace("https://", "")}
+                </a>
+              </p>
+            </>
+          )}
+
+          {/* Step 5: Success */}
+          {currentStep === 5 && (
             <>
               <div className="flex flex-col space-y-2 text-center">
                 <h1 className="text-2xl font-semibold tracking-tight">You&apos;re all set! 🎉</h1>

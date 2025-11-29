@@ -53,6 +53,41 @@ export async function completeOnboarding(data: OnboardingData) {
         },
       });
 
+      // Create default channels (#general and #random)
+      await tx.channel.createMany({
+        data: [
+          {
+            name: "general",
+            description: "General workspace discussions",
+            type: "PUBLIC",
+            workspaceId: workspace.id,
+          },
+          {
+            name: "random",
+            description: "Casual conversations and off-topic chat",
+            type: "PUBLIC",
+            workspaceId: workspace.id,
+          },
+        ],
+      });
+
+      // Get the created channels and add user as OWNER
+      const channels = await tx.channel.findMany({
+        where: {
+          workspaceId: workspace.id,
+          name: { in: ["general", "random"] },
+        },
+      });
+
+      // Add user as OWNER to both channels
+      await tx.channelMember.createMany({
+        data: channels.map((channel) => ({
+          channelId: channel.id,
+          userId: session.user.id,
+          role: "OWNER",
+        })),
+      });
+
       // Update user with onboarding completion
       const user = await tx.user.update({
         where: {
