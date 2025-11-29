@@ -56,8 +56,13 @@ export async function getCurrentWorkspace(): Promise<ActionResult<WorkspaceWithR
 }
 
 /**
- * Update workspace settings (name, slug)
- * Requires OWNER or ADMIN role
+ * Update workspace settings including name and slug.
+ *
+ * This function first retrieves the user's session to ensure they are authorized. It validates the input data and checks if the user has the required OWNER or ADMIN role for the workspace. If the slug is being changed, it verifies that the new slug is not already taken. Upon successful validation, it updates the workspace details and revalidates the relevant paths. Finally, it returns the updated workspace information along with the member's role.
+ *
+ * @param input - The input data for updating the workspace, including id, name, slug, and image.
+ * @returns An ActionResult containing the updated workspace with the member's role.
+ * @throws Error If an error occurs during the update process.
  */
 export async function updateWorkspace(
   input: UpdateWorkspaceInput
