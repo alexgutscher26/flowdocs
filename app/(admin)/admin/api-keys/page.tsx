@@ -1,3 +1,6 @@
+/**
+ * Renders the API Keys management page.
+ */
 export default function ApiKeysPage() {
   return (
     <section className="container mx-auto px-4 py-12 sm:px-6 lg:px-8">
