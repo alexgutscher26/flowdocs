@@ -55,9 +55,37 @@ export function MessageList({
   if (messages.length === 0 && !loading) {
     return (
       <div className="flex flex-1 items-center justify-center p-8">
-        <div className="text-center">
-          <p className="text-muted-foreground">No messages yet</p>
-          <p className="text-muted-foreground mt-1 text-sm">Be the first to send a message!</p>
+        <div className="max-w-md rounded-lg bg-card p-6 text-center">
+          <div className="mb-4 flex justify-center">
+            <div className="bg-primary/10 rounded-full p-4">
+              <Loader2 className="text-primary h-12 w-12" />
+            </div>
+          </div>
+          <div className="space-y-3">
+            <div>
+              <h3 className="text-lg font-semibold">No messages yet</h3>
+              <p className="text-muted-foreground mt-2 text-sm">
+                This channel is brand new! Start a conversation below.
+              </p>
+            </div>
+            <div className="border-t pt-4">
+              <p className="text-muted-foreground mb-2 text-xs font-medium">You can:</p>
+              <ul className="text-muted-foreground space-y-1.5 text-left text-xs">
+                <li className="flex items-start gap-2">
+                  <span className="text-primary mt-0.5">•</span>
+                  <span>Share updates and ideas with your team</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-primary mt-0.5">•</span>
+                  <span>Ask questions and collaborate in real-time</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-primary mt-0.5">•</span>
+                  <span>Convert important threads to wiki pages</span>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     );

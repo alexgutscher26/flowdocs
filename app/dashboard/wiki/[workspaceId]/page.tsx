@@ -3,7 +3,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Plus, BookOpen } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -89,22 +89,46 @@ export default async function WikiHomePage({ params }: WikiHomeProps) {
       </div>
 
       {pages.length === 0 ? (
-        <Card>
-          <CardHeader>
-            <CardTitle>No Wiki Pages Yet</CardTitle>
-            <CardDescription>
-              Create your first wiki page or convert a chat thread to documentation.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button asChild>
-              <Link href={`/dashboard/wiki/${workspaceId}/new`}>
-                <Plus className="mr-2 h-4 w-4" />
-                Create Your First Page
-              </Link>
-            </Button>
-          </CardContent>
-        </Card>
+        <div className="mx-auto max-w-2xl space-y-6">
+          <div className="text-center pb-4">
+            <div className="mb-4 flex justify-center">
+              <div className="bg-primary/10 rounded-full p-4">
+                <BookOpen className="text-primary h-12 w-12" />
+              </div>
+            </div>
+            <h2 className="text-2xl font-bold">No Wiki Pages Yet</h2>
+            <p className="text-muted-foreground text-base mt-2">
+              Start building your team's knowledge base by creating your first wiki page.
+            </p>
+          </div>
+          <div className="space-y-6">
+            <div className="bg-muted/50 rounded-lg p-4">
+              <p className="text-muted-foreground mb-3 text-sm font-medium">Ways to create pages:</p>
+              <ul className="text-muted-foreground space-y-2 text-sm">
+                <li className="flex items-start gap-2">
+                  <span className="text-primary mt-0.5">•</span>
+                  <span>Create a new page from scratch with the button below</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-primary mt-0.5">•</span>
+                  <span>Convert important chat threads to documentation</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-primary mt-0.5">•</span>
+                  <span>Organize pages with tags and nested structures</span>
+                </li>
+              </ul>
+            </div>
+            <div className="flex justify-center">
+              <Button asChild size="lg">
+                <Link href={`/dashboard/wiki/${workspaceId}/new`}>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Create Your First Page
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </div>
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {pages.map((page) => (
