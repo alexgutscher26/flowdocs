@@ -5,6 +5,19 @@ import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
 
 // POST /api/chat/[workspaceId]/channels/[channelId]/join - Join a public channel
+/**
+ * Handles the POST request to join a channel within a workspace.
+ *
+ * This function verifies the user's session, checks if the user is a member of the workspace,
+ * retrieves the specified channel, and ensures that the channel is public. It also checks if
+ * the user is already a member of the channel before adding them as a member. Finally, it
+ * returns the updated channel information, including membership details.
+ *
+ * @param request - The NextRequest object representing the incoming request.
+ * @param params - An object containing a Promise that resolves to an object with workspaceId and channelId.
+ * @returns The updated channel information with membership details.
+ * @throws Error If there is an internal server error during the process.
+ */
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ workspaceId: string; channelId: string }> }
