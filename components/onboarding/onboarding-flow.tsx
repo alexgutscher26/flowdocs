@@ -44,6 +44,16 @@ const discoverySources = [
   { value: "other", label: "Other" },
 ];
 
+/**
+ * Manages the onboarding flow for new users, guiding them through multiple steps to create a workspace and invite teammates.
+ *
+ * The function initializes state variables for user input and manages the current step of the onboarding process. It includes methods for generating slugs, handling workspace creation, sending invitations, and updating email fields. The onboarding flow consists of five steps, with user feedback provided through toast notifications and error handling. Additionally, it triggers a confetti animation upon successful completion of the onboarding process.
+ *
+ * @param {Object} props - The properties for the onboarding flow.
+ * @param {string} props.userName - The name of the user.
+ * @param {string} props.userEmail - The email of the user.
+ * @returns {JSX.Element} The rendered onboarding flow component.
+ */
 export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const [firstName, setFirstName] = useState(userName || "");
@@ -64,6 +74,20 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
     return name.toLowerCase().replace(/[^a-z0-9]/g, "-");
   };
 
+  /**
+   * Handles the creation of a workspace by completing the onboarding process.
+   *
+   * This function sets the loading state and clears any previous errors. It then attempts to call the completeOnboarding function with the necessary parameters. If successful, it updates the workspace ID and advances the current step, displaying a success message. In case of an error, it captures the error message and displays an error notification. Finally, it resets the loading state.
+   *
+   * @param role - The role of the user creating the workspace.
+   * @param useCase - The use case for the workspace.
+   * @param discoverySource - The source from which the workspace is discovered.
+   * @param workspaceName - The name of the workspace to be created.
+   * @param firstName - The first name of the user creating the workspace.
+   * @param businessName - The business name associated with the workspace.
+   * @param businessPhone - The business phone number associated with the workspace.
+   * @returns Promise<void>
+   */
   const handleWorkspaceCreation = async () => {
     setIsLoading(true);
     setError("");
@@ -92,6 +116,19 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
     }
   };
 
+  /**
+   * Handles the process of sending invitations to members.
+   *
+   * This function filters out empty email addresses from the inviteEmails array, sends invitations using the inviteMember function, and manages the loading state and error handling. It also provides feedback on the success or failure of the invitations sent. Finally, it updates the current step to indicate progress in the invitation process.
+   *
+   * @param inviteEmails - An array of email addresses to which invitations will be sent.
+   * @param createdWorkspaceId - The ID of the workspace where members are being invited.
+   * @param setIsLoading - A function to set the loading state.
+   * @param setError - A function to set error messages.
+   * @param setCurrentStep - A function to update the current step in the invitation process.
+   * @returns A promise that resolves when the invitations have been processed.
+   * @throws Error If an error occurs during the invitation process.
+   */
   const handleInvitations = async () => {
     setIsLoading(true);
     setError("");
@@ -132,15 +169,24 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
     }
   };
 
+  /**
+   * Adds an empty email field to the inviteEmails array.
+   */
   const addEmailField = () => {
     setInviteEmails([...inviteEmails, ""]);
   };
 
+  /**
+   * Removes an email from the inviteEmails array at the specified index.
+   */
   const removeEmailField = (index: number) => {
     const newEmails = inviteEmails.filter((_, i) => i !== index);
     setInviteEmails(newEmails.length > 0 ? newEmails : [""]);
   };
 
+  /**
+   * Updates the email field at the specified index with a new value.
+   */
   const updateEmailField = (index: number, value: string) => {
     const newEmails = [...inviteEmails];
     newEmails[index] = value;
