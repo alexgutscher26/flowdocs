@@ -205,6 +205,14 @@ export function ChannelSettingsDialog({
         }
     };
 
+    /**
+     * Returns the appropriate icon component based on the channel type.
+     *
+     * The function checks the type of the channel and returns a corresponding icon:
+     * a hash icon for public channels, a lock icon for private channels,
+     * and a users icon for direct messages. It utilizes the ChannelType enumeration
+     * to determine the correct icon to render.
+     */
     const getChannelIcon = () => {
         switch (channel.type) {
             case ChannelType.PUBLIC:
