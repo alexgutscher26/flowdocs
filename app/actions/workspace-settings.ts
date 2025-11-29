@@ -113,6 +113,7 @@ export async function updateWorkspace(
       data: {
         name: validatedData.name,
         slug: validatedData.slug,
+        image: validatedData.image,
         updatedAt: new Date(),
       },
       select: {

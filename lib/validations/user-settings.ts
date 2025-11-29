@@ -15,6 +15,7 @@ export const updateProfileSchema = z.object({
     .max(15, "Phone number must be less than 15 digits")
     .optional()
     .or(z.literal("")),
+  image: z.string().url("Invalid image URL").optional().or(z.literal("")),
 });
 
 export type UpdateProfileInput = z.infer<typeof updateProfileSchema>;

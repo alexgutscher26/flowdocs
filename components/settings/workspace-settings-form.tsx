@@ -9,6 +9,8 @@ import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { UploadButton } from "@/components/uploadthing";
 import { updateWorkspace } from "@/app/actions/workspace-settings";
 import type { WorkspaceWithRole } from "@/types/workspace";
 import { z } from "zod";
@@ -23,6 +25,7 @@ const workspaceFormSchema = z.object({
     .regex(/^[a-z0-9-]+$/, "Slug can only contain lowercase letters, numbers, and hyphens")
     .regex(/^[a-z0-9]/, "Slug must start with a letter or number")
     .regex(/[a-z0-9]$/, "Slug must end with a letter or number"),
+  image: z.string().optional(),
 });
 
 type WorkspaceFormInput = z.infer<typeof workspaceFormSchema>;
@@ -40,6 +43,7 @@ export function WorkspaceSettingsForm({ workspace }: WorkspaceSettingsFormProps)
     defaultValues: {
       name: workspace.name,
       slug: workspace.slug,
+      image: workspace.image || "",
     },
   });
 
@@ -50,6 +54,7 @@ export function WorkspaceSettingsForm({ workspace }: WorkspaceSettingsFormProps)
         id: workspace.id,
         name: data.name,
         slug: data.slug,
+        image: data.image,
       });
 
       if (result.success) {
@@ -69,6 +74,32 @@ export function WorkspaceSettingsForm({ workspace }: WorkspaceSettingsFormProps)
   return (
     <form onSubmit={form.handleSubmit(onSubmit)}>
       <FieldGroup>
+        {/* Workspace Logo Field */}
+        <Field>
+          <FieldLabel>Workspace Logo</FieldLabel>
+          <div className="flex items-center gap-4">
+            <Avatar className="h-16 w-16">
+              <AvatarImage src={form.watch("image") || ""} />
+              <AvatarFallback>{workspace.name.charAt(0)}</AvatarFallback>
+            </Avatar>
+            <UploadButton
+              endpoint="workspaceLogoUploader"
+              onClientUploadComplete={(res) => {
+                if (res?.[0]) {
+                  form.setValue("image", res[0].url);
+                  toast.success("Logo uploaded successfully");
+                }
+              }}
+              onUploadError={(error: Error) => {
+                toast.error(`Error uploading logo: ${error.message}`);
+              }}
+            />
+          </div>
+          <FieldDescription>
+            Upload a logo for your workspace. Recommended size: 256x256px.
+          </FieldDescription>
+        </Field>
+
         {/* Workspace Name Field */}
         <Field>
           <FieldLabel htmlFor="workspace-name">Workspace Name</FieldLabel>

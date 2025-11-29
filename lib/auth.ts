@@ -1,3 +1,4 @@
+import { createHash } from "crypto";
 import { PrismaClient } from "@/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { betterAuth } from "better-auth";
@@ -20,16 +21,28 @@ export const auth = betterAuth({
     user: {
       create: {
         before: async (user) => {
+          // Generate Gravatar URL if no image is provided
+          let image = user.image;
+          if (!image && user.email) {
+            const emailHash = createHash("md5").update(user.email.toLowerCase().trim()).digest("hex");
+            image = `https://www.gravatar.com/avatar/${emailHash}?d=mp`;
+          }
+
           const userCount = await prisma.user.count();
+          const data = {
+            ...user,
+            image: image || user.image,
+          };
+
           if (userCount === 0) {
             return {
               data: {
-                ...user,
+                ...data,
                 role: "admin",
               },
             };
           }
-          return { data: user };
+          return { data };
         },
         after: async (user) => {
           await indexUser(user);

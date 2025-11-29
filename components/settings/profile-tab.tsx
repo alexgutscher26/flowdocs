@@ -11,6 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { UploadButton } from "@/components/uploadthing";
 import { updateUserProfile } from "@/app/actions/user-settings";
 import { updateProfileSchema, type UpdateProfileInput } from "@/lib/validations/user-settings";
 
@@ -32,6 +33,7 @@ export function ProfileTab({ user }: ProfileTabProps) {
     defaultValues: {
       name: user.name || "",
       phone: user.phone || "",
+      image: user.image || "",
     },
   });
 
@@ -77,16 +79,30 @@ export function ProfileTab({ user }: ProfileTabProps) {
         {/* Avatar Display */}
         <div className="flex items-center gap-4">
           <Avatar className="h-20 w-20">
-            <AvatarImage src={user.image || undefined} alt={user.name || "User"} />
+            <AvatarImage src={form.watch("image") || user.image || undefined} alt={user.name || "User"} />
             <AvatarFallback className="text-lg">
               {getInitials(user.name, user.email)}
             </AvatarFallback>
           </Avatar>
-          <div>
-            <p className="text-sm font-medium">Profile Picture</p>
-            <p className="text-muted-foreground text-sm">
-              Your avatar is provided by your Google account
-            </p>
+          <div className="flex flex-col gap-2">
+            <div>
+              <p className="text-sm font-medium">Profile Picture</p>
+              <p className="text-muted-foreground text-sm">
+                Upload a new profile picture or use the default one.
+              </p>
+            </div>
+            <UploadButton
+              endpoint="userProfileUploader"
+              onClientUploadComplete={(res) => {
+                if (res?.[0]) {
+                  form.setValue("image", res[0].url);
+                  toast.success("Profile picture uploaded successfully");
+                }
+              }}
+              onUploadError={(error: Error) => {
+                toast.error(`Error uploading profile picture: ${error.message}`);
+              }}
+            />
           </div>
         </div>
 

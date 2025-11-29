@@ -28,11 +28,13 @@ export async function updateUserProfile(
       data: {
         name: validatedData.name,
         phone: validatedData.phone === "" ? null : validatedData.phone,
+        image: validatedData.image,
         updatedAt: new Date(),
       },
       select: {
         name: true,
         phone: true,
+        image: true,
       },
     });
 

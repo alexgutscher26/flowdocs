@@ -46,6 +46,36 @@ export const ourFileRouter = {
 
       return { url: file.url, name: file.name, size: file.size, key: file.key };
     }),
+
+  // Workspace logo uploader
+  workspaceLogoUploader: f({
+    image: { maxFileSize: "4MB", maxFileCount: 1 },
+  })
+    .middleware(async () => {
+      const session = await auth.api.getSession({ headers: await headers() });
+      if (!session?.user) throw new Error("Unauthorized");
+      return { userId: session.user.id };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log("Workspace logo upload complete for userId:", metadata.userId);
+      console.log("file url", file.url);
+      return { url: file.url };
+    }),
+
+  // User profile picture uploader
+  userProfileUploader: f({
+    image: { maxFileSize: "4MB", maxFileCount: 1 },
+  })
+    .middleware(async () => {
+      const session = await auth.api.getSession({ headers: await headers() });
+      if (!session?.user) throw new Error("Unauthorized");
+      return { userId: session.user.id };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log("User profile upload complete for userId:", metadata.userId);
+      console.log("file url", file.url);
+      return { url: file.url };
+    }),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;
