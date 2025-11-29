@@ -4,6 +4,8 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
+import rehypeRaw from "rehype-raw";
+import rehypeSlug from "rehype-slug";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
@@ -272,8 +274,29 @@ export function WikiEditor({
         </TabsContent>
 
         <TabsContent value="preview" className="mt-4">
-          <div className="bg-background prose prose-sm dark:prose-invert min-h-[500px] max-w-none rounded-lg border p-4">
-            <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]}>
+          <div className="bg-background prose prose-slate dark:prose-invert prose-headings:font-semibold prose-headings:tracking-tight prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-p:leading-7 prose-p:text-muted-foreground/90 prose-li:text-muted-foreground/90 prose-code:bg-muted/50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:before:content-none prose-code:after:content-none prose-pre:bg-muted/50 prose-pre:border prose-img:rounded-lg prose-img:border prose-blockquote:border-l-primary prose-blockquote:bg-muted/20 prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:not-italic min-h-[500px] max-w-none rounded-lg border p-6">
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              rehypePlugins={[rehypeRaw, rehypeSlug, rehypeHighlight]}
+              components={{
+                h1: ({ node, ...props }) => <h1 {...props} className="scroll-mt-24" />,
+                h2: ({ node, ...props }) => (
+                  <h2 {...props} className="mt-12 mb-6 scroll-mt-24 border-b pb-2" />
+                ),
+                h3: ({ node, ...props }) => <h3 {...props} className="mt-8 mb-4 scroll-mt-24" />,
+                h4: ({ node, ...props }) => <h4 {...props} className="scroll-mt-24" />,
+                h5: ({ node, ...props }) => <h5 {...props} className="scroll-mt-24" />,
+                h6: ({ node, ...props }) => <h6 {...props} className="scroll-mt-24" />,
+                a: ({ node, ...props }) => (
+                  <a
+                    {...props}
+                    className="text-primary font-medium hover:underline"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  />
+                ),
+              }}
+            >
               {content || "*No content yet. Start writing in the Edit tab.*"}
             </ReactMarkdown>
           </div>

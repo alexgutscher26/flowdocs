@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
-import rehypeRaw from "rehype-raw";
+import rehypeSlug from "rehype-slug"; // Plugin for heading IDs
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -202,12 +202,12 @@ export function WikiPageView({
   }, [tableOfContents]);
 
   // Transform markdown to add IDs to headings
-  const contentWithIds = useMemo(() => {
-    return page.content.replace(/^(#{1,6})\s+(.+)$/gm, (match, hashes, text) => {
-      const id = text.toLowerCase().replace(/[^\w]+/g, "-");
-      return `<h${hashes.length} id="${id}">${text}</h${hashes.length}>`;
-    });
-  }, [page.content]);
+  // const contentWithIds = useMemo(() => {
+  //   return page.content.replace(/^(#{1,6})\s+(.+)$/gm, (match, hashes, text) => {
+  //     const id = text.toLowerCase().replace(/[^\w]+/g, "-");
+  //     return `<h${hashes.length} id="${id}">${text}</h${hashes.length}>`;
+  //   });
+  // }, [page.content]);
 
   const handlePrint = () => {
     window.print();
@@ -386,7 +386,7 @@ export function WikiPageView({
           <div className="prose prose-slate dark:prose-invert prose-headings:font-semibold prose-headings:tracking-tight prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-p:leading-7 prose-p:text-muted-foreground/90 prose-li:text-muted-foreground/90 prose-code:bg-muted/50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:before:content-none prose-code:after:content-none prose-pre:bg-muted/50 prose-pre:border prose-img:rounded-lg prose-img:border prose-blockquote:border-l-primary prose-blockquote:bg-muted/20 prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:not-italic max-w-none">
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
-              rehypePlugins={[rehypeRaw, rehypeHighlight]}
+              rehypePlugins={[rehypeSlug, rehypeHighlight]}
               components={{
                 h1: ({ node, ...props }) => <h1 {...props} className="scroll-mt-24" />,
                 h2: ({ node, ...props }) => (
@@ -423,7 +423,7 @@ export function WikiPageView({
                 },
               }}
             >
-              {contentWithIds}
+              {page.content}
             </ReactMarkdown>
           </div>
         </div>
