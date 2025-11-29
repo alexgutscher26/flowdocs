@@ -5,6 +5,18 @@ import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
 
 // GET /api/chat/[workspaceId]/channels - List channels
+/**
+ * Handles the GET request to fetch channels for a specific workspace.
+ *
+ * This function retrieves the workspaceId from the request parameters and checks the user's session for authentication.
+ * It verifies if the user is a member of the workspace and determines the visibility of channels based on the user's role.
+ * Finally, it fetches the relevant channels and their member details, returning them in the response.
+ *
+ * @param request - The NextRequest object representing the incoming request.
+ * @param params - An object containing a promise that resolves to an object with the workspaceId.
+ * @returns A JSON response containing the channels for the specified workspace.
+ * @throws Error If there is an issue fetching channels or if the user is unauthorized or forbidden.
+ */
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ workspaceId: string }> }

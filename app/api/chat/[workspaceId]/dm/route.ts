@@ -5,6 +5,18 @@ import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
 
 // POST /api/chat/[workspaceId]/dm - Get or Create DM channel
+/**
+ * Handles the creation of a direct message (DM) channel between users.
+ *
+ * This function first retrieves the workspace ID and user session, ensuring the user is authenticated.
+ * It then validates the target user ID, checks for existing DM channels, and verifies workspace membership.
+ * If all checks pass, it creates a new DM channel and returns the channel details.
+ *
+ * @param request - The NextRequest object containing the request data.
+ * @param params - An object containing a promise that resolves to the workspace ID.
+ * @returns The details of the newly created DM channel or an existing DM channel if found.
+ * @throws Error If an internal server error occurs during the process.
+ */
 export async function POST(
     request: NextRequest,
     { params }: { params: Promise<{ workspaceId: string }> }

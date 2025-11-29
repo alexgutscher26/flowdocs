@@ -22,6 +22,19 @@ interface ChannelSidebarProps {
   currentUserId?: string;
 }
 
+/**
+ * Render the Channel Sidebar component, displaying a list of channels and allowing user interactions.
+ *
+ * This component fetches channels from an API based on the provided workspaceId and refreshTrigger. It filters channels based on a search query and groups them by type and category. The component also handles the display of direct messages and provides functionality for creating new channels and browsing existing ones. It manages loading states and user interactions, including selecting channels and opening dialogs for creating direct messages.
+ *
+ * @param workspaceId - The ID of the workspace to fetch channels from.
+ * @param activeChannelId - The ID of the currently active channel.
+ * @param onChannelSelect - Callback function to handle channel selection.
+ * @param onCreateChannel - Callback function to handle channel creation.
+ * @param refreshTrigger - A trigger to refresh the channel list.
+ * @param onlineUsers - A set of online user IDs for presence indication.
+ * @param currentUserId - The ID of the current user.
+ */
 export function ChannelSidebar({
   workspaceId,
   activeChannelId,
@@ -145,6 +158,9 @@ export function ChannelSidebar({
     );
   };
 
+  /**
+   * Renders a channel group with a title, channel list, and optional action.
+   */
   const ChannelGroup = ({ title, channels, action }: { title: string; channels: ExtendedChannel[]; action?: React.ReactNode }) => {
     if (channels.length === 0 && !action) return null;
 
