@@ -88,6 +88,127 @@ export async function completeOnboarding(data: OnboardingData) {
         })),
       });
 
+      // Find the general channel for adding welcome message
+      const generalChannel = channels.find((ch) => ch.name === "general");
+
+      if (generalChannel) {
+        // Create a welcome message in #general
+        const welcomeMessage = await tx.message.create({
+          data: {
+            content: `👋 Welcome to ${data.workspaceName}!
+
+This is your team's workspace for collaboration and knowledge sharing.
+
+QUICK START GUIDE
+
+Channels: Use channels to organize conversations by topic. We've created #general and #random to get you started.
+
+Messages: Share updates, ask questions, and collaborate with your team in real-time.
+
+Wiki: Convert important discussions into permanent documentation. Look for "Convert to Wiki" on message threads.
+
+Search: Use Cmd+K (Ctrl+K on Windows) to quickly search across all messages, wiki pages, and files.
+
+GETTING STARTED
+
+1. Invite your teammates from workspace settings
+2. Start a conversation in this channel
+3. Create your first wiki page to document your processes
+4. Explore features and make this workspace your own
+
+Need help? Check out the Getting Started guide in the wiki section.`,
+            type: "SYSTEM",
+            channelId: generalChannel.id,
+            userId: session.user.id,
+          },
+        });
+
+        // TODO: Pin the welcome message (when pin functionality is implemented)
+      }
+
+      // Create a Getting Started wiki page
+      await tx.wikiPage.create({
+        data: {
+          title: "Getting Started",
+          slug: "getting-started",
+          content: `# Getting Started with ${data.workspaceName}
+
+Welcome to your new workspace! This guide will help you make the most of your team collaboration platform.
+
+## Overview
+
+This workspace combines real-time chat with a powerful knowledge base, helping your team communicate effectively and preserve important information.
+
+## Core Features
+
+### 💬 Channels
+- Organize conversations by topic or project
+- Create public channels for team-wide discussions
+- Use private channels for sensitive information
+- Direct messages for one-on-one conversations
+
+### 📝 Real-time Messaging
+- Share updates and ideas instantly
+- Thread replies to keep conversations organized
+- React with emoji for quick feedback
+- Edit and delete your own messages
+
+### 📚 Wiki & Documentation
+- Convert important chat threads into wiki pages
+- Create pages from scratch using markdown
+- Organize with tags and nested pages
+- Track changes with version history
+
+### 🔍 Search
+- Press Cmd+K (Ctrl+K on Windows) to search
+- Find messages, wiki pages, and files
+- Filter by type, date, author, and more
+- Save frequent searches for quick access
+
+## Getting Started Checklist
+
+- [ ] Invited team members to join the workspace
+- [ ] Created additional channels for your projects
+- [ ] Started your first conversation
+- [ ] Created your first wiki page
+- [ ] Converted a chat thread to documentation
+- [ ] Customized workspace settings
+
+## Best Practices
+
+### Channel Organization
+- Use descriptive names (e.g., #project-alpha, #design)
+- Add descriptions to clarify channel purpose
+- Archive inactive channels to reduce clutter
+
+### Effective Communication
+- Use threads for focused discussions
+- @mention teammates when you need their input
+- Use reactions to acknowledge messages
+
+### Knowledge Management
+- Convert valuable discussions to wiki pages
+- Keep wiki pages up-to-date
+- Use tags to categorize content
+- Link related pages together
+
+## Need Help?
+
+- Ask questions in #general
+- Check workspace settings for customization options
+- Invite more teammates as your team grows
+
+---
+
+*This page was automatically created when your workspace was set up. Feel free to edit or delete it!*`,
+          excerpt:
+            "Learn how to use channels, messaging, wiki, and search to collaborate effectively with your team.",
+          published: true,
+          workspaceId: workspace.id,
+          authorId: session.user.id,
+        },
+      });
+
       // Update user with onboarding completion
       const user = await tx.user.update({
         where: {

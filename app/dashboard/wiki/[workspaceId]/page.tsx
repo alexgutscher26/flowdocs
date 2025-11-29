@@ -90,20 +90,22 @@ export default async function WikiHomePage({ params }: WikiHomeProps) {
 
       {pages.length === 0 ? (
         <div className="mx-auto max-w-2xl space-y-6">
-          <div className="text-center pb-4">
+          <div className="pb-4 text-center">
             <div className="mb-4 flex justify-center">
               <div className="bg-primary/10 rounded-full p-4">
                 <BookOpen className="text-primary h-12 w-12" />
               </div>
             </div>
             <h2 className="text-2xl font-bold">No Wiki Pages Yet</h2>
-            <p className="text-muted-foreground text-base mt-2">
+            <p className="text-muted-foreground mt-2 text-base">
               Start building your team's knowledge base by creating your first wiki page.
             </p>
           </div>
           <div className="space-y-6">
             <div className="bg-muted/50 rounded-lg p-4">
-              <p className="text-muted-foreground mb-3 text-sm font-medium">Ways to create pages:</p>
+              <p className="text-muted-foreground mb-3 text-sm font-medium">
+                Ways to create pages:
+              </p>
               <ul className="text-muted-foreground space-y-2 text-sm">
                 <li className="flex items-start gap-2">
                   <span className="text-primary mt-0.5">•</span>

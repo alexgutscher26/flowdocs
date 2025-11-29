@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
+import rehypeRaw from "rehype-raw";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -131,6 +132,33 @@ export function WikiPageView({
 }: WikiPageViewProps) {
   const [showVersionHistory, setShowVersionHistory] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("");
+  const [checkboxStates, setCheckboxStates] = useState<Record<string, boolean>>({});
+
+  // Load checkbox states from localStorage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem(`wiki-checkboxes-${page.id}`);
+    if (saved) {
+      try {
+        setCheckboxStates(JSON.parse(saved));
+      } catch (e) {
+        console.error("Failed to load checkbox states", e);
+      }
+    }
+  }, [page.id]);
+
+  // Save checkbox states to localStorage when they change
+  useEffect(() => {
+    if (Object.keys(checkboxStates).length > 0) {
+      localStorage.setItem(`wiki-checkboxes-${page.id}`, JSON.stringify(checkboxStates));
+    }
+  }, [checkboxStates, page.id]);
+
+  const handleCheckboxChange = (index: string) => {
+    setCheckboxStates((prev) => ({
+      ...prev,
+      [index]: !prev[index],
+    }));
+  };
 
   const coverGradient = useMemo(() => generateGradient(page.id), [page.id]);
 
@@ -358,7 +386,7 @@ export function WikiPageView({
           <div className="prose prose-slate dark:prose-invert prose-headings:font-semibold prose-headings:tracking-tight prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-p:leading-7 prose-p:text-muted-foreground/90 prose-li:text-muted-foreground/90 prose-code:bg-muted/50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:before:content-none prose-code:after:content-none prose-pre:bg-muted/50 prose-pre:border prose-img:rounded-lg prose-img:border prose-blockquote:border-l-primary prose-blockquote:bg-muted/20 prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:not-italic max-w-none">
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
-              rehypePlugins={[rehypeHighlight]}
+              rehypePlugins={[rehypeRaw, rehypeHighlight]}
               components={{
                 h1: ({ node, ...props }) => <h1 {...props} className="scroll-mt-24" />,
                 h2: ({ node, ...props }) => (
@@ -376,6 +404,23 @@ export function WikiPageView({
                     rel="noopener noreferrer"
                   />
                 ),
+                input: ({ node, ...props }) => {
+                  if (props.type === "checkbox") {
+                    // Use line number as stable ID
+                    const index = `checkbox-${node?.position?.start.line || Math.random()}`;
+                    const isChecked = checkboxStates[index] ?? (props.checked || false);
+                    return (
+                      <input
+                        {...props}
+                        type="checkbox"
+                        checked={isChecked}
+                        onChange={() => handleCheckboxChange(index)}
+                        className="mr-2 h-4 w-4 cursor-pointer rounded border-gray-300 text-primary focus:ring-2 focus:ring-primary"
+                      />
+                    );
+                  }
+                  return <input {...props} />;
+                },
               }}
             >
               {contentWithIds}

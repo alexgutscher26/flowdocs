@@ -43,12 +43,20 @@ export function ChatLayout({
   const [onlineUsers, setOnlineUsers] = useState<Set<string>>(new Set());
 
   // WebSocket connection
-  const { connected, joinChannel, leaveChannel, startTyping, stopTyping, onMessage, onTyping, onPresence } =
-    useWebSocket({
-      workspaceId,
-      userId,
-      enabled: true,
-    });
+  const {
+    connected,
+    joinChannel,
+    leaveChannel,
+    startTyping,
+    stopTyping,
+    onMessage,
+    onTyping,
+    onPresence,
+  } = useWebSocket({
+    workspaceId,
+    userId,
+    enabled: true,
+  });
 
   // Chat messages
   const {

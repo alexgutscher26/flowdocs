@@ -255,8 +255,6 @@ export async function POST(
       }
     }
 
-
-
     // Index wiki page in Typesense
     // Fetch complete page with tags for indexing
     const completePage = await prisma.wikiPage.findUnique({

@@ -86,8 +86,10 @@ export function ChannelSidebar({
     return { groups, uncategorized };
   };
 
-  const { groups: publicGroups, uncategorized: publicUncategorized } = groupChannelsByCategory(publicChannels);
-  const { groups: privateGroups, uncategorized: privateUncategorized } = groupChannelsByCategory(privateChannels);
+  const { groups: publicGroups, uncategorized: publicUncategorized } =
+    groupChannelsByCategory(publicChannels);
+  const { groups: privateGroups, uncategorized: privateUncategorized } =
+    groupChannelsByCategory(privateChannels);
 
   const getChannelIcon = (type: ChannelType) => {
     switch (type) {
@@ -130,7 +132,7 @@ export function ChannelSidebar({
         <div className="relative flex items-center">
           {getChannelIcon(channel.type)}
           {isOnline && (
-            <span className="absolute -bottom-0.5 -right-0.5 block h-2 w-2 rounded-full bg-green-500 ring-1 ring-white dark:ring-zinc-950" />
+            <span className="absolute -right-0.5 -bottom-0.5 block h-2 w-2 rounded-full bg-green-500 ring-1 ring-white dark:ring-zinc-950" />
           )}
         </div>
         <span className={cn("flex-1 truncate text-left", hasUnread && "font-semibold")}>
@@ -145,7 +147,15 @@ export function ChannelSidebar({
     );
   };
 
-  const ChannelGroup = ({ title, channels, action }: { title: string; channels: ExtendedChannel[]; action?: React.ReactNode }) => {
+  const ChannelGroup = ({
+    title,
+    channels,
+    action,
+  }: {
+    title: string;
+    channels: ExtendedChannel[];
+    action?: React.ReactNode;
+  }) => {
     if (channels.length === 0 && !action) return null;
 
     return (
@@ -223,7 +233,11 @@ export function ChannelSidebar({
 
           {/* Private Channels - Categorized */}
           {Object.entries(privateGroups).map(([category, channels]) => (
-            <ChannelGroup key={`private-${category}`} title={`${category} (Private)`} channels={channels} />
+            <ChannelGroup
+              key={`private-${category}`}
+              title={`${category} (Private)`}
+              channels={channels}
+            />
           ))}
           <ChannelGroup title="Private Channels" channels={privateUncategorized} />
 

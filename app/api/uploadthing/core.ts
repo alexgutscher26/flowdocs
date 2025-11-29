@@ -37,11 +37,11 @@ export const ourFileRouter = {
       await indexFile({
         id: file.key,
         name: file.name,
-        type: file.name.split('.').pop() || 'unknown',
-        workspaceId: 'unknown', // TODO: Pass workspaceId from client
+        type: file.name.split(".").pop() || "unknown",
+        workspaceId: "unknown", // TODO: Pass workspaceId from client
         uploadedBy: metadata.userId,
         createdAt: new Date(),
-        content: '', // Content extraction to be implemented
+        content: "", // Content extraction to be implemented
       });
 
       return { url: file.url, name: file.name, size: file.size, key: file.key };

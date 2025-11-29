@@ -39,29 +39,29 @@ export async function GET(
         workspaceId,
         ...(isWorkspaceAdmin
           ? {
-            OR: [
-              { type: { not: ChannelType.DM } }, // Admins see all non-DM channels (Public & Private)
-              {
-                members: {
-                  some: {
-                    userId: session.user.id,
+              OR: [
+                { type: { not: ChannelType.DM } }, // Admins see all non-DM channels (Public & Private)
+                {
+                  members: {
+                    some: {
+                      userId: session.user.id,
+                    },
                   },
                 },
-              },
-            ],
-          }
+              ],
+            }
           : {
-            OR: [
-              { type: ChannelType.PUBLIC },
-              {
-                members: {
-                  some: {
-                    userId: session.user.id,
+              OR: [
+                { type: ChannelType.PUBLIC },
+                {
+                  members: {
+                    some: {
+                      userId: session.user.id,
+                    },
                   },
                 },
-              },
-            ],
-          }),
+              ],
+            }),
       },
       include: {
         _count: {

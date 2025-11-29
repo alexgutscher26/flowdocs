@@ -8,7 +8,14 @@ import { Label } from "@/components/ui/label";
 import { completeOnboarding } from "@/app/actions/onboarding";
 import { inviteMember } from "@/app/actions/workspace-invitations";
 import { toast } from "sonner";
-import { IconInnerShadowTop, IconFolder, IconCheck, IconRocket, IconMail, IconX } from "@tabler/icons-react";
+import {
+  IconInnerShadowTop,
+  IconFolder,
+  IconCheck,
+  IconRocket,
+  IconMail,
+  IconX,
+} from "@tabler/icons-react";
 import Link from "next/link";
 import Image from "next/image";
 import confetti from "canvas-confetti";
@@ -111,11 +118,15 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
         );
 
         const results = await Promise.allSettled(invitePromises);
-        const successCount = results.filter((r) => r.status === "fulfilled" && r.value.success).length;
+        const successCount = results.filter(
+          (r) => r.status === "fulfilled" && r.value.success
+        ).length;
         const failureCount = results.length - successCount;
 
         if (successCount > 0) {
-          toast.success(`${successCount} invitation${successCount > 1 ? "s" : ""} sent successfully!`);
+          toast.success(
+            `${successCount} invitation${successCount > 1 ? "s" : ""} sent successfully!`
+          );
         }
         if (failureCount > 0) {
           toast.error(`${failureCount} invitation${failureCount > 1 ? "s" : ""} failed to send`);
@@ -249,10 +260,11 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
                           key={roleOption.value}
                           onClick={() => setRole(roleOption.value)}
                           type="button"
-                          className={`rounded-lg border-2 p-4 text-left transition-all ${role === roleOption.value
+                          className={`rounded-lg border-2 p-4 text-left transition-all ${
+                            role === roleOption.value
                               ? "border-primary bg-primary/5"
                               : "border-border hover:border-primary/50"
-                            }`}
+                          }`}
                         >
                           <span className="font-medium">{roleOption.label}</span>
                         </button>
@@ -307,10 +319,11 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
                           key={useCaseOption.value}
                           onClick={() => setUseCase(useCaseOption.value)}
                           type="button"
-                          className={`rounded-lg border-2 p-4 text-left transition-all ${useCase === useCaseOption.value
+                          className={`rounded-lg border-2 p-4 text-left transition-all ${
+                            useCase === useCaseOption.value
                               ? "border-primary bg-primary/5"
                               : "border-border hover:border-primary/50"
-                            }`}
+                          }`}
                         >
                           <span className="text-sm font-medium">{useCaseOption.label}</span>
                         </button>
@@ -326,10 +339,11 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
                           key={source.value}
                           onClick={() => setDiscoverySource(source.value)}
                           type="button"
-                          className={`rounded-lg border-2 p-4 text-left transition-all ${discoverySource === source.value
+                          className={`rounded-lg border-2 p-4 text-left transition-all ${
+                            discoverySource === source.value
                               ? "border-primary bg-primary/5"
                               : "border-border hover:border-primary/50"
-                            }`}
+                          }`}
                         >
                           <span className="text-sm font-medium">{source.label}</span>
                         </button>
@@ -502,8 +516,8 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
                       <h3 className="font-medium">Email Invitations</h3>
                     </div>
                     <p className="text-muted-foreground mb-4 text-sm">
-                      Enter email addresses to send invitations. You can always invite more people later
-                      from the workspace settings.
+                      Enter email addresses to send invitations. You can always invite more people
+                      later from the workspace settings.
                     </p>
 
                     <div className="space-y-3">
@@ -554,11 +568,7 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
                     >
                       Skip for now
                     </Button>
-                    <Button
-                      onClick={handleInvitations}
-                      disabled={isLoading}
-                      className="flex-1"
-                    >
+                    <Button onClick={handleInvitations} disabled={isLoading} className="flex-1">
                       {isLoading ? "Sending..." : "Send Invitations"}
                     </Button>
                   </div>

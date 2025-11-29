@@ -1,14 +1,14 @@
-import { redirect } from 'next/navigation';
-import { auth } from '@/lib/auth';
-import { headers } from 'next/headers';
-import prisma from '@/lib/prisma';
-import { SearchResultsPage } from '@/components/search/search-results-page';
+import { redirect } from "next/navigation";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import prisma from "@/lib/prisma";
+import { SearchResultsPage } from "@/components/search/search-results-page";
 
 export default async function SearchPage() {
   const session = await auth.api.getSession({ headers: await headers() });
 
   if (!session?.user) {
-    redirect('/auth/signin');
+    redirect("/auth/signin");
   }
 
   // Get user's first workspace
@@ -22,7 +22,7 @@ export default async function SearchPage() {
   });
 
   if (!workspaceMember) {
-    redirect('/dashboard');
+    redirect("/dashboard");
   }
 
   return <SearchResultsPage workspaceId={workspaceMember.workspaceId} />;

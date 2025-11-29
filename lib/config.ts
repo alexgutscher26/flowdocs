@@ -17,7 +17,7 @@ export const siteConfig = {
     "knowledge",
     "knowledge base",
     "slack",
-    "notion"
+    "notion",
   ],
   authors: [
     {

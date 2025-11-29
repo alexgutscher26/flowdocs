@@ -135,11 +135,11 @@ async function getWikiPage(workspaceId: string, slug: string, userId: string) {
     })),
     sourceMessage: page.message
       ? {
-        id: page.message.id,
-        channelId: page.message.channelId,
-        channelName: page.message.channel.name,
-        messageCount: page.message._count.replies + 1,
-      }
+          id: page.message.id,
+          channelId: page.message.channelId,
+          channelName: page.message.channel.name,
+          messageCount: page.message._count.replies + 1,
+        }
       : undefined,
     relatedPages: relatedPages.map((rp) => ({
       id: rp.id,

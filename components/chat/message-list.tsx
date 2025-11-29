@@ -55,7 +55,7 @@ export function MessageList({
   if (messages.length === 0 && !loading) {
     return (
       <div className="flex flex-1 items-center justify-center p-8">
-        <div className="max-w-md rounded-lg bg-card p-6 text-center">
+        <div className="bg-card max-w-md rounded-lg p-6 text-center">
           <div className="mb-4 flex justify-center">
             <div className="bg-primary/10 rounded-full p-4">
               <Loader2 className="text-primary h-12 w-12" />

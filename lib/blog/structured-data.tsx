@@ -23,16 +23,16 @@ export function generateBlogPostStructuredData(post: BlogPost, author?: Author) 
     dateModified: post.publishedAt,
     author: author
       ? {
-        "@type": "Person",
-        name: author.name,
-        jobTitle: author.role,
-        image: author.avatar ? `${baseUrl}${author.avatar}` : undefined,
-        sameAs: [author.twitter, author.linkedin].filter(Boolean),
-      }
+          "@type": "Person",
+          name: author.name,
+          jobTitle: author.role,
+          image: author.avatar ? `${baseUrl}${author.avatar}` : undefined,
+          sameAs: [author.twitter, author.linkedin].filter(Boolean),
+        }
       : {
-        "@type": "Person",
-        name: post.author,
-      },
+          "@type": "Person",
+          name: post.author,
+        },
     publisher: {
       "@type": "Organization",
       name: organizationName,
@@ -63,16 +63,16 @@ export function generateHelpArticleStructuredData(post: HelpPost, author?: Autho
     dateModified: post.updatedAt,
     author: author
       ? {
-        "@type": "Person",
-        name: author.name,
-        jobTitle: author.role,
-        image: author.avatar ? `${baseUrl}${author.avatar}` : undefined,
-        sameAs: [author.twitter, author.linkedin].filter(Boolean),
-      }
+          "@type": "Person",
+          name: author.name,
+          jobTitle: author.role,
+          image: author.avatar ? `${baseUrl}${author.avatar}` : undefined,
+          sameAs: [author.twitter, author.linkedin].filter(Boolean),
+        }
       : {
-        "@type": "Person",
-        name: post.author,
-      },
+          "@type": "Person",
+          name: post.author,
+        },
     publisher: {
       "@type": "Organization",
       name: organizationName,
@@ -167,10 +167,10 @@ export function generateHowToStructuredData(props: {
     totalTime: props.totalTime,
     estimatedCost: props.estimatedCost
       ? {
-        "@type": "MonetaryAmount",
-        currency: "USD",
-        value: props.estimatedCost,
-      }
+          "@type": "MonetaryAmount",
+          currency: "USD",
+          value: props.estimatedCost,
+        }
       : undefined,
     step: props.steps.map((step, index) => ({
       "@type": "HowToStep",
