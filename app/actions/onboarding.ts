@@ -14,6 +14,17 @@ export interface OnboardingData {
   businessPhone?: string;
 }
 
+/**
+ * Completes the onboarding process for a user by creating a workspace and updating user details.
+ *
+ * The function retrieves the current session to ensure the user is authorized, then generates a slug for the workspace.
+ * It checks for existing workspaces with the same slug, and if none exist, it creates a new workspace along with default channels.
+ * The user is then added as an owner to the channels, and their onboarding status is updated in the database.
+ *
+ * @param data - An object containing onboarding data including workspaceName, firstName, role, useCase, discoverySource, businessName, and businessPhone.
+ * @returns An object indicating success and the created workspace.
+ * @throws Error If the user is unauthorized, the workspace name already exists, or if any database operation fails.
+ */
 export async function completeOnboarding(data: OnboardingData) {
   try {
     const session = await auth.api.getSession({
