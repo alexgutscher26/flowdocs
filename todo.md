@@ -214,11 +214,12 @@
   - [x] Member management interface
   - **Acceptance**: Private channels are secure and exclusive
 
-- [ ] **Direct Messages**:
-  - [ ] One-on-one conversations
-  - [ ] Auto-creation on first message
-  - [ ] No separate channel entity
-  - [ ] Message privacy controls65
+- [x] **Direct Messages**:
+  - [x] **Backend**: Fix channel list privacy (hide other's DMs from admins)
+  - [x] **Backend**: Create "Find or Create DM" API endpoint
+  - [x] **Frontend**: Create "New Message" dialog with user search
+  - [x] **Frontend**: Add "+" button to DM section in sidebar
+  - [x] **Frontend**: Integrate DM creation with sidebar
   - **Acceptance**: DMs work seamlessly without channel overhead
 
 #### Channel Settings

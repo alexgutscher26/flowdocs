@@ -38,7 +38,18 @@ export async function GET(
       where: {
         workspaceId,
         ...(isWorkspaceAdmin
-          ? {} // Admins see all channels
+          ? {
+            OR: [
+              { type: { not: ChannelType.DM } }, // Admins see all non-DM channels (Public & Private)
+              {
+                members: {
+                  some: {
+                    userId: session.user.id,
+                  },
+                },
+              },
+            ],
+          }
           : {
             OR: [
               { type: ChannelType.PUBLIC },
@@ -57,6 +68,19 @@ export async function GET(
           select: {
             members: true,
             messages: true,
+          },
+        },
+        members: {
+          take: 5,
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                image: true,
+                email: true,
+              },
+            },
           },
         },
       },

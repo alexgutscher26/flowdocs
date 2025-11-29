@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Hash, Lock, Plus, Search, Users, Compass } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ChannelBrowserDialog } from "./channel-browser-dialog";
+import { NewDmDialog } from "./new-dm-dialog";
 
 interface ChannelSidebarProps {
   workspaceId: string;
@@ -34,6 +35,7 @@ export function ChannelSidebar({
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [browserDialogOpen, setBrowserDialogOpen] = useState(false);
+  const [newDmDialogOpen, setNewDmDialogOpen] = useState(false);
 
   // Fetch channels
   useEffect(() => {
@@ -102,11 +104,16 @@ export function ChannelSidebar({
     const isActive = channel.id === activeChannelId;
     const hasUnread = (channel.unreadCount || 0) > 0;
 
+    let displayName = channel.name;
     let isOnline = false;
-    if (channel.type === ChannelType.DM && currentUserId && onlineUsers) {
+
+    if (channel.type === ChannelType.DM && currentUserId) {
       const otherMember = channel.members.find((m) => m.userId !== currentUserId);
-      if (otherMember) {
-        isOnline = onlineUsers.has(otherMember.userId);
+      if (otherMember?.user) {
+        displayName = otherMember.user.name || otherMember.user.email;
+        if (onlineUsers) {
+          isOnline = onlineUsers.has(otherMember.userId);
+        }
       }
     }
 
@@ -127,7 +134,7 @@ export function ChannelSidebar({
           )}
         </div>
         <span className={cn("flex-1 truncate text-left", hasUnread && "font-semibold")}>
-          {channel.name}
+          {displayName}
         </span>
         {hasUnread && (
           <Badge variant="secondary" className="h-5 min-w-5 px-1.5 text-xs">
@@ -138,8 +145,8 @@ export function ChannelSidebar({
     );
   };
 
-  const ChannelGroup = ({ title, channels }: { title: string; channels: ExtendedChannel[] }) => {
-    if (channels.length === 0) return null;
+  const ChannelGroup = ({ title, channels, action }: { title: string; channels: ExtendedChannel[]; action?: React.ReactNode }) => {
+    if (channels.length === 0 && !action) return null;
 
     return (
       <div className="mb-4">
@@ -147,7 +154,10 @@ export function ChannelSidebar({
           <h3 className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
             {title}
           </h3>
-          <span className="text-muted-foreground text-xs">{channels.length}</span>
+          <div className="flex items-center gap-2">
+            <span className="text-muted-foreground text-xs">{channels.length}</span>
+            {action}
+          </div>
         </div>
         <div className="space-y-1">
           {channels.map((channel) => (
@@ -218,7 +228,20 @@ export function ChannelSidebar({
           <ChannelGroup title="Private Channels" channels={privateUncategorized} />
 
           {/* Direct Messages */}
-          <ChannelGroup title="Direct Messages" channels={dmChannels} />
+          <ChannelGroup
+            title="Direct Messages"
+            channels={dmChannels}
+            action={
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-4 w-4 p-0 hover:bg-transparent"
+                onClick={() => setNewDmDialogOpen(true)}
+              >
+                <Plus className="h-3 w-3" />
+              </Button>
+            }
+          />
 
           {filteredChannels.length === 0 && (
             <div className="py-8 text-center">
@@ -232,21 +255,38 @@ export function ChannelSidebar({
 
       {/* Channel Browser Dialog */}
       {currentUserId && (
-        <ChannelBrowserDialog
-          open={browserDialogOpen}
-          onOpenChange={setBrowserDialogOpen}
-          workspaceId={workspaceId}
-          currentUserId={currentUserId}
-          onChannelJoined={(channelId) => {
-            onChannelSelect(channelId);
-            // Trigger refresh
-            setChannels([]);
-            fetch(`/api/chat/${workspaceId}/channels`)
-              .then((res) => res.json())
-              .then((data) => setChannels(data))
-              .catch((error) => console.error("Error refetching channels:", error));
-          }}
-        />
+        <>
+          <ChannelBrowserDialog
+            open={browserDialogOpen}
+            onOpenChange={setBrowserDialogOpen}
+            workspaceId={workspaceId}
+            currentUserId={currentUserId}
+            onChannelJoined={(channelId) => {
+              onChannelSelect(channelId);
+              // Trigger refresh
+              setChannels([]);
+              fetch(`/api/chat/${workspaceId}/channels`)
+                .then((res) => res.json())
+                .then((data) => setChannels(data))
+                .catch((error) => console.error("Error refetching channels:", error));
+            }}
+          />
+          <NewDmDialog
+            open={newDmDialogOpen}
+            onOpenChange={setNewDmDialogOpen}
+            workspaceId={workspaceId}
+            currentUserId={currentUserId}
+            onDmCreated={(channelId) => {
+              onChannelSelect(channelId);
+              // Trigger refresh
+              setChannels([]);
+              fetch(`/api/chat/${workspaceId}/channels`)
+                .then((res) => res.json())
+                .then((data) => setChannels(data))
+                .catch((error) => console.error("Error refetching channels:", error));
+            }}
+          />
+        </>
       )}
     </div>
   );
