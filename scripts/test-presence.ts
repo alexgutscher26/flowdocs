@@ -5,6 +5,9 @@ const WORKSPACE_ID = "test-workspace";
 const USER_A = "user-a";
 const USER_B = "user-b";
 
+/**
+ * Creates a socket connection for the specified user.
+ */
 const createSocket = (userId: string) => {
   return io("http://localhost:3000", {
     path: "/api/socket",
@@ -16,6 +19,13 @@ const createSocket = (userId: string) => {
   });
 };
 
+/**
+ * Tests the presence of User B from User A's perspective.
+ *
+ * This function establishes a WebSocket connection for User A and listens for a USER_ONLINE event indicating that User B has come online.
+ * It resolves when the expected event is received or rejects if a timeout occurs after 5 seconds.
+ * After the test, it disconnects both sockets and exits the process.
+ */
 async function testPresence() {
   console.log("Starting presence test...");
 
