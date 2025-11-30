@@ -20,7 +20,12 @@ const changePasswordSchema = z.object({
 export type ChangePasswordInput = z.infer<typeof changePasswordSchema>;
 
 /**
- * Change the current user's password
+ * Change the current user's password.
+ *
+ * This function retrieves the current user and validates the input using changePasswordSchema. It then calls the better-auth's changePassword API with the new and current passwords. If the operation is successful, it revalidates the path to the settings dashboard. In case of errors, it handles specific error messages and returns appropriate responses.
+ *
+ * @param input - An object containing the new and current passwords for the user.
+ * @returns A promise that resolves to an ActionResult indicating the success or failure of the password change operation.
  */
 export async function changePassword(
     input: ChangePasswordInput
@@ -65,7 +70,13 @@ export async function changePassword(
 }
 
 /**
- * Get all connected accounts for the current user
+ * Get all connected accounts for the current user.
+ *
+ * This function retrieves the connected accounts associated with the currently authenticated user.
+ * It first checks if the user is authenticated by calling getCurrentUser(). If the user is not found,
+ * it returns an unauthorized error. If the user is authenticated, it queries the database for the user's
+ * accounts, selecting relevant fields and ordering them by creation date. In case of any errors during
+ * the process, it logs the error and returns a failure response.
  */
 export async function getConnectedAccounts(): Promise<
     ActionResult<{
@@ -101,7 +112,14 @@ export async function getConnectedAccounts(): Promise<
 }
 
 /**
- * Unlink a provider account
+ * Unlink a provider account.
+ *
+ * This function checks if the current user is authorized, verifies that the account belongs to the user,
+ * ensures that the account is not the last remaining authentication method, and then deletes the account.
+ * If any checks fail, it returns an appropriate error message.
+ *
+ * @param accountId - The ID of the account to unlink.
+ * @returns A promise that resolves to an ActionResult indicating success or failure.
  */
 export async function unlinkAccount(
     accountId: string

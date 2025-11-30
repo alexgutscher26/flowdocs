@@ -21,6 +21,14 @@ const changePasswordSchema = z.object({
     path: ["confirmPassword"],
 });
 
+/**
+ * Renders a form for changing the user's password.
+ *
+ * This component manages the state of the password change process, including loading states and form validation.
+ * It utilizes the `useForm` hook with a Zod resolver for schema validation. Upon submission, it calls the `changePassword` function
+ * and handles success or error responses, providing user feedback through toast notifications. The form includes fields for
+ * the current password, new password, and confirmation of the new password.
+ */
 export function ChangePasswordForm() {
     const [isLoading, setIsLoading] = useState(false);
 
@@ -33,6 +41,15 @@ export function ChangePasswordForm() {
         },
     });
 
+    /**
+     * Handles the submission of a password change request.
+     *
+     * This asynchronous function sets a loading state, attempts to change the password using the provided data,
+     * and displays success or error messages based on the result. It also ensures that the loading state is reset
+     * after the operation completes, regardless of success or failure.
+     *
+     * @param data - The input data required to change the password.
+     */
     async function onSubmit(data: ChangePasswordInput) {
         setIsLoading(true);
         try {

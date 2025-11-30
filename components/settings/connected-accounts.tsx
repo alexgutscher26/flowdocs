@@ -51,6 +51,15 @@ export function ConnectedAccounts() {
         }
     }
 
+    /**
+     * Handles the unlinking of an account by its ID.
+     *
+     * This function sets the unlinking ID, attempts to unlink the account using the unlinkAccount function,
+     * and provides feedback to the user through toast notifications based on the success or failure of the operation.
+     * It also ensures that the unlinking ID is cleared after the operation, regardless of the outcome.
+     *
+     * @param accountId - The ID of the account to be unlinked.
+     */
     async function handleUnlink(accountId: string) {
         setUnlinkingId(accountId);
         try {
@@ -80,6 +89,14 @@ export function ConnectedAccounts() {
         }
     }
 
+    /**
+     * Retrieves the display name for a given provider ID.
+     *
+     * The function checks the provided providerId against known cases such as "google" and "credential".
+     * If a match is found, it returns the corresponding display name; otherwise, it returns the providerId itself.
+     *
+     * @param {string} providerId - The ID of the provider to retrieve the name for.
+     */
     function getProviderName(providerId: string) {
         switch (providerId) {
             case "google":
