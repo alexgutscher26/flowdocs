@@ -23,6 +23,14 @@ import { signOut } from "@/lib/auth-client";
 import { ChangePasswordForm } from "./change-password-form";
 import { ConnectedAccounts } from "./connected-accounts";
 
+/**
+ * Renders the account management tab, allowing users to change their password and delete their account.
+ *
+ * This component manages the state for deleting an account and the visibility of a confirmation dialog.
+ * It handles the deletion process by calling `deleteUserAccount`, providing feedback through toast notifications,
+ * and redirects the user to the home page upon successful deletion. The component also includes forms for changing
+ * passwords and managing connected accounts.
+ */
 export function AccountTab() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
