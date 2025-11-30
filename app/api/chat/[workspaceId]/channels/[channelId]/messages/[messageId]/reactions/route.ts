@@ -74,6 +74,15 @@ export async function POST(
 }
 
 // DELETE /api/chat/[workspaceId]/channels/[channelId]/messages/[messageId]/reactions/[reactionId] - Remove reaction
+/**
+ * Deletes a reaction from a message in a channel.
+ *
+ * The function first retrieves the session to ensure the user is authorized. It then deletes the reaction from the database, verifying that the user owns the reaction. After deletion, it attempts to broadcast the removal of the reaction via WebSocket. If any errors occur during these processes, they are logged, and an appropriate response is returned.
+ *
+ * @param request - The HTTP request object.
+ * @param params - An object containing a promise that resolves to the parameters needed for deletion, including workspaceId, channelId, messageId, and reactionId.
+ * @returns A JSON response indicating success or error status.
+ */
 export async function DELETE(
   request: NextRequest,
   {
