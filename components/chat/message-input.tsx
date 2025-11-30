@@ -167,6 +167,30 @@ export function MessageInput({
   };
 
   // Handle send
+  /**
+   * Handles the sending of a message with optional file attachments.
+   *
+   * The function first checks if there is content to send or if a message is already being sent.
+   * If files are selected, it uploads them and handles any upload errors. After successful uploads,
+   * it sends the message along with the attachments, resets the input fields, and manages the typing state.
+   * Any errors during the sending process are caught and logged.
+   *
+   * @param content - The message content to be sent.
+   * @param selectedFiles - An array of files selected for upload.
+   * @param sending - A boolean indicating if a message is currently being sent.
+   * @param setSending - A function to update the sending state.
+   * @param uploadFiles - A function to handle the file upload process.
+   * @param onSend - A function to send the message.
+   * @param setContent - A function to reset the message content.
+   * @param setSelectedFiles - A function to reset the selected files.
+   * @param clearUploads - A function to clear the upload state.
+   * @param setIsPreview - A function to manage the preview state.
+   * @param textareaRef - A reference to the textarea element for resizing.
+   * @param onTypingStop - An optional callback for when typing stops.
+   * @param typingTimeoutRef - A reference to manage the typing timeout.
+   * @returns {Promise<void>} A promise that resolves when the message is sent.
+   * @throws Error If there is an error during the upload or sending process.
+   */
   const handleSend = async () => {
     if ((!content.trim() && selectedFiles.length === 0) || sending) return;
 
