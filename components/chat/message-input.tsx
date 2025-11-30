@@ -176,10 +176,20 @@ export function MessageInput({
       let attachments: any[] = [];
 
       if (selectedFiles.length > 0) {
-        const uploadedFiles = await uploadFiles(selectedFiles);
-        attachments = uploadedFiles;
+        console.log("[MessageInput] Uploading files:", selectedFiles);
+        try {
+          const uploadedFiles = await uploadFiles(selectedFiles);
+          console.log("[MessageInput] Upload successful:", uploadedFiles);
+          attachments = uploadedFiles;
+        } catch (uploadError) {
+          console.error("[MessageInput] Upload failed:", uploadError);
+          alert(`Upload failed: ${uploadError instanceof Error ? uploadError.message : 'Unknown error'}. Please check your UploadThing configuration.`);
+          setSending(false);
+          return;
+        }
       }
 
+      console.log("[MessageInput] Sending message with attachments:", attachments);
       await onSend(content.trim(), attachments.length > 0 ? attachments : undefined);
 
       setContent("");
@@ -197,7 +207,8 @@ export function MessageInput({
         typingTimeoutRef.current = undefined;
       }
     } catch (error) {
-      console.error("Error sending message:", error);
+      console.error("[MessageInput] Error sending message:", error);
+      alert(`Failed to send message: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setSending(false);
     }
@@ -216,8 +227,8 @@ export function MessageInput({
   const filteredMembers =
     mentionQuery !== null
       ? channelMembers
-          .filter((member) => member.user.name?.toLowerCase().includes(mentionQuery.toLowerCase()))
-          .slice(0, 5)
+        .filter((member) => member.user.name?.toLowerCase().includes(mentionQuery.toLowerCase()))
+        .slice(0, 5)
       : [];
 
   return (

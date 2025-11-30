@@ -225,6 +225,7 @@ model Message {
   id          String      @id @default(cuid())
   content     String
   type        MessageType @default(TEXT)
+  attachments Json?       // Store attachment metadata (url, name, size, type, key)
   channelId   String
   userId      String
   threadId    String?     // For threading support

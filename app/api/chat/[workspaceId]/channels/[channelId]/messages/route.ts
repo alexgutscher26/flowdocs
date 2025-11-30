@@ -104,6 +104,7 @@ export async function POST(
     const session = await auth.api.getSession({ headers: await headers() });
 
     if (!session?.user) {
+      console.error("[Messages API] Unauthorized: No session found");
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -116,24 +117,30 @@ export async function POST(
     });
 
     if (!channelMember) {
+      console.error(`[Messages API] Forbidden: User ${session.user.id} is not a member of channel ${channelId}`);
       return NextResponse.json({ error: "You must be a member of this channel" }, { status: 403 });
     }
 
     const body = await request.json();
-    const { content, threadId, type } = body;
+    const { content, threadId, type, attachments } = body;
 
-    if (!content) {
-      return NextResponse.json({ error: "Message content is required" }, { status: 400 });
+    // Validate: require either content or attachments
+    if (!content?.trim() && (!attachments || attachments.length === 0)) {
+      console.error("[Messages API] Bad request: Neither content nor attachments provided");
+      return NextResponse.json({ error: "Message must have either content or attachments" }, { status: 400 });
     }
 
     // Create message
     const message = await prisma.message.create({
       data: {
-        content,
-        type: type || MessageType.TEXT,
+        content: content?.trim() || "",
+        type: attachments && attachments.length > 0
+          ? (attachments[0].type?.startsWith('image/') ? MessageType.IMAGE : MessageType.FILE)
+          : (type || MessageType.TEXT),
         channelId,
         userId: session.user.id,
         threadId: threadId || null,
+        ...(attachments && attachments.length > 0 && { attachments }),
       },
       include: {
         user: {
@@ -144,18 +151,34 @@ export async function POST(
             image: true,
           },
         },
+        _count: {
+          select: {
+            replies: true,
+          },
+        },
       },
     });
+
+    console.log(`[Messages API] Message created: ${message.id} in channel ${channelId}`);
 
     // TODO: Broadcast via WebSocket
     // getIO().to(channelId).emit('message', message)
 
     // Index message in Typesense
-    await indexMessage(message);
+    try {
+      await indexMessage(message);
+    } catch (indexError) {
+      console.error("[Messages API] Error indexing message:", indexError);
+      // Don't fail the request if indexing fails
+    }
 
     return NextResponse.json(message, { status: 201 });
   } catch (error) {
-    console.error("Error creating message:", error);
+    console.error("[Messages API] Error creating message:", error);
+    if (error instanceof Error) {
+      console.error("[Messages API] Error details:", error.message);
+      console.error("[Messages API] Stack trace:", error.stack);
+    }
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

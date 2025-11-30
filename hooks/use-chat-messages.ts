@@ -90,6 +90,8 @@ export function useChatMessages({
       attachments?: { url: string; name: string; size: number; type: string }[]
     ) => {
       try {
+        console.log("[useChatMessages] Sending message:", { content, attachments });
+
         const response = await fetch(`/api/chat/${workspaceId}/channels/${channelId}/messages`, {
           method: "POST",
           headers: {
@@ -103,10 +105,13 @@ export function useChatMessages({
         });
 
         if (!response.ok) {
-          throw new Error("Failed to send message");
+          const errorData = await response.json().catch(() => ({ error: "Unknown error" }));
+          console.error("[useChatMessages] API error:", response.status, errorData);
+          throw new Error(errorData.error || `Failed to send message (${response.status})`);
         }
 
         const newMessage = await response.json();
+        console.log("[useChatMessages] Message sent successfully:", newMessage.id);
 
         // Optimistically add message to state
         setState((prev) => ({
@@ -119,7 +124,7 @@ export function useChatMessages({
 
         return newMessage;
       } catch (error) {
-        console.error("Error sending message:", error);
+        console.error("[useChatMessages] Error sending message:", error);
         throw error;
       }
     },
