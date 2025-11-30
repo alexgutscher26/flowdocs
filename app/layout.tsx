@@ -1,10 +1,8 @@
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
-import { Toaster } from "sonner";
 import "./globals.css";
-import { ThemeProvider } from "@/components/ui/theme-provider";
 import { constructMetadata } from "@/lib/constructMetadata";
-import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { Providers } from "@/components/providers";
 
 export const metadata = constructMetadata();
 
@@ -16,19 +14,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning={true}>
       <body className={`${GeistSans.variable} ${GeistMono.variable} font-sans antialiased`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <NuqsAdapter>
-            <div className="bg-background min-h-screen">
-              <main>{children}</main>
-            </div>
-            <Toaster />
-          </NuqsAdapter>
-        </ThemeProvider>
+        <Providers>
+          <div className="bg-background min-h-screen">
+            <main>{children}</main>
+          </div>
+        </Providers>
       </body>
     </html>
   );

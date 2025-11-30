@@ -10,7 +10,6 @@ import {
   IconFolder,
   IconHelp,
   IconInnerShadowTop,
-  IconListDetails,
   IconSearch,
   IconSettings,
   IconUsers,
@@ -135,11 +134,6 @@ export function AppSidebar({
       url: "/dashboard",
       icon: IconDashboard,
       match: "exact" as const,
-    },
-    {
-      title: "Lifecycle",
-      url: "/dashboard/lifecycle",
-      icon: IconListDetails,
     },
     {
       title: "Analytics",

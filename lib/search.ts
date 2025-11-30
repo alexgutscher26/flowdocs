@@ -1,16 +1,23 @@
 import Typesense from "typesense";
 
-const client = new Typesense.Client({
-  nodes: [
-    {
-      host: process.env.TYPESENSE_HOST || "localhost",
-      port: parseInt(process.env.TYPESENSE_PORT || "8108"),
-      protocol: process.env.TYPESENSE_PROTOCOL || "http",
-    },
-  ],
-  apiKey: process.env.TYPESENSE_API_KEY || "xyz",
-  connectionTimeoutSeconds: 2,
-});
+let client: Typesense.Client | null = null;
+
+function getClient() {
+  if (!client) {
+    client = new Typesense.Client({
+      nodes: [
+        {
+          host: process.env.TYPESENSE_HOST || "localhost",
+          port: parseInt(process.env.TYPESENSE_PORT || "8108"),
+          protocol: process.env.TYPESENSE_PROTOCOL || "http",
+        },
+      ],
+      apiKey: process.env.TYPESENSE_API_KEY || "xyz",
+      connectionTimeoutSeconds: 2,
+    });
+  }
+  return client;
+}
 
 // Schema definitions
 const messagesSchema = {
@@ -64,23 +71,23 @@ const usersSchema = {
 
 export async function initSearch() {
   try {
-    const collections = await client.collections().retrieve();
+    const collections = await getClient().collections().retrieve();
     const collectionNames = collections.map((c) => c.name);
 
     if (!collectionNames.includes("messages")) {
-      await client.collections().create(messagesSchema as any);
+      await getClient().collections().create(messagesSchema as any);
       console.log("Created messages collection");
     }
     if (!collectionNames.includes("wiki_pages")) {
-      await client.collections().create(wikiPagesSchema as any);
+      await getClient().collections().create(wikiPagesSchema as any);
       console.log("Created wiki_pages collection");
     }
     if (!collectionNames.includes("files")) {
-      await client.collections().create(filesSchema as any);
+      await getClient().collections().create(filesSchema as any);
       console.log("Created files collection");
     }
     if (!collectionNames.includes("users")) {
-      await client.collections().create(usersSchema as any);
+      await getClient().collections().create(usersSchema as any);
       console.log("Created users collection");
     }
   } catch (error) {
@@ -98,7 +105,7 @@ export async function indexMessage(message: any) {
       userId: message.userId,
       createdAt: new Date(message.createdAt).getTime(),
     };
-    await client.collections("messages").documents().upsert(document);
+    await getClient().collections("messages").documents().upsert(document);
   } catch (error) {
     console.error("Error indexing message:", error);
   }
@@ -116,7 +123,7 @@ export async function indexWikiPage(page: any) {
       tags: page.tags?.map((t: any) => t.tag?.name || t.name) || [],
       createdAt: new Date(page.createdAt).getTime(),
     };
-    await client.collections("wiki_pages").documents().upsert(document);
+    await getClient().collections("wiki_pages").documents().upsert(document);
   } catch (error) {
     console.error("Error indexing wiki page:", error);
   }
@@ -133,7 +140,7 @@ export async function indexFile(file: any) {
       uploadedBy: file.uploadedBy,
       createdAt: new Date(file.createdAt).getTime(),
     };
-    await client.collections("files").documents().upsert(document);
+    await getClient().collections("files").documents().upsert(document);
   } catch (error) {
     console.error("Error indexing file:", error);
   }
@@ -148,7 +155,7 @@ export async function indexUser(user: any) {
       role: user.role,
       createdAt: new Date(user.createdAt).getTime(),
     };
-    await client.collections("users").documents().upsert(document);
+    await getClient().collections("users").documents().upsert(document);
   } catch (error) {
     console.error("Error indexing user:", error);
   }
@@ -204,7 +211,7 @@ export async function searchMessages(
       searchParameters.highlight_affix_num_tokens = 8;
     }
 
-    return await client.collections("messages").documents().search(searchParameters);
+    return await getClient().collections("messages").documents().search(searchParameters);
   } catch (error) {
     console.error("Error searching messages:", error);
     return { hits: [], found: 0 };
@@ -247,7 +254,7 @@ export async function searchWikiPages(
       searchParameters.highlight_affix_num_tokens = 8;
     }
 
-    return await client.collections("wiki_pages").documents().search(searchParameters);
+    return await getClient().collections("wiki_pages").documents().search(searchParameters);
   } catch (error) {
     console.error("Error searching wiki pages:", error);
     return { hits: [], found: 0 };
@@ -287,7 +294,7 @@ export async function searchFiles(
       searchParameters.highlight_affix_num_tokens = 8;
     }
 
-    return await client.collections("files").documents().search(searchParameters);
+    return await getClient().collections("files").documents().search(searchParameters);
   } catch (error) {
     console.error("Error searching files:", error);
     return { hits: [], found: 0 };
@@ -309,11 +316,11 @@ export async function searchUsers(query: string, options: SearchOptions = {}) {
       searchParameters.highlight_affix_num_tokens = 8;
     }
 
-    return await client.collections("users").documents().search(searchParameters);
+    return await getClient().collections("users").documents().search(searchParameters);
   } catch (error) {
     console.error("Error searching users:", error);
     return { hits: [], found: 0 };
   }
 }
 
-export default client;
+export default getClient;

@@ -40,6 +40,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { WikiBreadcrumbs } from "./wiki-breadcrumbs";
 
 export interface WikiPageData {
   id: string;
@@ -238,25 +239,12 @@ export function WikiPageView({
         <div className="max-w-4xl min-w-0 flex-1">
           {/* Breadcrumbs */}
           <div className="mb-6">
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem>
-                  <BreadcrumbLink href="/dashboard/wiki">Wiki</BreadcrumbLink>
-                </BreadcrumbItem>
-                {workspaceName && (
-                  <>
-                    <BreadcrumbSeparator />
-                    <BreadcrumbItem>
-                      <BreadcrumbLink href="/dashboard/wiki">{workspaceName}</BreadcrumbLink>
-                    </BreadcrumbItem>
-                  </>
-                )}
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>{page.title}</BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
+            <WikiBreadcrumbs
+              workspaceId={workspaceId || ""}
+              currentPageId={page.id}
+              currentPageTitle={page.title}
+              currentPageSlug={page.slug}
+            />
           </div>
 
           {/* Header */}
