@@ -1,5 +1,8 @@
 import { MetadataRoute } from "next";
 
+/**
+ * Generates a robots.txt metadata route configuration.
+ */
 export default function robots(): MetadataRoute.Robots {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://flowdocs.com";
 
