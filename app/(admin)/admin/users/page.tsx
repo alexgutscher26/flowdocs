@@ -63,6 +63,9 @@ async function UsersContent({ searchParams }: PageProps) {
   );
 }
 
+/**
+ * Renders the user management page with a user creation dialog and a data table.
+ */
 export default function UsersPage(props: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8 sm:px-6 lg:px-8">

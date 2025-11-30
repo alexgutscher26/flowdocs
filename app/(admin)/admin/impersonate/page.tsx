@@ -23,6 +23,16 @@ interface PageProps {
   }>;
 }
 
+/**
+ * Handles the impersonation of users by fetching user data based on search parameters.
+ *
+ * This asynchronous function retrieves search parameters, including pagination and filtering options,
+ * and calls the `getUsers` function to fetch the relevant user data. If the fetch is unsuccessful,
+ * it displays an error message. Otherwise, it renders the `ImpersonateUsersDataTable` component
+ * with the retrieved user data.
+ *
+ * @param {PageProps} { searchParams } - The search parameters for fetching users.
+ */
 async function ImpersonateContent({ searchParams }: PageProps) {
   const params = await searchParams;
   const page = params.page ? parseInt(params.page) : 1;
@@ -62,6 +72,9 @@ async function ImpersonateContent({ searchParams }: PageProps) {
   );
 }
 
+/**
+ * Renders the Impersonate User page, allowing users to view the application from another user's perspective.
+ */
 export default function ImpersonatePage(props: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8 sm:px-6 lg:px-8">
