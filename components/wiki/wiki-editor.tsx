@@ -42,6 +42,24 @@ export interface WikiEditorProps {
   className?: string;
 }
 
+/**
+ * A component for editing and managing wiki content with auto-save functionality.
+ *
+ * The WikiEditor allows users to input a title, content, and tags, while providing a toolbar for markdown formatting.
+ * It supports auto-saving drafts at specified intervals and handles saving and publishing content through the provided onSave callback.
+ * The component also manages tag addition and removal, and provides a preview of the content in markdown format.
+ *
+ * @param {Object} props - The properties for the WikiEditor component.
+ * @param {string} [props.initialTitle=""] - The initial title of the wiki page.
+ * @param {string} [props.initialContent=""] - The initial content of the wiki page.
+ * @param {string[]} [props.initialTags=[]] - The initial tags associated with the wiki page.
+ * @param {function} props.onSave - The callback function to save the wiki content.
+ * @param {function} props.onCancel - The callback function to handle cancellation.
+ * @param {boolean} [props.autoSave=true] - Flag to enable or disable auto-saving.
+ * @param {number} [props.autoSaveInterval=30000] - The interval for auto-saving in milliseconds.
+ * @param {string} [props.className] - Additional class names for styling the component.
+ * @returns {JSX.Element} The rendered WikiEditor component.
+ */
 export function WikiEditor({
   initialTitle = "",
   initialContent = "",
