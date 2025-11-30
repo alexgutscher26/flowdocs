@@ -1,5 +1,8 @@
 import { HelpGuideLayout } from "@/components/help/help-guide-layout";
 
+/**
+ * Renders the Getting Started page with guidance on using Flowdocs.
+ */
 export default function GettingStartedPage() {
     return (
         <HelpGuideLayout
