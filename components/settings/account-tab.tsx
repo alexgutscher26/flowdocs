@@ -20,6 +20,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { deleteUserAccount } from "@/app/actions/user-settings";
 import { signOut } from "@/lib/auth-client";
+import { ChangePasswordForm } from "./change-password-form";
+import { ConnectedAccounts } from "./connected-accounts";
 
 export function AccountTab() {
   const [isDeleting, setIsDeleting] = useState(false);
@@ -56,56 +58,63 @@ export function AccountTab() {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-destructive">Danger Zone</CardTitle>
-        <CardDescription>Irreversible actions that will affect your account</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div>
-          <h3 className="text-base font-semibold">Delete Account</h3>
-          <p className="text-muted-foreground mt-1 text-sm">
-            Permanently delete your account and all associated data. This action cannot be undone.
-          </p>
-        </div>
+    <div className="space-y-6">
+      {/* Security Section */}
+      <ChangePasswordForm />
+      <ConnectedAccounts />
 
-        <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <AlertDialogTrigger asChild>
-            <Button variant="destructive" disabled={isDeleting}>
-              <IconTrash className="mr-2 h-4 w-4" />
-              Delete Account
-            </Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-              <AlertDialogDescription className="space-y-2">
-                <p>
-                  This action cannot be undone. This will permanently delete your account and remove
-                  all your data from our servers.
-                </p>
-                <p className="text-destructive font-semibold">
-                  All of your workspaces and data will be lost.
-                </p>
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
-              <AlertDialogAction
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleDeleteAccount();
-                }}
-                disabled={isDeleting}
-                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-              >
-                {isDeleting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+      {/* Danger Zone */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-destructive">Danger Zone</CardTitle>
+          <CardDescription>Irreversible actions that will affect your account</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div>
+            <h3 className="text-base font-semibold">Delete Account</h3>
+            <p className="text-muted-foreground mt-1 text-sm">
+              Permanently delete your account and all associated data. This action cannot be undone.
+            </p>
+          </div>
+
+          <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <AlertDialogTrigger asChild>
+              <Button variant="destructive" disabled={isDeleting}>
+                <IconTrash className="mr-2 h-4 w-4" />
                 Delete Account
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-      </CardContent>
-    </Card>
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription className="space-y-2">
+                  <p>
+                    This action cannot be undone. This will permanently delete your account and remove
+                    all your data from our servers.
+                  </p>
+                  <p className="text-destructive font-semibold">
+                    All of your workspaces and data will be lost.
+                  </p>
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleDeleteAccount();
+                  }}
+                  disabled={isDeleting}
+                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                >
+                  {isDeleting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  Delete Account
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
