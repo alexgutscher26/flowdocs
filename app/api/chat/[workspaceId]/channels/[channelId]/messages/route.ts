@@ -4,6 +4,8 @@ import { indexMessage } from "@/lib/search";
 import { MessageType } from "@/generated/prisma/enums";
 import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
+import { broadcastToChannel } from "@/lib/websocket";
+import { WebSocketEvent } from "@/types/chat";
 
 // GET /api/chat/[workspaceId]/channels/[channelId]/messages - List messages with pagination
 export async function GET(
@@ -161,8 +163,16 @@ export async function POST(
 
     console.log(`[Messages API] Message created: ${message.id} in channel ${channelId}`);
 
-    // TODO: Broadcast via WebSocket
-    // getIO().to(channelId).emit('message', message)
+    // Broadcast via WebSocket
+    try {
+      broadcastToChannel(channelId, WebSocketEvent.MESSAGE_RECEIVED, {
+        channelId,
+        message,
+      });
+    } catch (wsError) {
+      console.error("[Messages API] Error broadcasting message:", wsError);
+      // Don't fail the request if broadcasting fails
+    }
 
     // Index message in Typesense
     try {

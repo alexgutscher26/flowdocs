@@ -131,6 +131,52 @@ export function useChatMessages({
     [workspaceId, channelId, threadId]
   );
 
+  // Toggle pin status
+  const togglePinMessage = useCallback(
+    async (messageId: string, isPinned: boolean) => {
+      try {
+        // Optimistic update
+        setState((prev) => ({
+          ...prev,
+          messages: prev.messages.map((msg) =>
+            msg.id === messageId ? { ...msg, isPinned: !isPinned } : msg
+          ),
+        }));
+
+        const method = isPinned ? "DELETE" : "POST";
+        const response = await fetch(
+          `/api/chat/${workspaceId}/channels/${channelId}/messages/${messageId}/pin`,
+          { method }
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to update pin status");
+        }
+
+        const updatedMessage = await response.json();
+
+        // Confirm update with server data
+        setState((prev) => ({
+          ...prev,
+          messages: prev.messages.map((msg) =>
+            msg.id === messageId ? { ...msg, isPinned: updatedMessage.isPinned } : msg
+          ),
+        }));
+      } catch (error) {
+        console.error("Error toggling pin status:", error);
+        // Revert optimistic update on error
+        setState((prev) => ({
+          ...prev,
+          messages: prev.messages.map((msg) =>
+            msg.id === messageId ? { ...msg, isPinned } : msg
+          ),
+        }));
+      }
+    },
+    [workspaceId, channelId]
+  );
+
+
   // Delete a message
   const deleteMessage = useCallback(
     async (messageId: string) => {
@@ -235,15 +281,26 @@ export function useChatMessages({
   }, [channelId, threadId]);
 
   return {
-    messages: state.messages,
-    loading: state.loading,
-    error: state.error,
-    hasMore: state.hasMore,
-    loadMore,
+    ...state,
+    fetchMessages,
     sendMessage,
+    togglePinMessage,
     deleteMessage,
-    updateMessage,
-    scrollToBottom,
+    editMessage: updateMessage,
+    reactToMessage: async (messageId: string, emoji: string) => {
+      // TODO: Implement reaction logic
+      console.log("React to message:", messageId, emoji);
+    },
+    removeReaction: async (reactionId: string) => {
+      // TODO: Implement remove reaction logic
+      console.log("Remove reaction:", reactionId);
+    },
+    refreshMessages: () => fetchMessages(null),
+    loadMore: () => {
+      if (state.hasMore && !state.loading) {
+        fetchMessages(state.nextCursor);
+      }
+    },
     messagesEndRef,
   };
 }

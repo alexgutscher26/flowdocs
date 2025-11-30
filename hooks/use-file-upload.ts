@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import { UploadedFile, FileUploadProgress } from "@/types/chat";
 import { useUploadThing } from "@/lib/uploadthing";
 
-export function useFileUpload() {
+export function useFileUpload(workspaceId?: string) {
   const [uploads, setUploads] = useState<FileUploadProgress[]>([]);
   const { startUpload, isUploading } = useUploadThing("chatFileUploader", {
     onClientUploadComplete: (res) => {
@@ -28,8 +28,8 @@ export function useFileUpload() {
         // Update status to uploading
         setUploads((prev) => prev.map((upload) => ({ ...upload, status: "uploading" as const })));
 
-        // Upload using UploadThing
-        const uploadedFiles = await startUpload(files);
+        // Upload using UploadThing with workspaceId
+        const uploadedFiles = await startUpload(files, { workspaceId });
 
         if (!uploadedFiles) {
           throw new Error("Upload failed");

@@ -2,6 +2,8 @@ import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
+import { broadcastToChannel } from "@/lib/websocket";
+import { WebSocketEvent } from "@/types/chat";
 
 // PUT /api/chat/[workspaceId]/channels/[channelId]/messages/[messageId] - Edit message
 export async function PUT(
@@ -68,8 +70,12 @@ export async function PUT(
       },
     });
 
-    // TODO: Broadcast via WebSocket
-    // getIO().to(channelId).emit('message_updated', updatedMessage)
+    // Broadcast via WebSocket
+    try {
+      broadcastToChannel(channelId, WebSocketEvent.MESSAGE_UPDATED, updatedMessage);
+    } catch (error) {
+      console.error("Error broadcasting message update:", error);
+    }
 
     return NextResponse.json(updatedMessage);
   } catch (error) {
@@ -122,8 +128,12 @@ export async function DELETE(
       },
     });
 
-    // TODO: Broadcast via WebSocket
-    // getIO().to(channelId).emit('message_deleted', { messageId })
+    // Broadcast via WebSocket
+    try {
+      broadcastToChannel(channelId, WebSocketEvent.MESSAGE_DELETED, { messageId });
+    } catch (error) {
+      console.error("Error broadcasting message deletion:", error);
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {

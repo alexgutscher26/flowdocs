@@ -43,6 +43,7 @@ model User {
   // Chat relations
   channelMemberships ChannelMember[]
   messages           Message[]
+  reactions          MessageReaction[]
 
   // Wiki relations
   wikiPages          WikiPage[]
@@ -232,11 +233,13 @@ model Message {
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   isEdited    Boolean     @default(false)
+  isPinned    Boolean     @default(false)
 
   channel     Channel     @relation(fields: [channelId], references: [id], onDelete: Cascade)
   user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   parent      Message?    @relation("Thread", fields: [threadId], references: [id], onDelete: SetNull)
   replies     Message[]   @relation("Thread")
+  reactions   MessageReaction[]
   
   // Relationship to WikiPage conversion
   wikiPage    WikiPage?
@@ -245,6 +248,22 @@ model Message {
   @@index([userId])
   @@index([threadId])
   @@map("message")
+}
+
+model MessageReaction {
+  id        String   @id @default(cuid())
+  messageId String
+  userId    String
+  emoji     String   // The emoji character(s)
+  createdAt DateTime @default(now())
+
+  message Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([messageId, userId, emoji]) // Prevent duplicate reactions
+  @@index([messageId])
+  @@index([userId])
+  @@map("message_reaction")
 }
 
 // Wiki Models

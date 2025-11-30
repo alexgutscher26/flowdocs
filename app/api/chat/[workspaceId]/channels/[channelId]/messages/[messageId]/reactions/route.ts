@@ -2,6 +2,8 @@ import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
+import { broadcastToChannel } from "@/lib/websocket";
+import { WebSocketEvent } from "@/types/chat";
 
 // POST /api/chat/[workspaceId]/channels/[channelId]/messages/[messageId]/reactions - Add reaction
 export async function POST(
@@ -35,21 +37,34 @@ export async function POST(
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    // For now, store reactions in a simple way
-    // In production, you'd want a MessageReaction model in your schema
-    // This is a placeholder implementation
-    const reaction = {
-      id: `reaction_${Date.now()}`,
-      messageId,
-      userId: session.user.id,
-      emoji,
-      userName: session.user.name,
-      userImage: session.user.image,
-      createdAt: new Date(),
-    };
+    // Create reaction in database
+    const reaction = await prisma.messageReaction.create({
+      data: {
+        messageId,
+        userId: session.user.id,
+        emoji,
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            image: true,
+          },
+        },
+      },
+    });
 
-    // TODO: Store in database when MessageReaction model is added
-    // await prisma.messageReaction.create({ data: reaction });
+    // Broadcast reaction added via WebSocket
+    try {
+      broadcastToChannel(channelId, WebSocketEvent.REACTION_ADDED, {
+        messageId,
+        reaction,
+      });
+    } catch (error) {
+      console.error("Error broadcasting reaction:", error);
+    }
 
     return NextResponse.json(reaction, { status: 201 });
   } catch (error) {
@@ -73,15 +88,31 @@ export async function DELETE(
   }
 ) {
   try {
-    const { reactionId } = await params;
+    const { reactionId, channelId, messageId } = await params;
     const session = await auth.api.getSession({ headers: await headers() });
 
     if (!session?.user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // TODO: Delete from database when MessageReaction model is added
-    // await prisma.messageReaction.delete({ where: { id: reactionId, userId: session.user.id } });
+    // Delete reaction from database
+    // Verify user owns the reaction before deleting
+    await prisma.messageReaction.delete({
+      where: {
+        id: reactionId,
+        userId: session.user.id,
+      },
+    });
+
+    // Broadcast reaction removed via WebSocket
+    try {
+      broadcastToChannel(channelId, WebSocketEvent.REACTION_REMOVED, {
+        messageId,
+        reactionId,
+      });
+    } catch (error) {
+      console.error("Error broadcasting reaction removal:", error);
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {

@@ -78,6 +78,7 @@ export interface ExtendedMessage extends Message {
   attachments?: MessageAttachment[];
   reactions?: MessageReaction[];
   readBy?: ReadReceipt[];
+  isPinned?: boolean;
 }
 
 export interface MessageAttachment {
@@ -122,6 +123,10 @@ export enum WebSocketEvent {
   MESSAGE_RECEIVED = "message_received",
   MESSAGE_UPDATED = "message_updated",
   MESSAGE_DELETED = "message_deleted",
+
+  // Reaction events
+  REACTION_ADDED = "reaction_added",
+  REACTION_REMOVED = "reaction_removed",
 
   // Typing events
   TYPING_START = "typing_start",

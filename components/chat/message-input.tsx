@@ -28,6 +28,7 @@ interface MessageInputProps {
   disabled?: boolean;
   threadId?: string | null;
   channelMembers?: ChannelMember[];
+  workspaceId?: string;
 }
 
 export function MessageInput({
@@ -38,6 +39,7 @@ export function MessageInput({
   disabled = false,
   threadId = null,
   channelMembers = [],
+  workspaceId,
 }: MessageInputProps) {
   const [content, setContent] = useState("");
   const [sending, setSending] = useState(false);
@@ -51,7 +53,7 @@ export function MessageInput({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
-  const { uploads, uploadFiles, isUploading, clearUploads } = useFileUpload();
+  const { uploads, uploadFiles, isUploading, clearUploads } = useFileUpload(workspaceId);
 
   // Auto-resize textarea
   const adjustTextareaHeight = useCallback(() => {

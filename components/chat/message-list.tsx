@@ -20,6 +20,7 @@ interface MessageListProps {
   onDelete?: (messageId: string) => void;
   onReaction?: (messageId: string, emoji: string) => void;
   onReactionRemove?: (reactionId: string) => void;
+  onPin?: (messageId: string, isPinned: boolean) => void;
   totalChannelMembers?: number;
   messagesEndRef?: React.RefObject<HTMLDivElement>;
 }
@@ -35,6 +36,7 @@ export function MessageList({
   onDelete,
   onReaction,
   onReactionRemove,
+  onPin,
   totalChannelMembers,
   messagesEndRef,
 }: MessageListProps) {
@@ -115,6 +117,7 @@ export function MessageList({
                     onDelete={onDelete}
                     onReaction={onReaction}
                     onReactionRemove={onReactionRemove}
+                    onPin={onPin}
                     totalChannelMembers={totalChannelMembers}
                   />
                 ))}

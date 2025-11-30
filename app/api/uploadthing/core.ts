@@ -2,6 +2,7 @@ import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { indexFile } from "@/lib/search";
+import { z } from "zod";
 
 const f = createUploadthing();
 
@@ -22,12 +23,16 @@ export const ourFileRouter = {
       maxFileCount: 3,
     },
   })
-    .middleware(async () => {
+    .input(z.object({ workspaceId: z.string().optional() }))
+    .middleware(async (opts) => {
       const session = await auth.api.getSession({ headers: await headers() });
 
       if (!session?.user) throw new Error("Unauthorized");
 
-      return { userId: session.user.id };
+      return {
+        userId: session.user.id,
+        workspaceId: opts.input?.workspaceId || "unknown",
+      };
     })
     .onUploadComplete(async ({ metadata, file }) => {
       console.log("Upload complete for userId:", metadata.userId);
@@ -38,7 +43,7 @@ export const ourFileRouter = {
         id: file.key,
         name: file.name,
         type: file.name.split(".").pop() || "unknown",
-        workspaceId: "unknown", // TODO: Pass workspaceId from client
+        workspaceId: metadata.workspaceId,
         uploadedBy: metadata.userId,
         createdAt: new Date(),
         content: "", // Content extraction to be implemented

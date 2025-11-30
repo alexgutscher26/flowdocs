@@ -27,7 +27,9 @@ interface MessageItemProps {
   onEdit?: (message: ExtendedMessage) => void;
   onDelete?: (messageId: string) => void;
   onReaction?: (messageId: string, emoji: string) => void;
+  onReaction?: (messageId: string, emoji: string) => void;
   onReactionRemove?: (reactionId: string) => void;
+  onPin?: (messageId: string, isPinned: boolean) => void;
   totalChannelMembers?: number;
 }
 
@@ -41,6 +43,7 @@ export function MessageItem({
   onDelete,
   onReaction,
   onReactionRemove,
+  onPin,
   totalChannelMembers = 0,
 }: MessageItemProps) {
   const [isHovered, setIsHovered] = useState(false);
@@ -93,6 +96,7 @@ export function MessageItem({
                 {formatMessageTime(new Date(message.createdAt))}
               </span>
               {message.isEdited && <span className="text-muted-foreground text-xs">(edited)</span>}
+              {message.isPinned && <span className="text-muted-foreground text-xs" title="Pinned">📌</span>}
             </div>
           )}
 
@@ -213,6 +217,16 @@ export function MessageItem({
                   Reply in thread
                 </DropdownMenuItem>
               )}
+              {/* Pin/Unpin Option */}
+              {onPin && (
+                <DropdownMenuItem
+                  onClick={() => onPin(message.id, !!message.isPinned)}
+                >
+                  <span className="mr-2 h-4 w-4">📌</span>
+                  {message.isPinned ? "Unpin message" : "Pin message"}
+                </DropdownMenuItem>
+              )}
+
               {isOwnMessage && onEdit && (
                 <DropdownMenuItem onClick={() => onEdit(message)}>
                   <Pencil className="mr-2 h-4 w-4" />

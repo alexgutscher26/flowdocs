@@ -92,8 +92,8 @@ export async function completeOnboarding(data: OnboardingData) {
       const generalChannel = channels.find((ch) => ch.name === "general");
 
       if (generalChannel) {
-        // Create a welcome message in #general
-        const welcomeMessage = await tx.message.create({
+        // Create welcome message
+        await tx.message.create({
           data: {
             content: `👋 Welcome to ${data.workspaceName}!
 
@@ -120,10 +120,9 @@ Need help? Check out the Getting Started guide in the wiki section.`,
             type: "SYSTEM",
             channelId: generalChannel.id,
             userId: session.user.id,
+            isPinned: true,
           },
         });
-
-        // TODO: Pin the welcome message (when pin functionality is implemented)
       }
 
       // Create a Getting Started wiki page

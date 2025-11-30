@@ -66,7 +66,7 @@ export function ChatLayout({
     loadMore,
     sendMessage,
     deleteMessage,
-    updateMessage,
+    editMessage,
     messagesEndRef,
   } = useChatMessages({
     workspaceId,
@@ -284,7 +284,7 @@ export function ChatLayout({
               onEdit={(msg) => {
                 const newContent = prompt("Edit message:", msg.content);
                 if (newContent) {
-                  updateMessage(msg.id, newContent);
+                  editMessage(msg.id, newContent);
                 }
               }}
               onReaction={handleAddReaction}
@@ -311,6 +311,7 @@ export function ChatLayout({
               onTypingStop={handleTypingStop}
               placeholder={`Message #${activeChannel.name}`}
               channelMembers={activeChannel.members}
+              workspaceId={workspaceId}
             />
           </>
         ) : (
