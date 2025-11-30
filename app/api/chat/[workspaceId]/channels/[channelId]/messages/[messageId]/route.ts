@@ -6,6 +6,17 @@ import { broadcastToChannel } from "@/lib/websocket";
 import { WebSocketEvent } from "@/types/chat";
 
 // PUT /api/chat/[workspaceId]/channels/[channelId]/messages/[messageId] - Edit message
+/**
+ * Handles the PUT request to update a message in a specific channel.
+ *
+ * This function retrieves the session of the user, verifies their authorization, and checks if the message belongs to the user.
+ * If valid, it updates the message content and broadcasts the update via WebSocket.
+ * It handles various error scenarios, returning appropriate responses for unauthorized access, missing messages, and invalid content.
+ *
+ * @param request - The NextRequest object containing the request data.
+ * @param params - An object containing a promise that resolves to the workspaceId, channelId, and messageId.
+ * @returns A JSON response containing the updated message or an error message.
+ */
 export async function PUT(
   request: NextRequest,
   {
@@ -85,6 +96,15 @@ export async function PUT(
 }
 
 // DELETE /api/chat/[workspaceId]/channels/[channelId]/messages/[messageId] - Delete message
+/**
+ * Deletes a message from a specified channel in a workspace.
+ *
+ * The function first retrieves the session to ensure the user is authenticated. It then verifies that the message belongs to the user before proceeding to delete it from the database. After deletion, it attempts to broadcast the deletion event via WebSocket. If any errors occur during these processes, appropriate error responses are returned.
+ *
+ * @param request - The HTTP request object containing the request details.
+ * @param params - An object containing a promise that resolves to the workspaceId, channelId, and messageId.
+ * @returns A JSON response indicating the success of the deletion or an error message.
+ */
 export async function DELETE(
   request: NextRequest,
   {
