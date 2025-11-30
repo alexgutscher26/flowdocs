@@ -1,5 +1,8 @@
 import { HelpGuideLayout } from "@/components/help/help-guide-layout";
 
+/**
+ * Renders the Integrations page with available integration options.
+ */
 export default function IntegrationsPage() {
     return (
         <HelpGuideLayout

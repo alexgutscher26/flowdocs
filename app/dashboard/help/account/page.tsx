@@ -1,5 +1,8 @@
 import { HelpGuideLayout } from "@/components/help/help-guide-layout";
 
+/**
+ * Renders the Account & Billing help page with instructions for managing profile, changing password, and subscription plans.
+ */
 export default function AccountPage() {
     return (
         <HelpGuideLayout
