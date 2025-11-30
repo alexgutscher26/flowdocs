@@ -3,6 +3,19 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import prisma from "@/lib/prisma";
 
+/**
+ * Handles the GET request to fetch the wiki tree for a specific workspace.
+ *
+ * This function retrieves the workspace ID from the request parameters, checks the user's session for authorization,
+ * and verifies if the user is a member of the specified workspace. It then fetches all published pages for the workspace,
+ * constructs a tree structure of the pages, and returns the root nodes. If any errors occur during the process,
+ * appropriate error responses are returned.
+ *
+ * @param request - The NextRequest object representing the incoming request.
+ * @param params - An object containing a promise that resolves to the workspace ID.
+ * @returns A JSON response containing the root nodes of the wiki tree.
+ * @throws Error If there is an issue fetching the wiki tree.
+ */
 export async function GET(
     request: NextRequest,
     { params }: { params: Promise<{ workspaceId: string }> }
