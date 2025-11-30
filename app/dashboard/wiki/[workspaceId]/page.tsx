@@ -48,6 +48,16 @@ async function getWikiPages(workspaceId: string) {
   return pages;
 }
 
+/**
+ * Renders the Wiki home page for a specific workspace.
+ *
+ * This function retrieves the workspace ID from the parameters, checks the user's session for authentication,
+ * and verifies if the user is a member of the specified workspace. It then fetches the wiki pages associated
+ * with the workspace and renders the appropriate UI, including a message for no pages or a list of existing pages.
+ *
+ * @param {WikiHomeProps} params - The parameters containing the workspace ID.
+ * @returns {JSX.Element} The rendered Wiki home page component.
+ */
 export default async function WikiHomePage({ params }: WikiHomeProps) {
   const { workspaceId } = await params;
 
