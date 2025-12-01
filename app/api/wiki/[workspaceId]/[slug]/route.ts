@@ -156,9 +156,10 @@ export async function GET(
 /**
  * Update a wiki page in the specified workspace.
  *
- * This function handles the PUT request to update a wiki page by first verifying the user's session and permissions.
- * It fetches the existing page, checks for workspace access, and updates the page's content, title, and tags.
- * It also manages the published state and creates a new version of the page if changes are made.
+ * This function handles the PUT request to update a wiki page by verifying the user's session and permissions,
+ * fetching the existing page, and checking for workspace access. It updates the page's content, title, and tags,
+ * manages the published state, and creates a new version of the page if changes are made.
+ * It also handles errors and returns appropriate JSON responses based on the outcome of the operations.
  *
  * @param request - The NextRequest object containing the request data.
  * @param params - An object containing a Promise that resolves to an object with workspaceId and slug.
