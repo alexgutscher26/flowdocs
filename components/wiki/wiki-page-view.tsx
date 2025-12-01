@@ -21,6 +21,7 @@ import {
   Calendar,
   Hash,
   BookOpen,
+  Trash2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { VersionHistoryDialog, WikiVersion } from "./version-history";
@@ -30,7 +31,18 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -41,6 +53,8 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { WikiBreadcrumbs } from "./wiki-breadcrumbs";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
 
 export interface WikiPageData {
   id: string;
@@ -134,6 +148,14 @@ export function WikiPageView({
   const [showVersionHistory, setShowVersionHistory] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("");
   const [checkboxStates, setCheckboxStates] = useState<Record<string, boolean>>({});
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const router = useRouter();
+  const { toast } = useToast();
+
+  // Check if user can delete (author, admin, or owner)
+  const canDelete = canEdit && currentUserId && workspaceId;
 
   // Load checkbox states from localStorage on mount
   useEffect(() => {
@@ -159,6 +181,40 @@ export function WikiPageView({
       ...prev,
       [index]: !prev[index],
     }));
+  };
+
+  const handleDelete = async () => {
+    if (!workspaceId) return;
+
+    setIsDeleting(true);
+    try {
+      const response = await fetch(`/api/wiki/${workspaceId}/${page.slug}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Failed to delete page");
+      }
+
+      toast({
+        title: "Success",
+        description: "Wiki page deleted successfully",
+      });
+
+      // Navigate to wiki home
+      router.push(`/dashboard/wiki/${workspaceId}`);
+    } catch (error) {
+      console.error("Error deleting wiki page:", error);
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to delete wiki page",
+        variant: "destructive",
+      });
+    } finally {
+      setIsDeleting(false);
+      setShowDeleteDialog(false);
+    }
   };
 
   const coverGradient = useMemo(() => generateGradient(page.id), [page.id]);
@@ -296,6 +352,18 @@ export function WikiPageView({
                       <Download className="mr-2 h-4 w-4" />
                       Export Markdown
                     </DropdownMenuItem>
+                    {canDelete && (
+                      <>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                          onClick={() => setShowDeleteDialog(true)}
+                          className="text-destructive focus:text-destructive"
+                        >
+                          <Trash2 className="mr-2 h-4 w-4" />
+                          Delete Page
+                        </DropdownMenuItem>
+                      </>
+                    )}
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
@@ -495,6 +563,29 @@ export function WikiPageView({
             onRestore={onVersionRestore}
           />
         )}
+
+        {/* Delete Confirmation Dialog */}
+        <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete Wiki Page</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to delete "{page.title}"? This action cannot be undone.
+                All versions and associated data will be permanently removed.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={handleDelete}
+                disabled={isDeleting}
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              >
+                {isDeleting ? "Deleting..." : "Delete"}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </div>
   );
