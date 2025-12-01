@@ -14,6 +14,14 @@ interface GoogleDriveBrowserProps {
     onSelect?: (file: GoogleDriveFile) => void;
 }
 
+/**
+ * Renders a Google Drive file browser component.
+ *
+ * This component manages the state for files, loading status, and search queries. It fetches files from Google Drive based on the search query and handles pagination. The user can select files, and the component displays appropriate icons based on the file type. It also includes a search input and a load more button for additional files.
+ *
+ * @param {GoogleDriveBrowserProps} props - The properties for the GoogleDriveBrowser component.
+ * @param {function} props.onSelect - Callback function to handle file selection.
+ */
 export function GoogleDriveBrowser({ onSelect }: GoogleDriveBrowserProps) {
     const [files, setFiles] = useState<GoogleDriveFile[]>([]);
     const [loading, setLoading] = useState(false);
@@ -42,12 +50,24 @@ export function GoogleDriveBrowser({ onSelect }: GoogleDriveBrowserProps) {
         fetchFiles(debouncedQuery);
     }, [debouncedQuery]);
 
+    /**
+     * Handles loading more files if a next page token is available.
+     */
     const handleLoadMore = () => {
         if (nextPageToken) {
             fetchFiles(debouncedQuery, nextPageToken);
         }
     };
 
+    /**
+     * Returns the appropriate file icon based on the given MIME type.
+     *
+     * The function checks if the mimeType indicates a folder or an image and returns the corresponding icon component.
+     * If neither condition is met, it defaults to returning a generic file icon.
+     * This allows for a visual representation of different file types in the UI.
+     *
+     * @param mimeType - The MIME type of the file to determine the icon for.
+     */
     const getFileIcon = (mimeType: string) => {
         if (mimeType.includes("folder")) return <FolderIcon className="h-5 w-5 text-blue-500" />;
         if (mimeType.includes("image")) return <ImageIcon className="h-5 w-5 text-purple-500" />;
