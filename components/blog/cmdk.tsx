@@ -15,6 +15,9 @@ import ExpandingArrow from "./icons/expanding-arrow";
 import Magic from "./icons/magic";
 import Modal from "./modal";
 
+/**
+ * Renders a modal for CMDK with a search input and command list.
+ */
 function CMDKHelper({
   showCMDK,
   setShowCMDK,
@@ -31,7 +34,6 @@ function CMDKHelper({
     <Modal showModal={showCMDK} setShowModal={setShowCMDK}>
       <Command label="CMDK" loop shouldFilter={false}>
         <Command.Input
-          
           onInput={(e) => {
             setTimeout(() => {
               commandListRef.current?.scrollTo(0, 0);
