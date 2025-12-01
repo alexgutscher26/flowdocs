@@ -124,7 +124,7 @@ In a real scenario, this would be sent via Resend.
       success: true,
     };
   } catch (error) {
-    console.error(`Failed to send email (${templateId}):`, error);
+    console.error("Failed to send email (%s):", templateId, error);
 
     return {
       id: "",
