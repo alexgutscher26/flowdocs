@@ -156,7 +156,10 @@ export async function POST(
       return NextResponse.json({ error: "Missing required field: title" }, { status: 400 });
     }
 
-    if (published && !content) {
+    // Determine if page will be published (default to true if not specified)
+    const willBePublished = published ?? true;
+    
+    if (willBePublished && !content) {
       return NextResponse.json(
         { error: "Content is required for published pages" },
         { status: 400 }
@@ -194,8 +197,8 @@ export async function POST(
         excerpt: excerpt || content.substring(0, 200),
         workspaceId,
         authorId: session.user.id,
-        published: published ?? true,
-        publishedAt: published ? new Date() : null,
+        published: willBePublished,
+        publishedAt: willBePublished ? new Date() : null,
         parentId: parentId || null,
       },
       include: {
