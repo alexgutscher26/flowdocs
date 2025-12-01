@@ -13,11 +13,15 @@ export interface FileWithBackup {
 }
 
 /**
- * Get the best available URL for a file with automatic failover
- * 
- * @param file - File object with primary and backup URLs
- * @param preferBackup - If true, prefer backup URL over primary (useful for testing)
- * @returns Promise<string> - The working URL
+ * Get the best available URL for a file with automatic failover.
+ *
+ * This function attempts to retrieve a working URL for a file by first checking the backup URL if preferred.
+ * If the backup URL is not valid or not preferred, it checks the primary URL. If both URLs fail, an error is thrown.
+ *
+ * @param file - File object with primary and backup URLs.
+ * @param preferBackup - If true, prefer backup URL over primary (useful for testing).
+ * @returns A promise that resolves to the working URL.
+ * @throws Error If both primary and backup URLs are unavailable.
  */
 export async function getFileUrl(
     file: FileWithBackup,
@@ -55,10 +59,13 @@ export async function getFileUrl(
 }
 
 /**
- * Test if a URL is accessible
- * 
- * @param url - URL to test
- * @returns Promise<boolean> - True if URL is accessible
+ * Test if a URL is accessible.
+ *
+ * This function attempts to fetch the provided URL using a HEAD request with a timeout of 5 seconds.
+ * If the request is successful and the response is OK, it returns true; otherwise, it catches any errors
+ * and returns false, indicating the URL is not accessible.
+ *
+ * @param url - URL to test.
  */
 async function testUrl(url: string): Promise<boolean> {
     try {
@@ -73,12 +80,13 @@ async function testUrl(url: string): Promise<boolean> {
 }
 
 /**
- * Get multiple file URLs with failover
- * Optimized to test URLs in parallel
- * 
- * @param files - Array of files with backup URLs
- * @param preferBackup - If true, prefer backup URLs
- * @returns Promise<Map<string, string>> - Map of file IDs to working URLs
+ * Retrieves multiple file URLs with a failover mechanism.
+ * This function tests URLs in parallel, utilizing the getFileUrl function to obtain the URL for each file.
+ * If an error occurs while fetching a URL, it logs the error and continues processing the remaining files.
+ * The results are returned as a Map, associating file IDs with their corresponding working URLs.
+ *
+ * @param files - Array of files with backup URLs, each containing an id.
+ * @param preferBackup - If true, prefers backup URLs when fetching.
  */
 export async function getFileUrls(
     files: (FileWithBackup & { id: string })[],
@@ -101,10 +109,14 @@ export async function getFileUrls(
 }
 
 /**
- * Download file with automatic failover
- * 
+ * Downloads a file with automatic failover.
+ *
+ * This function retrieves the appropriate URL for the file using the getFileUrl function,
+ * then attempts to fetch the file from that URL. If the response is not successful,
+ * it throws an error indicating the failure. The function returns the fetch response
+ * containing the file data.
+ *
  * @param file - File object with primary and backup URLs
- * @returns Promise<Response> - Fetch response with file data
  */
 export async function downloadFile(
     file: FileWithBackup
@@ -120,8 +132,8 @@ export async function downloadFile(
 }
 
 /**
- * Get file buffer with automatic failover
- * 
+ * Retrieves the file buffer from a given FileWithBackup object.
+ *
  * @param file - File object with primary and backup URLs
  * @returns Promise<Buffer> - File data as buffer
  */
@@ -134,10 +146,7 @@ export async function getFileBuffer(
 }
 
 /**
- * Check health of both storage providers
- * Useful for monitoring and alerting
- * 
- * @returns Promise<StorageHealth> - Health status of both providers
+ * Checks the health of both primary and backup storage providers.
  */
 export async function checkStorageHealth(): Promise<{
     primary: { available: boolean; latency?: number };
