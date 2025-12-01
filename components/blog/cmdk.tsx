@@ -120,14 +120,14 @@ const CommandResults = ({ setShowCMDK }: { setShowCMDK: Dispatch<SetStateAction<
         <Highlighter
           highlightClassName="underline bg-transparent text-gray-900 font-semibold"
           searchWords={search.split(" ")}
-          autoEscape={true}
+          autoEscape
           textToHighlight={title}
           className="text-sm font-semibold text-gray-900"
         />
         <Highlighter
           highlightClassName="underline bg-transparent text-gray-700"
           searchWords={search.split(" ")}
-          autoEscape={true}
+          autoEscape
           textToHighlight={summary ?? ""}
           className="line-clamp-1 text-xs text-gray-500"
         />
