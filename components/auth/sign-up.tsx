@@ -29,6 +29,16 @@ function formatLoginMethod(method: string | null) {
     .join(" ");
 }
 
+/**
+ * Sign up authentication component for user account creation.
+ *
+ * This component manages the state for user inputs such as name, email, and password, and handles the sign-up process.
+ * It extracts the callback URL from query parameters, determines the last used login method, and provides visual feedback
+ * during the sign-up process. The form submission triggers the sign-up logic, which includes error handling and redirection
+ * upon success.
+ *
+ * @returns {JSX.Element} The rendered sign-up authentication component.
+ */
 export default function SignUpAuth() {
   const router = useRouter();
   const [name, setName] = useState("");
