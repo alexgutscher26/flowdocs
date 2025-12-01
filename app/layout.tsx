@@ -7,6 +7,9 @@ import { ConsentManager } from "./consent-manager";
 
 export const metadata = constructMetadata();
 
+/**
+ * Renders the root layout of the application with children components.
+ */
 export default function RootLayout({
   children,
 }: Readonly<{
