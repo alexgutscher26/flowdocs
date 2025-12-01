@@ -237,13 +237,13 @@
 
 #### File Storage System
 
-- [ ] **File**: `lib/file-storage.ts` (new)
-  - [ ] AWS S3 or Cloudflare R2 integration
-  - [ ] File type validation and security scanning
-  - [ ] Image resizing and optimization
-  - [ ] Thumbnail generation for images/videos
-  - [ ] Virus scanning integration
-  - [ ] Storage quota management per workspace
+- [x] **File**: `lib/file-storage.ts` (new)
+  - [x] AWS S3 or Cloudflare R2 integration
+  - [x] File type validation and security scanning
+  - [x] Image resizing and optimization
+  - [x] Thumbnail generation for images/videos
+  - [x] Virus scanning integration
+  - [x] Storage quota management per workspace
   - **Environment variables**: Storage credentials and bucket names
   - **Acceptance**: Secure, optimized file handling
 
