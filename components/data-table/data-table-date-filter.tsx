@@ -51,6 +51,15 @@ interface DataTableDateFilterProps<TData> {
   multiple?: boolean;
 }
 
+/**
+ * Renders a date filter component for a data table.
+ *
+ * This component manages the selection of single or multiple dates, updating the filter value in the column based on user interactions. It utilizes memoization for performance optimization and handles both date ranges and single date selections. The component also provides a reset functionality to clear the selected dates and updates the display label accordingly.
+ *
+ * @param column - The column object that contains the filter value and methods to set it.
+ * @param title - The title displayed for the date filter.
+ * @param multiple - A boolean indicating whether multiple date selections are allowed.
+ */
 export function DataTableDateFilter<TData>({
   column,
   title,
