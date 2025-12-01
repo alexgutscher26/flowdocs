@@ -40,7 +40,7 @@ export default function SignUpAuth() {
   const searchParams = useSearchParams();
   const rawCallbackUrl = searchParams.get("callbackUrl");
   const callbackURL =
-    rawCallbackUrl && rawCallbackUrl.startsWith("/") && !rawCallbackUrl.startsWith("//")
+    rawCallbackUrl?.startsWith("/") && !rawCallbackUrl.startsWith("//")
       ? rawCallbackUrl
       : "/onboarding";
 

@@ -44,7 +44,7 @@ export default function SignInAuth() {
 
   // Prevent open redirects - only allow same-origin paths
   const callbackURL =
-    rawCallbackUrl && rawCallbackUrl.startsWith("/") && !rawCallbackUrl.startsWith("//")
+    rawCallbackUrl?.startsWith("/") && !rawCallbackUrl.startsWith("//")
       ? rawCallbackUrl
       : "/dashboard";
 
