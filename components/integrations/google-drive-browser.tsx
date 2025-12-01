@@ -15,6 +15,14 @@ interface GoogleDriveBrowserProps {
     onSelect?: (file: GoogleDriveFile) => void;
 }
 
+/**
+ * Renders a Google Drive file browser component.
+ *
+ * This component manages the state for files, loading status, search queries, and error handling. It fetches files from Google Drive based on the search query and pagination, displaying them in a scrollable area. The user can search for files, load more files, and handle connection errors gracefully. The component also provides visual feedback for loading states and errors.
+ *
+ * @param {GoogleDriveBrowserProps} props - The properties for the GoogleDriveBrowser component.
+ * @param {function} props.onSelect - Callback function to handle file selection.
+ */
 export function GoogleDriveBrowser({ onSelect }: GoogleDriveBrowserProps) {
     const [files, setFiles] = useState<GoogleDriveFile[]>([]);
     const [loading, setLoading] = useState(false);
@@ -23,6 +31,14 @@ export function GoogleDriveBrowser({ onSelect }: GoogleDriveBrowserProps) {
     const [nextPageToken, setNextPageToken] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
+    /**
+     * Fetch files from Google Drive based on the provided query and page token.
+     *
+     * The function sets the loading state to true and resets any previous errors. It then attempts to retrieve files using the listGoogleDriveFiles function. If a pageToken is provided, it appends the new files to the existing list; otherwise, it replaces the current files. In case of an error, it logs the error and sets an appropriate error state based on the error message. Finally, it sets the loading state to false.
+     *
+     * @param query - An optional string to filter the files retrieved from Google Drive.
+     * @param pageToken - An optional string for pagination to fetch the next set of files.
+     */
     const fetchFiles = async (query?: string, pageToken?: string) => {
         setLoading(true);
         setError(null);
