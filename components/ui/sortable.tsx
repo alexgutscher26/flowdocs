@@ -301,6 +301,9 @@ interface SortableContentProps extends React.ComponentProps<"div"> {
   withoutSlot?: boolean;
 }
 
+/**
+ * Renders sortable content with optional slot and strategy.
+ */
 function SortableContent(props: SortableContentProps) {
   const { strategy: strategyProp, asChild, withoutSlot, children, ref, ...contentProps } = props;
 
