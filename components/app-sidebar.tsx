@@ -160,6 +160,11 @@ export function AppSidebar({
       url: `/dashboard/wiki/${user?.defaultWorkspaceId || "default"}`,
       icon: IconBook,
     },
+    {
+      title: "Integrations",
+      url: "/dashboard/integrations",
+      icon: IconInnerShadowTop,
+    },
   ];
 
   return (
