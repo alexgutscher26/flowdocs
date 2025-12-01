@@ -89,9 +89,7 @@ export default function BlogClient() {
     () =>
       activeFilter === "all"
         ? articles
-        : articles.filter(
-            (article) => article.categories?.includes(activeFilter as Category)
-          ),
+        : articles.filter((article) => article.categories?.includes(activeFilter as Category)),
     [articles, activeFilter]
   );
 
