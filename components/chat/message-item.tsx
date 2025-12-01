@@ -32,6 +32,25 @@ interface MessageItemProps {
   totalChannelMembers?: number;
 }
 
+/**
+ * Render a message item with various interactive features.
+ *
+ * This function displays a message along with its user information, content, attachments, and reactions.
+ * It handles hover states to show action buttons, and allows for replying, editing, deleting, and pinning messages.
+ * The component also manages the display of read receipts and user presence based on the provided props.
+ *
+ * @param message - The message object containing details such as user information, content, and attachments.
+ * @param isGrouped - A boolean indicating if the message is part of a grouped conversation.
+ * @param showAvatar - A boolean indicating if the user's avatar should be displayed.
+ * @param currentUserId - The ID of the current user for comparison with the message sender.
+ * @param onReply - Callback function to handle replying to the message.
+ * @param onEdit - Callback function to handle editing the message.
+ * @param onDelete - Callback function to handle deleting the message.
+ * @param onReaction - Callback function to handle adding a reaction to the message.
+ * @param onReactionRemove - Callback function to handle removing a reaction from the message.
+ * @param onPin - Callback function to handle pinning or unpinning the message.
+ * @param totalChannelMembers - The total number of members in the channel for read receipts.
+ */
 export function MessageItem({
   message,
   isGrouped = false,
