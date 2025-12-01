@@ -2,7 +2,7 @@ import { siteConfig } from "../config";
 import type { EmailTemplateId, EmailTemplateData } from "./types";
 
 /**
- * Build a dashboard URL for the application
+ * Builds a dashboard URL for the application.
  */
 export function buildDashboardUrl(path = ""): string {
   const baseUrl =
@@ -13,7 +13,7 @@ export function buildDashboardUrl(path = ""): string {
 }
 
 /**
- * Build welcome email data
+ * Builds welcome email data.
  */
 export function buildWelcomeEmailData(
   firstName: string,
@@ -26,7 +26,7 @@ export function buildWelcomeEmailData(
 }
 
 /**
- * Build workspace invitation email data
+ * Builds the workspace invitation email data.
  */
 export function buildWorkspaceInvitationData(
   inviterName: string,
@@ -60,7 +60,7 @@ export function buildEmailVerificationData(
 }
 
 /**
- * Build password reset email data
+ * Builds data for a password reset email.
  */
 export function buildPasswordResetData(
   firstName: string,
@@ -86,8 +86,13 @@ export function extractFirstName(fullName: string | null | undefined): string {
 }
 
 /**
- * Format email address for display
- * Masks the local part for privacy if requested
+ * Format email address for display.
+ * Masks the local part for privacy if requested by replacing part of it with asterisks.
+ * The function splits the email into local and domain parts, checks for the presence of a domain,
+ * and applies masking to the local part based on the specified visibility criteria.
+ *
+ * @param email - The email address to format.
+ * @param maskLocalPart - A boolean indicating whether to mask the local part of the email.
  */
 export function formatEmailAddress(email: string, maskLocalPart = false): string {
   if (!maskLocalPart) return email;
