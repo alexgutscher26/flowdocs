@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import {
     Card,
     CardContent,
@@ -9,7 +10,6 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Switch } from "@/components/ui/switch"
 import { Badge } from "@/components/ui/badge"
 import {
     Github,
@@ -18,62 +18,95 @@ import {
     HardDrive,
     Database,
     Trello,
-    Mail,
-    MessageSquare
 } from "lucide-react"
-
-const integrations = [
-    {
-        id: "google-drive",
-        name: "Google Drive",
-        description: "Connect your Google Drive to sync files and documents directly into your workspace.",
-        icon: HardDrive,
-        connected: true,
-        category: "Storage"
-    },
-    {
-        id: "github",
-        name: "GitHub",
-        description: "Link pull requests, commits, and issues to your tasks and documentation.",
-        icon: Github,
-        connected: false,
-        category: "Development"
-    },
-    {
-        id: "slack",
-        name: "Slack",
-        description: "Receive notifications and updates in your Slack channels.",
-        icon: Slack,
-        connected: false,
-        category: "Communication"
-    },
-    {
-        id: "notion",
-        name: "Notion",
-        description: "Import pages and databases from your Notion workspace.",
-        icon: Database,
-        connected: false,
-        category: "Productivity"
-    },
-    {
-        id: "jira",
-        name: "Jira",
-        description: "Sync Jira issues and track progress within your projects.",
-        icon: Trello, // Closest generic icon
-        connected: false,
-        category: "Project Management"
-    },
-    {
-        id: "figma",
-        name: "Figma",
-        description: "Embed Figma designs and get updates on file changes.",
-        icon: Figma,
-        connected: true,
-        category: "Design"
-    }
-]
+import { authClient } from "@/lib/auth-client"
+import { checkGoogleDriveConnection } from "@/app/actions/google-drive"
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+import { GoogleDriveBrowser } from "@/components/integrations/google-drive-browser"
+import { toast } from "sonner"
 
 export default function IntegrationsPage() {
+    const [googleConnected, setGoogleConnected] = useState(false)
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        checkGoogleDriveConnection().then(setGoogleConnected).finally(() => setLoading(false))
+    }, [])
+
+    const handleConnect = async (provider: string) => {
+        if (provider === "google") {
+            await authClient.signIn.social({
+                provider: "google",
+                callbackURL: "/dashboard/integrations",
+            })
+        } else {
+            toast.info("Integration coming soon")
+        }
+    }
+
+    const integrations = [
+        {
+            id: "google-drive",
+            name: "Google Drive",
+            description: "Connect your Google Drive to sync files and documents directly into your workspace.",
+            icon: HardDrive,
+            connected: googleConnected,
+            category: "Storage",
+            action: googleConnected ? "Browse Files" : "Connect",
+        },
+        {
+            id: "github",
+            name: "GitHub",
+            description: "Link pull requests, commits, and issues to your tasks and documentation.",
+            icon: Github,
+            connected: false,
+            category: "Development",
+            action: "Connect",
+        },
+        {
+            id: "slack",
+            name: "Slack",
+            description: "Receive notifications and updates in your Slack channels.",
+            icon: Slack,
+            connected: false,
+            category: "Communication",
+            action: "Connect",
+        },
+        {
+            id: "notion",
+            name: "Notion",
+            description: "Import pages and databases from your Notion workspace.",
+            icon: Database,
+            connected: false,
+            category: "Productivity",
+            action: "Connect",
+        },
+        {
+            id: "jira",
+            name: "Jira",
+            description: "Sync Jira issues and track progress within your projects.",
+            icon: Trello,
+            connected: false,
+            category: "Project Management",
+            action: "Connect",
+        },
+        {
+            id: "figma",
+            name: "Figma",
+            description: "Embed Figma designs and get updates on file changes.",
+            icon: Figma,
+            connected: false,
+            category: "Design",
+            action: "Connect",
+        },
+    ]
+
     return (
         <div className="flex flex-col gap-6 p-6">
             <div className="flex flex-col gap-2">
@@ -108,12 +141,29 @@ export default function IntegrationsPage() {
                             </CardDescription>
                         </CardContent>
                         <CardFooter>
-                            <Button
-                                variant={integration.connected ? "outline" : "default"}
-                                className="w-full"
-                            >
-                                {integration.connected ? "Manage" : "Connect"}
-                            </Button>
+                            {integration.id === "google-drive" && integration.connected ? (
+                                <Dialog>
+                                    <DialogTrigger asChild>
+                                        <Button variant="outline" className="w-full">
+                                            Browse Files
+                                        </Button>
+                                    </DialogTrigger>
+                                    <DialogContent className="sm:max-w-[600px]">
+                                        <DialogHeader>
+                                            <DialogTitle>Google Drive Files</DialogTitle>
+                                        </DialogHeader>
+                                        <GoogleDriveBrowser onSelect={(file) => toast.success(`Selected: ${file.name}`)} />
+                                    </DialogContent>
+                                </Dialog>
+                            ) : (
+                                <Button
+                                    variant={integration.connected ? "outline" : "default"}
+                                    className="w-full"
+                                    onClick={() => handleConnect(integration.id === "google-drive" ? "google" : integration.id)}
+                                >
+                                    {integration.action}
+                                </Button>
+                            )}
                         </CardFooter>
                     </Card>
                 ))}
