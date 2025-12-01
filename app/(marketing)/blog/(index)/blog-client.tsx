@@ -28,7 +28,7 @@ interface ArticleWithBlur {
  *
  * The component retrieves the category from search parameters and initializes the active filter state.
  * It loads articles asynchronously, calculates category counts, and filters articles based on the active filter.
- * The component displays a loading skeleton while articles are being fetched and renders the articles in a structured layout.
+ * While articles are being fetched, a loading skeleton is displayed, and the articles are rendered in a structured layout.
  *
  * @returns JSX.Element - The rendered blog client component.
  */
