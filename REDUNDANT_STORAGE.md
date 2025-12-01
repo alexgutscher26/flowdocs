@@ -31,7 +31,7 @@ Database stores BOTH URLs
 ✅ **Disaster Recovery**: Complete backup of all files  
 ✅ **Image Optimization**: Backup version is optimized and has thumbnails  
 ✅ **Virus Scanning**: Files are scanned before backup  
-✅ **Cost Optimization**: Use UploadThing CDN for speed, S3 for reliability  
+✅ **Cost Optimization**: Use UploadThing CDN for speed, S3 for reliability
 
 ## Setup Instructions
 
@@ -74,9 +74,9 @@ File stored redundantly:
 ### 3. Verify in Database
 
 ```sql
-SELECT name, url, "backupUrl", "thumbnailUrl" 
-FROM file 
-ORDER BY "createdAt" DESC 
+SELECT name, url, "backupUrl", "thumbnailUrl"
+FROM file
+ORDER BY "createdAt" DESC
 LIMIT 5;
 ```
 
@@ -132,12 +132,14 @@ console.log("Backup available:", health.backup.available);
 
 ## Cost Considerations
 
-**UploadThing**: 
+**UploadThing**:
+
 - Pays for CDN and bandwidth
 - Fast global delivery
 - Easy integration
 
 **S3/R2**:
+
 - You pay for storage (~$0.023/GB/month)
 - Backup and disaster recovery
 - Optimized versions saved
@@ -147,16 +149,19 @@ console.log("Backup available:", health.backup.available);
 ## Troubleshooting
 
 **Backup uploads failing?**
+
 - Check AWS credentials in `.env`
 - Verify bucket exists and has correct permissions
 - Check server logs for specific errors
 
 **Files only in primary?**
+
 - Backup is best-effort - primary always succeeds
 - Check if AWS credentials are configured
 - Look for errors in server logs
 
 **Want to test failover?**
+
 ```typescript
 // Force use of backup URL
 const backupUrl = await getFileUrl(file, true);

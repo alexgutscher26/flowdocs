@@ -77,11 +77,7 @@ export const ourFileRouter = {
             // Generate thumbnail
             const thumbnails = await generateThumbnails(fileBuffer);
             const thumbnailKey = `thumbnails/${metadata.workspaceId}/${sanitizeFilename(file.name)}`;
-            thumbnailUrl = await uploadToStorage(
-              thumbnails["300"],
-              thumbnailKey,
-              "image/webp"
-            );
+            thumbnailUrl = await uploadToStorage(thumbnails["300"], thumbnailKey, "image/webp");
             console.log("Thumbnail uploaded to backup:", thumbnailUrl);
           } catch (error) {
             console.error("Image processing failed:", error);
