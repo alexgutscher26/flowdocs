@@ -192,7 +192,6 @@ export function DataTableDateFilter<TData>({
       <PopoverContent className="w-auto p-0" align="start">
         {multiple ? (
           <Calendar
-            
             captionLayout="dropdown"
             mode="range"
             selected={
