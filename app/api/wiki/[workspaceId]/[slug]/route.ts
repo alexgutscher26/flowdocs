@@ -212,6 +212,20 @@ export async function PUT(
     const body = await request.json();
     const { title, content, excerpt, tags, published, changeNote } = body;
 
+    // Determine the new published state
+    const newPublished = published ?? existingPage.published;
+    
+    // Calculate publishedAt based on state transitions
+    let publishedAt = existingPage.publishedAt;
+    if (newPublished && !existingPage.published) {
+      // Publishing for the first time
+      publishedAt = new Date();
+    } else if (!newPublished && existingPage.published) {
+      // Unpublishing
+      publishedAt = null;
+    }
+    // Otherwise keep existing publishedAt (remains published or remains unpublished)
+
     // Update page
     const updatedPage = await prisma.wikiPage.update({
       where: { id: existingPage.id },
@@ -219,8 +233,8 @@ export async function PUT(
         title: title || existingPage.title,
         content: content || existingPage.content,
         excerpt: excerpt || existingPage.excerpt,
-        published: published ?? existingPage.published,
-        publishedAt: published && !existingPage.published ? new Date() : existingPage.publishedAt,
+        published: newPublished,
+        publishedAt,
       },
       include: {
         author: {
