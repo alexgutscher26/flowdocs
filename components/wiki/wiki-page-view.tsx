@@ -570,8 +570,8 @@ export function WikiPageView({
             <AlertDialogHeader>
               <AlertDialogTitle>Delete Wiki Page</AlertDialogTitle>
               <AlertDialogDescription>
-                Are you sure you want to delete "{page.title}"? This action cannot be undone.
-                All versions and associated data will be permanently removed.
+                Are you sure you want to delete "{page.title}"? This action cannot be undone. All
+                versions and associated data will be permanently removed.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>

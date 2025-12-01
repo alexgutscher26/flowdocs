@@ -79,7 +79,10 @@ export function ProfileTab({ user }: ProfileTabProps) {
         {/* Avatar Display */}
         <div className="flex items-center gap-4">
           <Avatar className="h-20 w-20">
-            <AvatarImage src={form.watch("image") || user.image || undefined} alt={user.name || "User"} />
+            <AvatarImage
+              src={form.watch("image") || user.image || undefined}
+              alt={user.name || "User"}
+            />
             <AvatarFallback className="text-lg">
               {getInitials(user.name, user.email)}
             </AvatarFallback>

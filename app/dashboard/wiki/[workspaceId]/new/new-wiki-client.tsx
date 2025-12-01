@@ -47,14 +47,20 @@ export function NewWikiClient({ workspaceId }: NewWikiClientProps) {
   });
 
   // Flatten tree for select options
-  const flattenTree = (nodes: WikiPageNode[], level = 0): { id: string; title: string; level: number }[] => {
-    return nodes.reduce((acc, node) => {
-      acc.push({ id: node.id, title: node.title, level });
-      if (node.children.length > 0) {
-        acc.push(...flattenTree(node.children, level + 1));
-      }
-      return acc;
-    }, [] as { id: string; title: string; level: number }[]);
+  const flattenTree = (
+    nodes: WikiPageNode[],
+    level = 0
+  ): { id: string; title: string; level: number }[] => {
+    return nodes.reduce(
+      (acc, node) => {
+        acc.push({ id: node.id, title: node.title, level });
+        if (node.children.length > 0) {
+          acc.push(...flattenTree(node.children, level + 1));
+        }
+        return acc;
+      },
+      [] as { id: string; title: string; level: number }[]
+    );
   };
 
   const parentOptions = tree ? flattenTree(tree) : [];
@@ -138,9 +144,7 @@ export function NewWikiClient({ workspaceId }: NewWikiClientProps) {
             <SelectItem value="root">No Parent (Root Level)</SelectItem>
             {parentOptions.map((option) => (
               <SelectItem key={option.id} value={option.id}>
-                <span style={{ paddingLeft: `${option.level * 10}px` }}>
-                  {option.title}
-                </span>
+                <span style={{ paddingLeft: `${option.level * 10}px` }}>{option.title}</span>
               </SelectItem>
             ))}
           </SelectContent>

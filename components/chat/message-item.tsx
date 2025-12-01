@@ -96,7 +96,11 @@ export function MessageItem({
                 {formatMessageTime(new Date(message.createdAt))}
               </span>
               {message.isEdited && <span className="text-muted-foreground text-xs">(edited)</span>}
-              {message.isPinned && <span className="text-muted-foreground text-xs" title="Pinned">📌</span>}
+              {message.isPinned && (
+                <span className="text-muted-foreground text-xs" title="Pinned">
+                  📌
+                </span>
+              )}
             </div>
           )}
 
@@ -219,9 +223,7 @@ export function MessageItem({
               )}
               {/* Pin/Unpin Option */}
               {onPin && (
-                <DropdownMenuItem
-                  onClick={() => onPin(message.id, !!message.isPinned)}
-                >
+                <DropdownMenuItem onClick={() => onPin(message.id, !!message.isPinned)}>
                   <span className="mr-2 h-4 w-4">📌</span>
                   {message.isPinned ? "Unpin message" : "Pin message"}
                 </DropdownMenuItem>

@@ -7,27 +7,25 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Toaster } from "sonner";
 
 export function Providers({ children }: { children: React.ReactNode }) {
-    const [queryClient] = useState(() => new QueryClient({
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
         defaultOptions: {
-            queries: {
-                staleTime: 60 * 1000, // 1 minute
-            },
+          queries: {
+            staleTime: 60 * 1000, // 1 minute
+          },
         },
-    }));
+      })
+  );
 
-    return (
-        <QueryClientProvider client={queryClient}>
-            <ThemeProvider
-                attribute="class"
-                defaultTheme="light"
-                enableSystem
-                disableTransitionOnChange
-            >
-                <NuqsAdapter>
-                    {children}
-                    <Toaster />
-                </NuqsAdapter>
-            </ThemeProvider>
-        </QueryClientProvider>
-    );
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+        <NuqsAdapter>
+          {children}
+          <Toaster />
+        </NuqsAdapter>
+      </ThemeProvider>
+    </QueryClientProvider>
+  );
 }

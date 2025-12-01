@@ -24,7 +24,9 @@ export const auth = betterAuth({
           // Generate Gravatar URL if no image is provided
           let image = user.image;
           if (!image && user.email) {
-            const emailHash = createHash("md5").update(user.email.toLowerCase().trim()).digest("hex");
+            const emailHash = createHash("md5")
+              .update(user.email.toLowerCase().trim())
+              .digest("hex");
             image = `https://www.gravatar.com/avatar/${emailHash}?d=mp`;
           }
 

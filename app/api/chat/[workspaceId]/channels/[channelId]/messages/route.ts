@@ -132,7 +132,9 @@ export async function POST(
     });
 
     if (!channelMember) {
-      console.error(`[Messages API] Forbidden: User ${session.user.id} is not a member of channel ${channelId}`);
+      console.error(
+        `[Messages API] Forbidden: User ${session.user.id} is not a member of channel ${channelId}`
+      );
       return NextResponse.json({ error: "You must be a member of this channel" }, { status: 403 });
     }
 
@@ -142,16 +144,22 @@ export async function POST(
     // Validate: require either content or attachments
     if (!content?.trim() && (!attachments || attachments.length === 0)) {
       console.error("[Messages API] Bad request: Neither content nor attachments provided");
-      return NextResponse.json({ error: "Message must have either content or attachments" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Message must have either content or attachments" },
+        { status: 400 }
+      );
     }
 
     // Create message
     const message = await prisma.message.create({
       data: {
         content: content?.trim() || "",
-        type: attachments && attachments.length > 0
-          ? (attachments[0].type?.startsWith('image/') ? MessageType.IMAGE : MessageType.FILE)
-          : (type || MessageType.TEXT),
+        type:
+          attachments && attachments.length > 0
+            ? attachments[0].type?.startsWith("image/")
+              ? MessageType.IMAGE
+              : MessageType.FILE
+            : type || MessageType.TEXT,
         channelId,
         userId: session.user.id,
         threadId: threadId || null,

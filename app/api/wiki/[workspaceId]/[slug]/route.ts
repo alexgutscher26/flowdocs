@@ -214,7 +214,7 @@ export async function PUT(
 
     // Determine the new published state
     const newPublished = published ?? existingPage.published;
-    
+
     // Calculate publishedAt based on state transitions
     let publishedAt = existingPage.publishedAt;
     if (newPublished && !existingPage.published) {
