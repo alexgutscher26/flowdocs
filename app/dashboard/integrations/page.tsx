@@ -39,6 +39,9 @@ export default function IntegrationsPage() {
         checkGoogleDriveConnection().then(setGoogleConnected).finally(() => setLoading(false))
     }, [])
 
+    /**
+     * Handles the connection for a specified provider.
+     */
     const handleConnect = async (provider: string) => {
         if (provider === "google") {
             await authClient.signIn.social({
