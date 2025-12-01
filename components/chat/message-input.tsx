@@ -3,7 +3,19 @@
 import { useState, useRef, useCallback, KeyboardEvent, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Send, Paperclip, X, Loader2, Bold, Italic, Code, Eye, Edit2, AtSign, HardDrive } from "lucide-react";
+import {
+  Send,
+  Paperclip,
+  X,
+  Loader2,
+  Bold,
+  Italic,
+  Code,
+  Eye,
+  Edit2,
+  AtSign,
+  HardDrive,
+} from "lucide-react";
 import { GoogleDrivePicker } from "@/components/integrations/google-drive-picker";
 import { GoogleDriveFile } from "@/lib/integrations/google-drive";
 import { useFileUpload } from "@/hooks/use-file-upload";
@@ -183,7 +195,11 @@ export function MessageInput({
 
   // Handle send
   const handleSend = async () => {
-    if ((!content.trim() && selectedFiles.length === 0 && selectedDriveFiles.length === 0) || sending) return;
+    if (
+      (!content.trim() && selectedFiles.length === 0 && selectedDriveFiles.length === 0) ||
+      sending
+    )
+      return;
 
     setSending(true);
 
@@ -254,8 +270,8 @@ export function MessageInput({
   const filteredMembers =
     mentionQuery !== null
       ? channelMembers
-        .filter((member) => member.user.name?.toLowerCase().includes(mentionQuery.toLowerCase()))
-        .slice(0, 5)
+          .filter((member) => member.user.name?.toLowerCase().includes(mentionQuery.toLowerCase()))
+          .slice(0, 5)
       : [];
 
   return (
