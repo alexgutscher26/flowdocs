@@ -73,6 +73,9 @@ const integrations = [
     }
 ]
 
+/**
+ * Renders the Integrations page to manage connections to external services and tools.
+ */
 export default function IntegrationsPage() {
     return (
         <div className="flex flex-col gap-6 p-6">
