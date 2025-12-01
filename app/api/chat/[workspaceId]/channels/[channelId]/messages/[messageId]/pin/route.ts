@@ -7,7 +7,7 @@ import { headers } from "next/headers";
 /**
  * Handles the POST request to pin a message in a channel.
  *
- * This function retrieves the workspaceId, channelId, and messageId from the request parameters. It then checks the user's session for authentication and verifies if the user is a member of the specified channel. If the user is authorized, it updates the message to set it as pinned. In case of errors, appropriate responses are returned based on the failure point.
+ * This function retrieves the workspaceId, channelId, and messageId from the request parameters. It checks the user's session for authentication and verifies if the user is a member of the specified channel. If authorized, it updates the message to set it as pinned. In case of errors, appropriate JSON responses are returned based on the failure point.
  *
  * @param request - The NextRequest object representing the incoming request.
  * @param params - An object containing a Promise that resolves to an object with workspaceId, channelId, and messageId.
