@@ -329,6 +329,17 @@ function DraggableRow({ row }: { row: Row<z.infer<typeof schema>> }) {
   );
 }
 
+/**
+ * Renders a data table with various functionalities including sorting, filtering, and pagination.
+ *
+ * The DataTable component initializes state for data, row selection, column visibility, column filters, sorting, and pagination.
+ * It utilizes the useReactTable hook to manage table state and rendering. The component also handles drag-and-drop functionality
+ * for reordering rows and provides a user interface for selecting views and customizing columns.
+ *
+ * @param {Object} param0 - The component props.
+ * @param {Array} param0.data - An array of data objects inferred from the schema.
+ * @returns {JSX.Element} The rendered DataTable component.
+ */
 export function DataTable({ data: initialData }: { data: z.infer<typeof schema>[] }) {
   const [data, setData] = React.useState(() => initialData);
   const [rowSelection, setRowSelection] = React.useState({});
