@@ -31,6 +31,16 @@ function formatLoginMethod(method: string | null) {
     .join(" ");
 }
 
+/**
+ * Sign in authentication component.
+ *
+ * This component manages the sign-in process, including handling user input for email and password,
+ * managing loading states, and providing options for signing in with a password or a magic link.
+ * It also handles redirects based on the callback URL and displays appropriate messages based on the
+ * user's last login method. The component ensures security by preventing open redirects.
+ *
+ * @returns {JSX.Element} The rendered sign-in authentication UI.
+ */
 export default function SignInAuth() {
   const router = useRouter();
   const [email, setEmail] = useState("");
