@@ -129,7 +129,7 @@ export function WikiEditor({
 
   // Insert markdown formatting at cursor position
   const insertMarkdown = useCallback(
-    (before: string, after: string = "", defaultText: string = "") => {
+    (before: string, after = "", defaultText = "") => {
       const textarea = textareaRef.current;
       if (!textarea) return;
 
