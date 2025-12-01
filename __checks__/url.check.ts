@@ -1,15 +1,13 @@
-import { UrlAssertionBuilder, UrlMonitor } from 'checkly/constructs'
+import { UrlAssertionBuilder, UrlMonitor } from "checkly/constructs";
 
-new UrlMonitor('books-url-check', {
-  name: 'Books URL',
+new UrlMonitor("books-url-check", {
+  name: "Books URL",
   activated: true,
   maxResponseTime: 10000,
   degradedResponseTime: 5000,
   request: {
-    url: 'https://www.danube-web.shop/',
+    url: "https://www.danube-web.shop/",
     followRedirects: true,
-    assertions: [
-      UrlAssertionBuilder.statusCode().equals(200),
-    ]
-  }
-})
+    assertions: [UrlAssertionBuilder.statusCode().equals(200)],
+  },
+});
