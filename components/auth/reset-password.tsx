@@ -259,7 +259,10 @@ export default function ResetPasswordAuth() {
                     <Button
                       type="submit"
                       disabled={
-                        loading || Boolean(tokenError) || !passwordValidation.isValid || !passwordsMatch
+                        loading ||
+                        Boolean(tokenError) ||
+                        !passwordValidation.isValid ||
+                        !passwordsMatch
                       }
                       className="w-full"
                     >
@@ -415,7 +418,10 @@ export default function ResetPasswordAuth() {
                   <Button
                     type="submit"
                     disabled={
-                      loading || Boolean(tokenError) || !passwordValidation.isValid || !passwordsMatch
+                      loading ||
+                      Boolean(tokenError) ||
+                      !passwordValidation.isValid ||
+                      !passwordsMatch
                     }
                     className="w-full"
                   >
