@@ -2,12 +2,12 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 
 export interface GoogleDriveFile {
-    id: string;
-    name: string;
-    mimeType: string;
-    thumbnailLink?: string;
-    webViewLink: string;
-    iconLink: string;
+  id: string;
+  name: string;
+  mimeType: string;
+  thumbnailLink?: string;
+  webViewLink: string;
+  iconLink: string;
 }
 
 /**
@@ -22,33 +22,33 @@ export interface GoogleDriveFile {
  * @param {string} [pageToken] - An optional token for pagination to retrieve the next set of files.
  */
 export async function getGoogleDriveFiles(accessToken: string, query?: string, pageToken?: string) {
-    const params = new URLSearchParams({
-        q: query || "trashed = false",
-        fields: "nextPageToken, files(id, name, mimeType, thumbnailLink, webViewLink, iconLink)",
-        pageSize: "20",
-    });
+  const params = new URLSearchParams({
+    q: query || "trashed = false",
+    fields: "nextPageToken, files(id, name, mimeType, thumbnailLink, webViewLink, iconLink)",
+    pageSize: "20",
+  });
 
-    if (pageToken) {
-        params.append("pageToken", pageToken);
-    }
+  if (pageToken) {
+    params.append("pageToken", pageToken);
+  }
 
-    const response = await fetch(`https://www.googleapis.com/drive/v3/files?${params.toString()}`, {
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-        },
-    });
+  const response = await fetch(`https://www.googleapis.com/drive/v3/files?${params.toString()}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
 
-    if (!response.ok) {
-        throw new Error(`Google Drive API error: ${response.statusText}`);
-    }
+  if (!response.ok) {
+    throw new Error(`Google Drive API error: ${response.statusText}`);
+  }
 
-    return response.json();
+  return response.json();
 }
 
 /**
  * Searches Google Drive for files containing the specified query.
  */
 export async function searchGoogleDrive(accessToken: string, query: string) {
-    const q = `name contains '${query}' and trashed = false`;
-    return getGoogleDriveFiles(accessToken, q);
+  const q = `name contains '${query}' and trashed = false`;
+  return getGoogleDriveFiles(accessToken, q);
 }
