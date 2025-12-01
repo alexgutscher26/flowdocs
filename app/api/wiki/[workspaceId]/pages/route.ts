@@ -116,8 +116,16 @@ export async function GET(
 }
 
 /**
- * POST /api/wiki/[workspaceId]/pages
- * Create a new wiki page
+ * Create a new wiki page in the specified workspace.
+ *
+ * This function handles the creation of a wiki page by first verifying the user's session and permissions for the workspace.
+ * It checks for required fields, generates a unique slug, and ensures that a page with the same title does not already exist.
+ * After creating the page, it also creates an initial version and handles any associated tags before indexing the page in Typesense.
+ *
+ * @param request - The NextRequest object containing the request data.
+ * @param params - An object containing a Promise that resolves to an object with the workspaceId.
+ * @returns A JSON response containing the created wiki page or an error message.
+ * @throws Error If there is an issue during the creation process.
  */
 export async function POST(
   request: NextRequest,
