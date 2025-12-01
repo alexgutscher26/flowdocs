@@ -30,7 +30,7 @@ export function WorkspaceInvitation({
   return (
     <EmailLayout
       previewText={`${inviterName} invited you to join ${workspaceName} on ${siteConfig.name}`}
-      heading={`You've been invited!`}
+      heading={"You've been invited!"}
     >
       <Text style={paragraphStyle}>
         <strong>{inviterName}</strong> has invited you to join the <strong>{workspaceName}</strong>{" "}
@@ -67,8 +67,8 @@ WorkspaceInvitation.PreviewProps = {
   inviterName: "Sarah Johnson",
   workspaceName: "Acme Corp",
   inviteeEmail: "john@example.com",
-  acceptUrl: `https://flowdocs.com/accept-invitation?token=abc123`,
-  declineUrl: `https://flowdocs.com/decline-invitation?token=abc123`,
+  acceptUrl: "https://flowdocs.com/accept-invitation?token=abc123",
+  declineUrl: "https://flowdocs.com/decline-invitation?token=abc123",
 } satisfies WorkspaceInvitationData;
 
 export default WorkspaceInvitation;

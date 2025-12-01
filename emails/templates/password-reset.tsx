@@ -61,7 +61,7 @@ export const passwordResetTemplate = {
 
 PasswordReset.PreviewProps = {
   firstName: "Alex",
-  resetUrl: `https://flowdocs.com/reset-password?token=abc123`,
+  resetUrl: "https://flowdocs.com/reset-password?token=abc123",
   expiresInMinutes: 60,
 } satisfies PasswordResetData;
 
