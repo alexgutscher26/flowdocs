@@ -493,7 +493,7 @@ export async function deleteFromStorage(key: string): Promise<void> {
 
 export async function generatePresignedUrl(
     key: string,
-    expiresIn: number = 3600
+    expiresIn = 3600
 ): Promise<string> {
     const client = createS3Client();
     const config = getStorageConfig();

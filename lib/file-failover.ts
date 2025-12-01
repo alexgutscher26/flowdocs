@@ -21,7 +21,7 @@ export interface FileWithBackup {
  */
 export async function getFileUrl(
     file: FileWithBackup,
-    preferBackup: boolean = false
+    preferBackup = false
 ): Promise<string> {
     const primaryUrl = file.url;
     const backupUrl = file.backupUrl;
@@ -82,7 +82,7 @@ async function testUrl(url: string): Promise<boolean> {
  */
 export async function getFileUrls(
     files: (FileWithBackup & { id: string })[],
-    preferBackup: boolean = false
+    preferBackup = false
 ): Promise<Map<string, string>> {
     const urlMap = new Map<string, string>();
 
