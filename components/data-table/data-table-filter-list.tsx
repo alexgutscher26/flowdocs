@@ -478,6 +478,20 @@ function DataTableFilterItem<TData>({
   );
 }
 
+/**
+ * Renders the appropriate input component for filtering based on the provided filter configuration.
+ *
+ * The function checks the filter operator and variant to determine which input component to render, including handling cases for text, number, range, boolean, select, multiSelect, and date filters. It also manages the state of the value selector and updates the filter state through the onFilterUpdate callback.
+ *
+ * @param params - An object containing the parameters for rendering the filter input.
+ * @param params.filter - The filter configuration object.
+ * @param params.inputId - The unique identifier for the input element.
+ * @param params.column - The column associated with the filter.
+ * @param params.columnMeta - Optional metadata for the column.
+ * @param params.onFilterUpdate - Callback function to update the filter state.
+ * @param params.showValueSelector - Boolean indicating whether to show the value selector.
+ * @param params.setShowValueSelector - Function to set the visibility of the value selector.
+ */
 function onFilterInputRender<TData>({
   filter,
   inputId,
