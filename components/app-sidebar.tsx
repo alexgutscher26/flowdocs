@@ -122,6 +122,15 @@ const data = {
   ],
 };
 
+/**
+ * Renders the application sidebar with navigation links and user information.
+ *
+ * The function constructs a navigation menu based on the user's role and default workspace. It includes links to various sections such as Dashboard, Analytics, and Chat. Additionally, it conditionally renders admin-specific documents and user information in the sidebar footer.
+ *
+ * @param user - The user object containing user details and role.
+ * @param props - Additional props passed to the Sidebar component.
+ * @returns A JSX element representing the sidebar.
+ */
 export function AppSidebar({
   user,
   ...props
