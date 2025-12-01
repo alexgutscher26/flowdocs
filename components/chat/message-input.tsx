@@ -3,7 +3,9 @@
 import { useState, useRef, useCallback, KeyboardEvent, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Send, Paperclip, X, Loader2, Bold, Italic, Code, Eye, Edit2, AtSign } from "lucide-react";
+import { Send, Paperclip, X, Loader2, Bold, Italic, Code, Eye, Edit2, AtSign, HardDrive } from "lucide-react";
+import { GoogleDrivePicker } from "@/components/integrations/google-drive-picker";
+import { GoogleDriveFile } from "@/lib/integrations/google-drive";
 import { useFileUpload } from "@/hooks/use-file-upload";
 import { formatFileSize, getFileTypeIcon } from "@/lib/message-utils";
 import { cn } from "@/lib/utils";
@@ -44,6 +46,7 @@ export function MessageInput({
   const [content, setContent] = useState("");
   const [sending, setSending] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [selectedDriveFiles, setSelectedDriveFiles] = useState<GoogleDriveFile[]>([]);
   const [isPreview, setIsPreview] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [mentionQuery, setMentionQuery] = useState<string | null>(null);
@@ -168,9 +171,19 @@ export function MessageInput({
     setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
+  // Handle Google Drive file selection
+  const handleDriveFileSelect = (file: GoogleDriveFile) => {
+    setSelectedDriveFiles((prev) => [...prev, file]);
+  };
+
+  // Remove selected Drive file
+  const removeDriveFile = (index: number) => {
+    setSelectedDriveFiles((prev) => prev.filter((_, i) => i !== index));
+  };
+
   // Handle send
   const handleSend = async () => {
-    if ((!content.trim() && selectedFiles.length === 0) || sending) return;
+    if ((!content.trim() && selectedFiles.length === 0 && selectedDriveFiles.length === 0) || sending) return;
 
     setSending(true);
 
@@ -193,11 +206,21 @@ export function MessageInput({
         }
       }
 
+      // Add Google Drive files to attachments
+      if (selectedDriveFiles.length > 0) {
+        const driveAttachments = selectedDriveFiles.map((file) => ({
+          type: "google-drive",
+          ...file,
+        }));
+        attachments = [...attachments, ...driveAttachments];
+      }
+
       console.log("[MessageInput] Sending message with attachments:", attachments);
       await onSend(content.trim(), attachments.length > 0 ? attachments : undefined);
 
       setContent("");
       setSelectedFiles([]);
+      setSelectedDriveFiles([]);
       clearUploads();
       setIsPreview(false);
 
@@ -231,8 +254,8 @@ export function MessageInput({
   const filteredMembers =
     mentionQuery !== null
       ? channelMembers
-          .filter((member) => member.user.name?.toLowerCase().includes(mentionQuery.toLowerCase()))
-          .slice(0, 5)
+        .filter((member) => member.user.name?.toLowerCase().includes(mentionQuery.toLowerCase()))
+        .slice(0, 5)
       : [];
 
   return (
@@ -309,6 +332,32 @@ export function MessageInput({
         </div>
       )}
 
+      {/* Google Drive file previews */}
+      {selectedDriveFiles.length > 0 && (
+        <div className="mb-3 flex flex-wrap gap-2">
+          {selectedDriveFiles.map((file, index) => (
+            <div
+              key={index}
+              className="bg-muted/50 border-primary/20 flex items-center gap-2 rounded-lg border px-3 py-2"
+            >
+              <HardDrive className="h-4 w-4 text-primary" />
+              <div className="min-w-0 flex-1">
+                <p className="max-w-[200px] truncate text-sm font-medium">{file.name}</p>
+                <p className="text-muted-foreground text-xs">Google Drive</p>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-6 w-6 p-0"
+                onClick={() => removeDriveFile(index)}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+          ))}
+        </div>
+      )}
+
       {/* Upload progress */}
       {uploads.length > 0 && (
         <div className="mb-3 space-y-2">
@@ -343,6 +392,20 @@ export function MessageInput({
         >
           <Paperclip className="text-muted-foreground h-5 w-5" />
         </Button>
+
+        <GoogleDrivePicker
+          onSelect={handleDriveFileSelect}
+          trigger={
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-9 w-9 p-0"
+              disabled={disabled || isUploading}
+            >
+              <HardDrive className="text-muted-foreground h-5 w-5" />
+            </Button>
+          }
+        />
 
         <div className="relative flex-1">
           {isPreview ? (
