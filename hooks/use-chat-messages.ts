@@ -61,7 +61,7 @@ export function useChatMessages({
         setState((prev) => ({
           ...prev,
           messages: cursor ? [...prev.messages, ...data.messages] : data.messages,
-          hasMore: !!data.nextCursor,
+          hasMore: Boolean(data.nextCursor),
           nextCursor: data.nextCursor,
           loading: false,
         }));

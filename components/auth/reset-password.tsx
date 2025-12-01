@@ -197,7 +197,7 @@ export default function ResetPasswordAuth() {
                           setShowValidation(true);
                         }}
                         value={newPassword}
-                        disabled={loading || !!tokenError}
+                        disabled={loading || Boolean(tokenError)}
                         autoComplete="new-password"
                       />
                     </div>
@@ -239,7 +239,7 @@ export default function ResetPasswordAuth() {
                         required
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         value={confirmPassword}
-                        disabled={loading || !!tokenError}
+                        disabled={loading || Boolean(tokenError)}
                         autoComplete="new-password"
                       />
                       {confirmPassword && !passwordsMatch && (
@@ -259,7 +259,7 @@ export default function ResetPasswordAuth() {
                     <Button
                       type="submit"
                       disabled={
-                        loading || !!tokenError || !passwordValidation.isValid || !passwordsMatch
+                        loading || Boolean(tokenError) || !passwordValidation.isValid || !passwordsMatch
                       }
                       className="w-full"
                     >
@@ -353,7 +353,7 @@ export default function ResetPasswordAuth() {
                         setShowValidation(true);
                       }}
                       value={newPassword}
-                      disabled={loading || !!tokenError}
+                      disabled={loading || Boolean(tokenError)}
                       autoComplete="new-password"
                     />
                   </div>
@@ -395,7 +395,7 @@ export default function ResetPasswordAuth() {
                       required
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       value={confirmPassword}
-                      disabled={loading || !!tokenError}
+                      disabled={loading || Boolean(tokenError)}
                       autoComplete="new-password"
                     />
                     {confirmPassword && !passwordsMatch && (
@@ -415,7 +415,7 @@ export default function ResetPasswordAuth() {
                   <Button
                     type="submit"
                     disabled={
-                      loading || !!tokenError || !passwordValidation.isValid || !passwordsMatch
+                      loading || Boolean(tokenError) || !passwordValidation.isValid || !passwordsMatch
                     }
                     className="w-full"
                   >

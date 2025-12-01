@@ -53,5 +53,5 @@ export async function checkGoogleDriveConnection() {
         },
     });
 
-    return !!account;
+    return Boolean(account);
 }
