@@ -20,6 +20,9 @@ interface GoogleDrivePickerProps {
 export function GoogleDrivePicker({ onSelect, trigger }: GoogleDrivePickerProps) {
     const [open, setOpen] = useState(false);
 
+    /**
+     * Handles the selection of a Google Drive file.
+     */
     const handleSelect = (file: GoogleDriveFile) => {
         onSelect(file);
         setOpen(false);
