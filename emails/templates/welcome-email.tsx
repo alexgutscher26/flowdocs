@@ -50,7 +50,7 @@ export const welcomeEmailTemplate = {
 
 WelcomeEmail.PreviewProps = {
   firstName: "Alex",
-  dashboardUrl: `https://flowdocs.com/dashboard`,
+  dashboardUrl: "https://flowdocs.com/dashboard",
 } satisfies WelcomeEmailData;
 
 export default WelcomeEmail;

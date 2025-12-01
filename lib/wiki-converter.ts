@@ -244,7 +244,7 @@ export class WikiConverter {
 
     // Add key decisions section if any
     if (analysis.keyDecisions.length > 0) {
-      markdown += `## Key Decisions\n\n`;
+      markdown += "## Key Decisions\n\n";
       analysis.keyDecisions.forEach((decision) => {
         markdown += `- ${decision}\n`;
       });
@@ -252,7 +252,7 @@ export class WikiConverter {
     }
 
     // Add main content
-    markdown += `## Discussion\n\n`;
+    markdown += "## Discussion\n\n";
 
     sections.forEach((section, index) => {
       switch (section.type) {
@@ -300,7 +300,7 @@ export class WikiConverter {
 
     // Add links section if any
     if (analysis.hasLinks) {
-      markdown += `## References\n\n`;
+      markdown += "## References\n\n";
       markdown += `This discussion referenced ${analysis.linkCount} external link(s).\n\n`;
     }
 
@@ -336,7 +336,7 @@ export class WikiConverter {
 
     // Add context
     if (analysis.hasCodeBlocks) {
-      excerpt += ` Includes code examples.`;
+      excerpt += " Includes code examples.";
     }
 
     if (analysis.decisionCount > 0) {
