@@ -73,7 +73,7 @@ async function ImpersonateContent({ searchParams }: PageProps) {
 }
 
 /**
- * Renders the Impersonate User page, allowing users to view the application from another user's perspective.
+ * Renders the Impersonate User page to view the application from another user's perspective.
  */
 export default function ImpersonatePage(props: PageProps) {
   return (
