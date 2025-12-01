@@ -54,7 +54,7 @@ export const magicLinkTemplate = {
 
 MagicLink.PreviewProps = {
   firstName: "Alex",
-  magicLinkUrl: `https://flowdocs.com/magic-link?token=abc123`,
+  magicLinkUrl: "https://flowdocs.com/magic-link?token=abc123",
   expiresInMinutes: 10,
 } satisfies MagicLinkData;
 

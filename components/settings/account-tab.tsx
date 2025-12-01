@@ -97,8 +97,8 @@ export function AccountTab() {
                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                 <AlertDialogDescription className="space-y-2">
                   <p>
-                    This action cannot be undone. This will permanently delete your account and remove
-                    all your data from our servers.
+                    This action cannot be undone. This will permanently delete your account and
+                    remove all your data from our servers.
                   </p>
                   <p className="text-destructive font-semibold">
                     All of your workspaces and data will be lost.

@@ -167,15 +167,12 @@ export function useChatMessages({
         // Revert optimistic update on error
         setState((prev) => ({
           ...prev,
-          messages: prev.messages.map((msg) =>
-            msg.id === messageId ? { ...msg, isPinned } : msg
-          ),
+          messages: prev.messages.map((msg) => (msg.id === messageId ? { ...msg, isPinned } : msg)),
         }));
       }
     },
     [workspaceId, channelId]
   );
-
 
   // Delete a message
   const deleteMessage = useCallback(

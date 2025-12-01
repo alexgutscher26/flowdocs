@@ -135,6 +135,25 @@ function generateGradient(str: string) {
   return `linear-gradient(135deg, hsl(${hue1}, 70%, 85%) 0%, hsl(${hue2}, 70%, 95%) 100%)`;
 }
 
+/**
+ * Renders a wiki page view with various functionalities including editing, deleting, and version history.
+ *
+ * This component manages the state for displaying the wiki page, including handling checkbox states,
+ * loading and saving data to localStorage, and providing a table of contents generated from markdown headings.
+ * It also implements a scroll spy feature to highlight the active section and handles user interactions
+ * for printing and exporting the page content. The component includes dialogs for confirming deletions
+ * and viewing version history.
+ *
+ * @param {Object} props - The properties for the WikiPageView component.
+ * @param {Object} props.page - The wiki page data.
+ * @param {string} props.workspaceName - The name of the workspace.
+ * @param {string} props.workspaceId - The ID of the workspace.
+ * @param {boolean} [props.canEdit=false] - Indicates if the user can edit the page.
+ * @param {string} props.currentUserId - The ID of the current user.
+ * @param {Function} props.onEdit - Callback function for editing the page.
+ * @param {Function} props.onVersionRestore - Callback function for restoring a version.
+ * @param {string} props.className - Additional class names for styling.
+ */
 export function WikiPageView({
   page,
   workspaceName,
@@ -183,6 +202,16 @@ export function WikiPageView({
     }));
   };
 
+  /**
+   * Handles the deletion of a wiki page.
+   *
+   * This function checks if a workspaceId is present, sets a loading state, and attempts to delete the specified wiki page via a DELETE request.
+   * If the response is not successful, it throws an error with a message. Upon successful deletion, it displays a success toast and navigates to the wiki home.
+   * In case of an error, it logs the error and shows an error toast. Finally, it resets the loading state and closes the delete dialog.
+   *
+   * @param workspaceId - The ID of the workspace containing the wiki page.
+   * @param page - The page object containing the slug of the wiki page to be deleted.
+   */
   const handleDelete = async () => {
     if (!workspaceId) return;
 
@@ -570,8 +599,8 @@ export function WikiPageView({
             <AlertDialogHeader>
               <AlertDialogTitle>Delete Wiki Page</AlertDialogTitle>
               <AlertDialogDescription>
-                Are you sure you want to delete "{page.title}"? This action cannot be undone.
-                All versions and associated data will be permanently removed.
+                Are you sure you want to delete "{page.title}"? This action cannot be undone. All
+                versions and associated data will be permanently removed.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>

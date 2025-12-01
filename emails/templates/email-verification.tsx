@@ -58,7 +58,7 @@ export const emailVerificationTemplate = {
 
 EmailVerification.PreviewProps = {
   firstName: "Alex",
-  verificationUrl: `https://flowdocs.com/verify-email?token=abc123`,
+  verificationUrl: "https://flowdocs.com/verify-email?token=abc123",
 } satisfies EmailVerificationData;
 
 export default EmailVerification;

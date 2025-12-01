@@ -185,7 +185,9 @@ export function MessageInput({
           attachments = uploadedFiles;
         } catch (uploadError) {
           console.error("[MessageInput] Upload failed:", uploadError);
-          alert(`Upload failed: ${uploadError instanceof Error ? uploadError.message : 'Unknown error'}. Please check your UploadThing configuration.`);
+          alert(
+            `Upload failed: ${uploadError instanceof Error ? uploadError.message : "Unknown error"}. Please check your UploadThing configuration.`
+          );
           setSending(false);
           return;
         }
@@ -210,7 +212,7 @@ export function MessageInput({
       }
     } catch (error) {
       console.error("[MessageInput] Error sending message:", error);
-      alert(`Failed to send message: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      alert(`Failed to send message: ${error instanceof Error ? error.message : "Unknown error"}`);
     } finally {
       setSending(false);
     }
@@ -229,8 +231,8 @@ export function MessageInput({
   const filteredMembers =
     mentionQuery !== null
       ? channelMembers
-        .filter((member) => member.user.name?.toLowerCase().includes(mentionQuery.toLowerCase()))
-        .slice(0, 5)
+          .filter((member) => member.user.name?.toLowerCase().includes(mentionQuery.toLowerCase()))
+          .slice(0, 5)
       : [];
 
   return (
