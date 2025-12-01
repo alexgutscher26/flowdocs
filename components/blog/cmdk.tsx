@@ -31,7 +31,7 @@ function CMDKHelper({
     <Modal showModal={showCMDK} setShowModal={setShowCMDK}>
       <Command label="CMDK" loop shouldFilter={false}>
         <Command.Input
-          autoFocus
+          
           onInput={(e) => {
             setTimeout(() => {
               commandListRef.current?.scrollTo(0, 0);
