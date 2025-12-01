@@ -106,6 +106,19 @@ const styles = {
   },
 };
 
+/**
+ * Renders the layout for an email, including optional heading and footer sections.
+ *
+ * The function constructs an email layout using provided properties such as previewText, children, heading, footer, brandName, and tagline. It resolves default values for brandName and tagline from siteConfig if they are not provided. The layout includes structured sections for the logo, content, and footer, with conditional rendering based on the presence of heading and footer props.
+ *
+ * @param {Object} props - The properties for the email layout.
+ * @param {string} props.previewText - The text to display in the email preview.
+ * @param {ReactNode} props.children - The main content of the email.
+ * @param {string | ReactNode} [props.heading] - The optional heading for the email.
+ * @param {ReactNode} [props.footer] - The optional footer for the email.
+ * @param {string} [props.brandName] - The optional brand name to display.
+ * @param {string} [props.tagline] - The optional tagline to display.
+ */
 export function EmailLayout({
   previewText,
   children,
