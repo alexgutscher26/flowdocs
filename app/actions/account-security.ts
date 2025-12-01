@@ -70,13 +70,12 @@ export async function changePassword(input: ChangePasswordInput): Promise<Action
 }
 
 /**
- * Get all connected accounts for the current user.
+ * Retrieves all connected accounts for the currently authenticated user.
  *
- * This function retrieves the connected accounts associated with the currently authenticated user.
- * It first checks if the user is authenticated by calling getCurrentUser(). If the user is not found,
- * it returns an unauthorized error. If the user is authenticated, it queries the database for the user's
- * accounts, selecting relevant fields and ordering them by creation date. In case of any errors during
- * the process, it logs the error and returns a failure response.
+ * This function first checks the authentication status of the user by calling getCurrentUser().
+ * If the user is not authenticated, it returns an unauthorized error. If authenticated, it queries
+ * the database for the user's accounts, selecting specific fields and ordering them by creation date.
+ * In case of any errors during the process, it logs the error and returns a failure response.
  */
 export async function getConnectedAccounts(): Promise<
   ActionResult<
@@ -116,9 +115,10 @@ export async function getConnectedAccounts(): Promise<
 /**
  * Unlink a provider account.
  *
- * This function checks if the current user is authorized, verifies that the account belongs to the user,
- * ensures that the account is not the last remaining authentication method, and then deletes the account.
- * If any checks fail, it returns an appropriate error message.
+ * This function checks if the current user is authorized and verifies that the account belongs to the user.
+ * It ensures that the account is not the last remaining authentication method before deleting the account.
+ * If any checks fail, it returns an appropriate error message. In case of an error during the process,
+ * it logs the error and returns a failure message.
  *
  * @param accountId - The ID of the account to unlink.
  * @returns A promise that resolves to an ActionResult indicating success or failure.
