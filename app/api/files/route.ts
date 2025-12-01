@@ -10,6 +10,17 @@ import {
 import { fileListQuerySchema } from "@/lib/validations/file";
 
 // POST /api/files - Upload a new file
+/**
+ * Handles the POST request for file uploads and processing.
+ *
+ * This function authenticates the user session, validates the input data, and checks user access to the specified workspace.
+ * It processes the uploaded file, scans it for viruses asynchronously, and creates a record in the database.
+ * If the file is found to be infected, it deletes the file and updates the storage usage accordingly.
+ *
+ * @param req - The NextRequest object containing the request data.
+ * @returns A JSON response containing the file record or an error message.
+ * @throws Error If an error occurs during file upload or processing.
+ */
 export async function POST(req: NextRequest) {
     try {
         const session = await auth.api.getSession({ headers: await headers() });
@@ -125,6 +136,16 @@ export async function POST(req: NextRequest) {
 }
 
 // GET /api/files - List files for workspace
+/**
+ * Handles the GET request to retrieve a list of files based on query parameters.
+ *
+ * This function first checks the user's session for authorization. It then validates the query parameters for pagination, filtering, and sorting.
+ * After verifying the user's access to the specified workspace, it constructs a query to fetch the total count and the files, returning them in a paginated format.
+ *
+ * @param req - The NextRequest object containing the request details.
+ * @returns A JSON response containing the list of files and pagination information.
+ * @throws Error If an error occurs during the file retrieval process.
+ */
 export async function GET(req: NextRequest) {
     try {
         const session = await auth.api.getSession({ headers: await headers() });
