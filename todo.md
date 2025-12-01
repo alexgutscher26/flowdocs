@@ -249,13 +249,13 @@
 
 #### Google Drive Integration
 
-- [ ] **File**: `lib/integrations/google-drive.ts` (new)
-  - [ ] OAuth setup with Google Drive scopes
-  - [ ] Browse Google Drive files interface
-  - [ ] Link files to chat messages
-  - [ ] Document/image/video previews
-  - [ ] Sync file permissions
-  - [ ] Search Google Drive content
+- [x] **File**: `lib/integrations/google-drive.ts` (new)
+  - [x] OAuth setup with Google Drive scopes
+  - [x] Browse Google Drive files interface
+  - [x] Link files to chat messages
+  - [x] Document/image/video previews
+  - [x] Sync file permissions
+  - [x] Search Google Drive content
   - **Acceptance**: Google Drive files accessible directly in chat
 
 #### GitHub Integration

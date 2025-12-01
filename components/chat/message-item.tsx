@@ -5,7 +5,7 @@ import { ExtendedMessage, PresenceStatus } from "@/types/chat";
 import { formatMessageTime } from "@/lib/message-utils";
 import { UserPresence } from "./user-presence";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal, Reply, Pencil, Trash2, File as FileIcon } from "lucide-react";
+import { MoreHorizontal, Reply, Pencil, Trash2, File as FileIcon, HardDrive, ExternalLink } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -111,7 +111,23 @@ export function MessageItem({
             <div className="mt-2 space-y-2">
               {message.attachments.map((attachment, index) => (
                 <div key={index}>
-                  {isImageFile(attachment.type) ? (
+                  {attachment.type === "google-drive" ? (
+                    <a
+                      href={attachment.webViewLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-muted/50 hover:bg-muted border-primary/20 flex max-w-sm items-center gap-2 rounded-lg border p-3 transition-colors"
+                    >
+                      <HardDrive className="h-5 w-5 text-primary" />
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-medium">{attachment.name}</p>
+                        <p className="text-muted-foreground text-xs flex items-center gap-1">
+                          Google Drive
+                          <ExternalLink className="h-3 w-3" />
+                        </p>
+                      </div>
+                    </a>
+                  ) : isImageFile(attachment.type) ? (
                     <a
                       href={attachment.url}
                       target="_blank"
