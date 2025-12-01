@@ -9,6 +9,21 @@ import { Drawer } from "vaul";
 import useMediaQuery from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 
+/**
+ * Renders a modal component that can display content conditionally based on device type.
+ *
+ * The function checks if the device is mobile and whether the modal should be displayed as a dialog or a drawer.
+ * It handles closing the modal through the closeModal function, which can trigger an onClose event and manage state
+ * using setShowModal. The modal's appearance and behavior are adjusted based on the provided props.
+ *
+ * @param children - The content to be displayed inside the modal.
+ * @param className - Optional additional class names for styling the modal.
+ * @param dialogOnly - Optional flag to indicate if the modal should only be displayed as a dialog.
+ * @param showModal - Optional flag to control the visibility of the modal.
+ * @param setShowModal - Optional function to set the modal's visibility state.
+ * @param onClose - Optional callback function to be called when the modal is closed.
+ * @param preventDefaultClose - Optional flag to prevent closing the modal under certain conditions.
+ */
 export default function Modal({
   children,
   className,
@@ -28,6 +43,17 @@ export default function Modal({
 }) {
   const router = useRouter();
 
+  /**
+   * Closes the modal based on the provided conditions.
+   *
+   * This function checks if the modal should be closed based on the `dragged` state.
+   * If `preventDefaultClose` is true and `dragged` is not set, the function exits early.
+   * If an `onClose` event is provided, it is triggered. The modal is closed using `setShowModal` if defined;
+   * otherwise, it navigates back using the router.
+   *
+   * @param {Object} options - Options for closing the modal.
+   * @param {boolean} [options.dragged] - Indicates if the modal was dragged.
+   */
   const closeModal = ({ dragged }: { dragged?: boolean } = {}) => {
     if (preventDefaultClose && !dragged) {
       return;
