@@ -1,12 +1,8 @@
-import type { ReactNode } from 'react';
-import {
-	ConsentManagerDialog,
-	ConsentManagerProvider,
-	CookieBanner,
-} from '@c15t/nextjs';
+import type { ReactNode } from "react";
+import { ConsentManagerDialog, ConsentManagerProvider, CookieBanner } from "@c15t/nextjs";
 // For client-only apps (non-SSR), you can use:
 // import { ConsentManagerProvider } from '@c15t/nextjs/client';
-import { ConsentManagerClient } from './consent-manager.client';
+import { ConsentManagerClient } from "./consent-manager.client";
 
 /**
  * Server-side rendered consent management wrapper for Next.js App Router
@@ -46,18 +42,18 @@ import { ConsentManagerClient } from './consent-manager.client';
  * ```
  */
 export function ConsentManager({ children }: { children: ReactNode }) {
-	return (
-		<ConsentManagerProvider
-			options={{
-					mode: 'c15t',
-					backendURL: '/api/c15t',
-					consentCategories: ['necessary', 'marketing'], // Optional: Specify which consent categories to show in the banner. 
-					ignoreGeoLocation: true, // Useful for development to always view the banner.
-				}}
-		>
-			<CookieBanner />
-			<ConsentManagerDialog />
-			<ConsentManagerClient>{children}</ConsentManagerClient>
-		</ConsentManagerProvider>
-	);
+  return (
+    <ConsentManagerProvider
+      options={{
+        mode: "c15t",
+        backendURL: "/api/c15t",
+        consentCategories: ["necessary", "marketing"], // Optional: Specify which consent categories to show in the banner.
+        ignoreGeoLocation: true, // Useful for development to always view the banner.
+      }}
+    >
+      <CookieBanner />
+      <ConsentManagerDialog />
+      <ConsentManagerClient>{children}</ConsentManagerClient>
+    </ConsentManagerProvider>
+  );
 }

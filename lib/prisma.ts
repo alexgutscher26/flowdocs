@@ -8,9 +8,11 @@ const globalForPrisma = global as unknown as {
 };
 
 // Create a connection pool
-const pool = globalForPrisma.pool || new Pool({
-  connectionString: process.env.DATABASE_URL!,
-});
+const pool =
+  globalForPrisma.pool ||
+  new Pool({
+    connectionString: process.env.DATABASE_URL!,
+  });
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.pool = pool;
 

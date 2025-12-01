@@ -30,20 +30,14 @@ The wiki page API routes had incorrect logic for managing the `publishedAt` time
 ```typescript
 // Before
 if (published && !content) {
-  return NextResponse.json(
-    { error: "Content is required for published pages" },
-    { status: 400 }
-  );
+  return NextResponse.json({ error: "Content is required for published pages" }, { status: 400 });
 }
 
 // After
 const willBePublished = published ?? true;
 
 if (willBePublished && !content) {
-  return NextResponse.json(
-    { error: "Content is required for published pages" },
-    { status: 400 }
-  );
+  return NextResponse.json({ error: "Content is required for published pages" }, { status: 400 });
 }
 ```
 
@@ -51,7 +45,7 @@ if (willBePublished && !content) {
 
 ```typescript
 // Before
-publishedAt: published && !existingPage.published ? new Date() : existingPage.publishedAt
+publishedAt: published && !existingPage.published ? new Date() : existingPage.publishedAt;
 
 // After
 const newPublished = published ?? existingPage.published;
@@ -69,12 +63,12 @@ if (newPublished && !existingPage.published) {
 
 ## State Transitions
 
-| Current State | New State | publishedAt Behavior |
-|--------------|-----------|---------------------|
-| Unpublished (null) | Published | Set to current date |
-| Published (date) | Published | Keep existing date |
-| Published (date) | Unpublished | Set to null |
-| Unpublished (null) | Unpublished | Keep null |
+| Current State      | New State   | publishedAt Behavior |
+| ------------------ | ----------- | -------------------- |
+| Unpublished (null) | Published   | Set to current date  |
+| Published (date)   | Published   | Keep existing date   |
+| Published (date)   | Unpublished | Set to null          |
+| Unpublished (null) | Unpublished | Keep null            |
 
 ## Testing
 

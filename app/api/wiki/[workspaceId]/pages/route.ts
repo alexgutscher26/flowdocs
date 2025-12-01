@@ -166,7 +166,7 @@ export async function POST(
 
     // Determine if page will be published (default to true if not specified)
     const willBePublished = published ?? true;
-    
+
     if (willBePublished && !content) {
       return NextResponse.json(
         { error: "Content is required for published pages" },

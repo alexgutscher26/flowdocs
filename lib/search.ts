@@ -75,19 +75,27 @@ export async function initSearch() {
     const collectionNames = collections.map((c) => c.name);
 
     if (!collectionNames.includes("messages")) {
-      await getClient().collections().create(messagesSchema as any);
+      await getClient()
+        .collections()
+        .create(messagesSchema as any);
       console.log("Created messages collection");
     }
     if (!collectionNames.includes("wiki_pages")) {
-      await getClient().collections().create(wikiPagesSchema as any);
+      await getClient()
+        .collections()
+        .create(wikiPagesSchema as any);
       console.log("Created wiki_pages collection");
     }
     if (!collectionNames.includes("files")) {
-      await getClient().collections().create(filesSchema as any);
+      await getClient()
+        .collections()
+        .create(filesSchema as any);
       console.log("Created files collection");
     }
     if (!collectionNames.includes("users")) {
-      await getClient().collections().create(usersSchema as any);
+      await getClient()
+        .collections()
+        .create(usersSchema as any);
       console.log("Created users collection");
     }
   } catch (error) {
