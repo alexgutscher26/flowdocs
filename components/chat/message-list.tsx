@@ -94,7 +94,7 @@ export function MessageList({
   }
 
   return (
-    <ScrollArea className="flex-1">
+    <ScrollArea className="flex-1 min-h-0">
       <div className="flex flex-col-reverse">
         {/* Messages end marker for auto-scroll */}
         <div ref={messagesEndRef} />

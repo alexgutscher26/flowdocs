@@ -27,7 +27,6 @@ interface MessageItemProps {
   onEdit?: (message: ExtendedMessage) => void;
   onDelete?: (messageId: string) => void;
   onReaction?: (messageId: string, emoji: string) => void;
-  onReaction?: (messageId: string, emoji: string) => void;
   onReactionRemove?: (reactionId: string) => void;
   onPin?: (messageId: string, isPinned: boolean) => void;
   totalChannelMembers?: number;
@@ -117,19 +116,19 @@ export function MessageItem({
                       href={attachment.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="block max-w-sm"
+                      className="block max-w-lg"
                     >
                       <img
                         src={attachment.url}
                         alt={attachment.name}
-                        className="max-h-96 rounded-lg border object-cover transition-opacity hover:opacity-90"
+                        className="max-h-96 max-w-full h-auto rounded-lg border object-contain transition-opacity hover:opacity-90"
                       />
                     </a>
                   ) : isVideoFile(attachment.type) ? (
                     <video
                       src={attachment.url}
                       controls
-                      className="max-h-96 max-w-sm rounded-lg border"
+                      className="max-h-96 max-w-full h-auto rounded-lg border"
                     />
                   ) : (
                     <a
