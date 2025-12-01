@@ -42,6 +42,9 @@ const links = [
   },
 ];
 
+/**
+ * Renders the footer section of the website.
+ */
 export function FooterSection() {
   return (
     <footer role="contentinfo" className="py-8 sm:py-20 lg:pt-32">
