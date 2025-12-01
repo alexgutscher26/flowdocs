@@ -83,6 +83,16 @@ export async function GET(
 }
 
 // DELETE /api/files/[id] - Delete file
+/**
+ * Deletes a file from the database and storage.
+ *
+ * This function first checks the user's session for authorization. It retrieves the file based on the provided ID and checks if the user has permission to delete it, either as the uploader or as an admin/owner of the workspace. If authorized, it deletes the file and its thumbnail from storage, updates the storage usage, and removes the file from the database. In case of errors, appropriate responses are returned.
+ *
+ * @param req - The NextRequest object representing the HTTP request.
+ * @param params - A promise that resolves to an object containing the file ID.
+ * @returns A JSON response indicating success or error.
+ * @throws Error If an error occurs during the deletion process.
+ */
 export async function DELETE(
     req: NextRequest,
     { params }: { params: Promise<{ id: string }> }
