@@ -100,8 +100,8 @@ export async function GET(
 /**
  * Handles the POST request to create a message in a specified channel.
  *
- * This function first retrieves the workspace and channel IDs from the request parameters, then checks the user's session for authorization.
- * It verifies that the user is a member of the specified channel and ensures that the message contains either content or attachments.
+ * This function retrieves the workspace and channel IDs from the request parameters, checks the user's session for authorization,
+ * verifies that the user is a member of the specified channel, and ensures that the message contains either content or attachments.
  * Upon successful validation, it creates the message in the database, broadcasts it via WebSocket, and indexes it in Typesense.
  * If any errors occur during these processes, appropriate error messages are logged, and a 500 status response is returned.
  *
