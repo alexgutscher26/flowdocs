@@ -4,7 +4,7 @@ import type { EmailTemplateId, EmailTemplateData } from "./types";
 /**
  * Build a dashboard URL for the application
  */
-export function buildDashboardUrl(path: string = ""): string {
+export function buildDashboardUrl(path = ""): string {
   const baseUrl =
     process.env.NEXT_PUBLIC_APP_URL ||
     (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://flowdocs.com");
@@ -17,7 +17,7 @@ export function buildDashboardUrl(path: string = ""): string {
  */
 export function buildWelcomeEmailData(
   firstName: string,
-  dashboardPath: string = "/dashboard"
+  dashboardPath = "/dashboard"
 ): EmailTemplateData[EmailTemplateId.WORKSPACE_WELCOME] {
   return {
     firstName,
@@ -33,7 +33,7 @@ export function buildWorkspaceInvitationData(
   workspaceName: string,
   inviteeEmail: string,
   invitationToken: string,
-  includeDecline: boolean = true
+  includeDecline = true
 ): EmailTemplateData[EmailTemplateId.WORKSPACE_INVITATION] {
   return {
     inviterName,
@@ -65,7 +65,7 @@ export function buildEmailVerificationData(
 export function buildPasswordResetData(
   firstName: string,
   resetToken: string,
-  expiresInMinutes: number = 60
+  expiresInMinutes = 60
 ): EmailTemplateData[EmailTemplateId.PASSWORD_RESET] {
   return {
     firstName,
@@ -89,7 +89,7 @@ export function extractFirstName(fullName: string | null | undefined): string {
  * Format email address for display
  * Masks the local part for privacy if requested
  */
-export function formatEmailAddress(email: string, maskLocalPart: boolean = false): string {
+export function formatEmailAddress(email: string, maskLocalPart = false): string {
   if (!maskLocalPart) return email;
 
   const [localPart, domain] = email.split("@");
