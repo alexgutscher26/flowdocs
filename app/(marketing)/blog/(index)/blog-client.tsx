@@ -23,6 +23,15 @@ interface ArticleWithBlur {
   blurDataURL: string;
 }
 
+/**
+ * Renders the blog client component that displays articles based on selected filters.
+ *
+ * The component retrieves the category from search parameters, initializes state for active filters, articles, and loading status.
+ * It loads articles asynchronously, calculates category counts, and filters articles based on the active filter.
+ * The component conditionally renders a loading skeleton or the articles, including a section for more articles if available.
+ *
+ * @returns JSX.Element representing the blog client.
+ */
 export default function BlogClient() {
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get("category") as Filter | null;
