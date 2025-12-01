@@ -36,21 +36,14 @@ function getResendClient(): Resend | null {
 const DEFAULT_FROM_EMAIL = process.env.EMAIL_FROM || siteConfig.email.fromEmail;
 
 /**
- * Send an email using a template
+ * Send an email using a specified template.
  *
- * @param templateId - The ID of the email template to use
- * @param data - The data required for the template
- * @param options - Email sending options (to, from, cc, bcc, etc.)
- * @returns Promise with send result
+ * This function retrieves the email template based on the provided templateId, renders it with the given data, and sends the email using the specified options. If the resend client is not available, it logs the email details instead of sending. The function handles both successful and failed email sending scenarios, returning appropriate results.
  *
- * @example
- * ```typescript
- * await sendTemplateEmail(
- *   EmailTemplateId.WORKSPACE_WELCOME,
- *   { firstName: "John", dashboardUrl: "https://..." },
- *   { to: "john@example.com" }
- * );
- * ```
+ * @param templateId - The ID of the email template to use.
+ * @param data - The data required for the template.
+ * @param options - Email sending options (to, from, cc, bcc, etc.).
+ * @returns Promise with the result of the email sending operation.
  */
 export async function sendTemplateEmail<T extends EmailTemplateId>(
   templateId: T,
