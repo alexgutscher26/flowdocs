@@ -15,8 +15,15 @@ const openrouter = createOpenAI({
 const model = openrouter(process.env.OPENROUTER_MODEL || "anthropic/claude-3.5-sonnet");
 
 /**
- * Answer a question using RAG (Retrieval Augmented Generation)
- * based on team knowledge (messages and wiki pages).
+ * Answer a question using RAG (Retrieval Augmented Generation) based on team knowledge.
+ *
+ * This function retrieves relevant context from both messages and wiki pages using the provided query and workspaceId.
+ * It performs concurrent searches and constructs a context string from the results. If context is available, it generates
+ * an answer using the FlowDocs system prompt, incorporating the context. If no context is found, it provides information
+ * about FlowDocs features to assist the user.
+ *
+ * @param query - The question to be answered.
+ * @param workspaceId - The identifier for the workspace from which to retrieve context.
  */
 export async function answerQuestion(query: string, workspaceId: string) {
   // 1. Retrieve relevant context from Typesense
