@@ -2,7 +2,8 @@ import { createOpenAI } from "@ai-sdk/openai";
 import { generateText, generateObject } from "ai";
 import { z } from "zod";
 import { searchMessages, searchWikiPages, SearchOptions } from "@/lib/search";
-import type { Message } from "generated/prisma";
+import { Message } from "@/generated/prisma/client";
+
 
 // Configure OpenRouter
 const openrouter = createOpenAI({
@@ -46,19 +47,36 @@ export async function answerQuestion(query: string, workspaceId: string) {
     });
   }
 
-  const context = contextParts.join("\n\n");
+  const hasContext = contextParts.length > 0;
+  const context = hasContext ? contextParts.join("\n\n") : "No indexed content available yet.";
 
-  // 2. Generate answer
+  // 2. Generate answer with FlowDocs context
+  const systemPrompt = `You are a helpful AI assistant for FlowDocs, a team communication and knowledge base platform that combines chat and wiki features (similar to Slack + Notion).
+
+FlowDocs Features:
+- Real-time chat with channels, threads, and direct messages
+- Wiki pages with markdown support and version history
+- Convert important conversations into wiki documentation
+- Full-text search across messages and wiki pages
+- File uploads and sharing
+- User mentions and notifications
+- Message reactions and pinning
+
+${hasContext
+      ? "Answer the user's question based on the provided context from their workspace. Be specific and cite the sources."
+      : "The workspace doesn't have any indexed content yet. Provide helpful information about FlowDocs features and how to get started. Encourage them to create channels, send messages, and create wiki pages to build their knowledge base."}
+
+Keep answers concise and professional.`;
+
   const { text } = await generateText({
     model,
-    system: `You are a helpful AI assistant for a team collaboration platform. 
-    Answer the user's question based ONLY on the provided context. 
-    If the answer is not in the context, say you don't know.
-    Keep answers concise and professional.`,
-    prompt: `Context:\n${context}\n\nQuestion: ${query}`,
+    system: systemPrompt,
+    prompt: hasContext
+      ? `Context:\n${context}\n\nQuestion: ${query}`
+      : `Question: ${query}\n\nNote: This is a new workspace with no content yet. Help the user understand FlowDocs and how to get started.`,
   });
 
-  return { answer: text, sources: [...new Set(sources)].slice(0, 5) };
+  return { answer: text, sources: hasContext ? [...new Set(sources)].slice(0, 5) : [] };
 }
 
 /**
