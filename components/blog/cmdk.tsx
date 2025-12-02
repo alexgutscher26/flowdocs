@@ -61,6 +61,16 @@ function CMDKHelper({
   );
 }
 
+/**
+ * Renders command results based on a search query and popular articles.
+ *
+ * The function retrieves popular articles and constructs a list of all help posts, including their summaries and table of contents.
+ * It utilizes the Fuse.js library for fuzzy searching through titles and descriptions.
+ * The results are filtered based on the search input, and each result is rendered as a selectable command item.
+ *
+ * @param setShowCMDK - A function to update the visibility state of the command menu.
+ * @returns An array of command items representing the search results.
+ */
 const CommandResults = ({ setShowCMDK }: { setShowCMDK: Dispatch<SetStateAction<boolean>> }) => {
   const router = useRouter();
   const popularArticles = POPULAR_ARTICLES.map(
