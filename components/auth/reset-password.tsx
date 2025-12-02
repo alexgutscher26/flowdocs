@@ -33,6 +33,13 @@ const validatePasswordStrength = (password: string) => {
   };
 };
 
+/**
+ * Handles the password reset authentication process.
+ *
+ * This function manages the state for new and confirmed passwords, loading status, success, and error messages. It validates the reset token and password strength, checks if the passwords match, and submits the new password to the authentication client. Upon success, it redirects the user to the sign-in page after a brief delay. It also handles various error scenarios, including invalid tokens and password requirements.
+ *
+ * @returns {JSX.Element} The rendered component for resetting the password.
+ */
 export default function ResetPasswordAuth() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
