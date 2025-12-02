@@ -29,28 +29,28 @@ In your report, please include:
 
 ### Response Timeline
 
-*   **Acknowledgement**: We will acknowledge receipt of your report within 48 hours.
-*   **Assessment**: We will assess the vulnerability and determine its severity within 5 business days.
-*   **Resolution**: We aim to resolve critical vulnerabilities within 14 days.
+- **Acknowledgement**: We will acknowledge receipt of your report within 48 hours.
+- **Assessment**: We will assess the vulnerability and determine its severity within 5 business days.
+- **Resolution**: We aim to resolve critical vulnerabilities within 14 days.
 
 ## Security Best Practices
 
 ### For Administrators
 
-*   **Environment Variables**: Ensure `OPENROUTER_API_KEY`, `DATABASE_URL`, and other sensitive keys are kept secret and never committed to version control.
-*   **Access Control**: Regularly review user roles and permissions within your workspace.
-*   **Updates**: Keep your FlowDocs installation updated to the latest version to ensure you have the latest security patches.
+- **Environment Variables**: Ensure `OPENROUTER_API_KEY`, `DATABASE_URL`, and other sensitive keys are kept secret and never committed to version control.
+- **Access Control**: Regularly review user roles and permissions within your workspace.
+- **Updates**: Keep your FlowDocs installation updated to the latest version to ensure you have the latest security patches.
 
 ### For Users
 
-*   **Passwords**: Use strong, unique passwords for your account.
-*   **API Keys**: If you generate API keys for integrations, treat them like passwords.
-*   **Phishing**: Be cautious of suspicious links or messages, even within the platform.
+- **Passwords**: Use strong, unique passwords for your account.
+- **API Keys**: If you generate API keys for integrations, treat them like passwords.
+- **Phishing**: Be cautious of suspicious links or messages, even within the platform.
 
 ## Out of Scope
 
 The following are generally considered out of scope for our bug bounty program (if applicable):
 
-*   Social engineering attacks.
-*   Denial of Service (DoS) attacks.
-*   Issues related to third-party services (e.g., OpenRouter, AWS) unless caused by our implementation.
+- Social engineering attacks.
+- Denial of Service (DoS) attacks.
+- Issues related to third-party services (e.g., OpenRouter, AWS) unless caused by our implementation.

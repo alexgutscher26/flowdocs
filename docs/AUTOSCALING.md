@@ -39,6 +39,7 @@ For local development and small deployments:
 - Includes PostgreSQL and Redis services
 
 **Setup:**
+
 ```bash
 # Copy environment file
 cp .env.docker .env
@@ -55,6 +56,7 @@ docker-compose up -d --scale app=3
 
 **Environment Variables:**
 The docker-compose.yml includes default values for local development:
+
 - `DATABASE_URL`: postgresql://postgres:postgres@postgres:5432/flowdocs
 - `POSTGRES_PASSWORD`: postgres (default)
 - `BETTER_AUTH_SECRET`: change-me-in-production
@@ -62,6 +64,7 @@ The docker-compose.yml includes default values for local development:
 - `NEXT_PUBLIC_APP_URL`: http://localhost:3000
 
 **Important:** Always set a secure `BETTER_AUTH_SECRET` in production:
+
 ```bash
 openssl rand -hex 32
 ```
@@ -223,6 +226,7 @@ docker run -p 3000:3000 \
 ```
 
 **Troubleshooting:**
+
 - If build fails with "Prisma Schema not found", ensure `prisma/schema.prisma` exists
 - If build fails with "Missing required environment variable: DATABASE_URL", the Dockerfile includes a placeholder for build time
 - If npm install fails, check that all dependencies are compatible
