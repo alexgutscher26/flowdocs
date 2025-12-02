@@ -13,20 +13,13 @@ export interface FileWithBackup {
 }
 
 /**
- * Get the best available URL for a file with automatic failover.
+ * Get the best available URL for a file with automatic failover
  *
- * This function attempts to retrieve a working URL for a file by first checking the backup URL if preferred.
- * If the backup URL is not valid or not preferred, it checks the primary URL. If both URLs fail, an error is thrown.
- *
- * @param file - File object with primary and backup URLs.
- * @param preferBackup - If true, prefer backup URL over primary (useful for testing).
- * @returns A promise that resolves to the working URL.
- * @throws Error If both primary and backup URLs are unavailable.
+ * @param file - File object with primary and backup URLs
+ * @param preferBackup - If true, prefer backup URL over primary (useful for testing)
+ * @returns Promise<string> - The working URL
  */
-export async function getFileUrl(
-  file: FileWithBackup,
-  preferBackup: boolean = false
-): Promise<string> {
+export async function getFileUrl(file: FileWithBackup, preferBackup = false): Promise<string> {
   const primaryUrl = file.url;
   const backupUrl = file.backupUrl;
 
@@ -59,13 +52,10 @@ export async function getFileUrl(
 }
 
 /**
- * Test if a URL is accessible.
+ * Test if a URL is accessible
  *
- * This function attempts to fetch the provided URL using a HEAD request with a timeout of 5 seconds.
- * If the request is successful and the response is OK, it returns true; otherwise, it catches any errors
- * and returns false, indicating the URL is not accessible.
- *
- * @param url - URL to test.
+ * @param url - URL to test
+ * @returns Promise<boolean> - True if URL is accessible
  */
 async function testUrl(url: string): Promise<boolean> {
   try {
@@ -80,17 +70,16 @@ async function testUrl(url: string): Promise<boolean> {
 }
 
 /**
- * Retrieves multiple file URLs with a failover mechanism.
- * This function tests URLs in parallel, utilizing the getFileUrl function to obtain the URL for each file.
- * If an error occurs while fetching a URL, it logs the error and continues processing the remaining files.
- * The results are returned as a Map, associating file IDs with their corresponding working URLs.
+ * Get multiple file URLs with failover
+ * Optimized to test URLs in parallel
  *
- * @param files - Array of files with backup URLs, each containing an id.
- * @param preferBackup - If true, prefers backup URLs when fetching.
+ * @param files - Array of files with backup URLs
+ * @param preferBackup - If true, prefer backup URLs
+ * @returns Promise<Map<string, string>> - Map of file IDs to working URLs
  */
 export async function getFileUrls(
   files: (FileWithBackup & { id: string })[],
-  preferBackup: boolean = false
+  preferBackup = false
 ): Promise<Map<string, string>> {
   const urlMap = new Map<string, string>();
 
@@ -109,12 +98,7 @@ export async function getFileUrls(
 }
 
 /**
- * Downloads a file with automatic failover.
- *
- * This function retrieves the appropriate URL for the file using the getFileUrl function,
- * then attempts to fetch the file from that URL. If the response is not successful,
- * it throws an error indicating the failure. The function returns the fetch response
- * containing the file data.
+ * Download file with automatic failover
  *
  * @param file - File object with primary and backup URLs
  */
@@ -130,7 +114,7 @@ export async function downloadFile(file: FileWithBackup): Promise<Response> {
 }
 
 /**
- * Retrieves the file buffer from a given FileWithBackup object.
+ * Get file buffer with automatic failover
  *
  * @param file - File object with primary and backup URLs
  * @returns Promise<Buffer> - File data as buffer
@@ -142,7 +126,10 @@ export async function getFileBuffer(file: FileWithBackup): Promise<Buffer> {
 }
 
 /**
- * Checks the health of both primary and backup storage providers.
+ * Check health of both storage providers
+ * Useful for monitoring and alerting
+ *
+ * @returns Promise<StorageHealth> - Health status of both providers
  */
 export async function checkStorageHealth(): Promise<{
   primary: { available: boolean; latency?: number };
