@@ -25,8 +25,14 @@ const openrouter = createOpenAI({
 const model = openrouter(OPENROUTER_MODEL);
 
 /**
- * Answer a question using RAG (Retrieval Augmented Generation)
- * based on team knowledge (messages and wiki pages).
+ * Answer a question using RAG (Retrieval Augmented Generation) based on team knowledge (messages and wiki pages).
+ *
+ * This function retrieves relevant context from Typesense by searching both messages and wiki pages associated with the provided workspaceId. It processes the results to create a context string, which is then used to generate an answer using the FlowDocs AI assistant. The function handles various error cases, including missing API keys, empty queries, and workspace IDs, and ensures that the context does not exceed a specified length.
+ *
+ * @param query - The question to be answered.
+ * @param workspaceId - The ID of the workspace from which to retrieve context.
+ * @returns An object containing the generated answer and the sources of the information used.
+ * @throws Error If the OpenRouter API key is not configured, if the query is empty, if the workspace ID is missing, or if an error occurs during the answer generation process.
  */
 export async function answerQuestion(query: string, workspaceId: string) {
   if (!OPENROUTER_API_KEY) {
@@ -170,9 +176,13 @@ export async function summarizeThread(messages: Message[]) {
 
 /**
  * Suggest a wiki page based on a conversation thread.
- * Returns title, slug, and markdown content.
- * @param messages - Array of messages to analyze
- * @returns Structured wiki page suggestion
+ *
+ * This function analyzes an array of messages to generate a structured wiki page suggestion. It first checks for the presence of the OpenRouter API key and validates the input messages. Then, it constructs a transcript from the messages and calls the generateObject function to create a well-structured wiki page, including a title, slug, content, and tags. If any errors occur during this process, they are logged and a generic error is thrown.
+ *
+ * @param messages - Array of messages to analyze.
+ * @returns Structured wiki page suggestion.
+ * @throws Error If the OpenRouter API key is not configured or if no messages are provided.
+ * @throws Error If the generation of the wiki page suggestion fails.
  */
 export async function suggestWikiPage(messages: Message[]) {
   if (!OPENROUTER_API_KEY) {
@@ -209,8 +219,13 @@ export async function suggestWikiPage(messages: Message[]) {
 }
 
 /**
- * Find related conversations based on a query.
- * This uses the search index to find semantically similar messages.
+ * Find related conversations based on a query and workspace ID.
+ * This function searches for messages using the provided query and workspaceId,
+ * then groups the results by channelId, counting occurrences and capturing snippets.
+ * It returns an array of related conversations with their respective counts and snippets.
+ *
+ * @param query - The search query to find related conversations.
+ * @param workspaceId - The ID of the workspace to limit the search context.
  */
 export async function findRelatedConversations(query: string, workspaceId: string) {
   const results = await searchMessages(query, { workspaceId }, { limit: 20 });
@@ -239,6 +254,14 @@ export async function findRelatedConversations(query: string, workspaceId: strin
 
 /**
  * Extract action items from text.
+ *
+ * This function checks for the presence of the OPENROUTER_API_KEY and validates the input text.
+ * It then calls the generateObject function to extract action items based on a predefined schema.
+ * If successful, it returns the extracted action items; otherwise, it logs an error and throws a new error.
+ *
+ * @param text - The input text from which action items will be extracted.
+ * @returns An array of action items extracted from the input text.
+ * @throws Error If the OpenRouter API key is not configured or if extraction fails.
  */
 export async function extractActionItems(text: string) {
   if (!OPENROUTER_API_KEY) {
