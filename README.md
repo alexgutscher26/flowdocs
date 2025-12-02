@@ -22,18 +22,21 @@ FlowDocs is a modern collaboration platform that combines real-time chat with st
 ## Features
 
 ### 💬 Real-time Communication
+
 - **Channels & Threads**: Organize discussions by topic.
 - **Direct Messages**: Private 1:1 or group conversations.
 - **Rich Text Editor**: Markdown support, code blocks, and file attachments.
 - **Reactions & Mentions**: Express yourself and notify teammates.
 
 ### 📚 Knowledge Base (Wiki)
+
 - **Structured Documentation**: Create and organize wiki pages with a hierarchy.
 - **Thread-to-Wiki**: One-click conversion of chat threads into documentation.
 - **Version History**: Track changes and revert if needed.
 - **Collaborative Editing**: Real-time updates (coming soon).
 
 ### 🤖 AI Assistant (RAG)
+
 - **Context-Aware Answers**: Ask questions about your workspace content.
 - **Source Citations**: See exactly which messages or wiki pages were used.
 - **Summarization**: Get quick summaries of long threads.
@@ -41,6 +44,7 @@ FlowDocs is a modern collaboration platform that combines real-time chat with st
 - **Powered by OpenRouter**: Use Claude 3.5 Sonnet, GPT-4o, or any other model.
 
 ### 🔍 Search & Discovery
+
 - **Full-Text Search**: Powered by Typesense for lightning-fast results.
 - **Unified Search**: Search across messages, files, and wiki pages.
 - **Filters**: Narrow down by user, channel, date, or tag.
@@ -48,6 +52,7 @@ FlowDocs is a modern collaboration platform that combines real-time chat with st
 ## Getting Started
 
 ### Prerequisites
+
 - Node.js 18+
 - PostgreSQL
 - Typesense (for search)
@@ -56,20 +61,24 @@ FlowDocs is a modern collaboration platform that combines real-time chat with st
 ### Installation
 
 1.  **Clone the repository**
+
     ```bash
     git clone https://github.com/your-org/flowdocs.git
     cd flowdocs
     ```
 
 2.  **Install dependencies**
+
     ```bash
     bun install
     ```
 
 3.  **Set up environment variables**
+
     ```bash
     cp .env.example .env.local
     ```
+
     Update `.env.local` with your credentials:
     - `DATABASE_URL` (PostgreSQL)
     - `TYPESENSE_API_KEY` & Host
@@ -77,6 +86,7 @@ FlowDocs is a modern collaboration platform that combines real-time chat with st
     - `BETTER_AUTH_SECRET` & URL
 
 4.  **Initialize Database**
+
     ```bash
     bun prisma:generate
     bun prisma:push
