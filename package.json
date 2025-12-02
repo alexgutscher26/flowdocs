@@ -124,6 +124,7 @@
     "@types/react-dom": "^19",
     "@types/react-highlight-words": "^0.20.0",
     "@types/sanitize-filename": "^1.6.3",
+    "baseline-browser-mapping": "^2.8.32",
     "checkly": "latest",
     "eslint": "^9",
     "eslint-config-next": "15.5.3",
