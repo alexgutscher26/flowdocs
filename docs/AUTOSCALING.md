@@ -36,11 +36,34 @@ For local development and small deployments:
 - Resource reservations: 0.5 CPU, 512MB memory
 - Automatic restart on failure (max 3 attempts)
 - Health checks every 30 seconds
+- Includes PostgreSQL and Redis services
 
-**Usage:**
-
+**Setup:**
 ```bash
+# Copy environment file
+cp .env.docker .env
+
+# Edit .env and update values (especially BETTER_AUTH_SECRET)
+nano .env
+
+# Start services with default 2 replicas
+docker-compose up -d
+
+# Or scale to specific number of replicas
 docker-compose up -d --scale app=3
+```
+
+**Environment Variables:**
+The docker-compose.yml includes default values for local development:
+- `DATABASE_URL`: postgresql://postgres:postgres@postgres:5432/flowdocs
+- `POSTGRES_PASSWORD`: postgres (default)
+- `BETTER_AUTH_SECRET`: change-me-in-production
+- `BETTER_AUTH_URL`: http://localhost:3000
+- `NEXT_PUBLIC_APP_URL`: http://localhost:3000
+
+**Important:** Always set a secure `BETTER_AUTH_SECRET` in production:
+```bash
+openssl rand -hex 32
 ```
 
 ## Kubernetes
@@ -180,6 +203,7 @@ Multi-stage build optimized for production:
 - Non-root user (nextjs:nodejs)
 - Health check included
 - Standalone output for minimal image size
+- Prisma schema copied before npm install to support postinstall script
 
 **Build:**
 
@@ -197,6 +221,11 @@ docker run -p 3000:3000 \
   -e NEXT_PUBLIC_APP_URL="https://..." \
   flowdocs:latest
 ```
+
+**Troubleshooting:**
+- If build fails with "Prisma Schema not found", ensure `prisma/schema.prisma` exists
+- If npm install fails, check that all dependencies are compatible
+- For permission errors, verify the nextjs user has correct permissions
 
 ## Health Check Endpoint
 
