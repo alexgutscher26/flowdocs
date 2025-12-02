@@ -4,6 +4,16 @@ import { headers } from "next/headers";
 import prisma from "@/lib/prisma";
 
 // GET /api/workspaces/[id]/storage - Get storage usage and quota
+/**
+ * Handles the GET request to retrieve workspace storage information.
+ *
+ * This function authenticates the user, verifies their access to the specified workspace, and gathers storage details including used and quota values. It also categorizes files by type, counts them, and retrieves the largest files in the workspace. The response includes workspace details, storage metrics, file breakdown, and the largest files.
+ *
+ * @param req - The NextRequest object representing the incoming request.
+ * @param params - An object containing a Promise that resolves to an object with the workspace ID.
+ * @returns A JSON response containing workspace details, storage metrics, file breakdown, and largest files.
+ * @throws Error If an error occurs during the process, a JSON response with an error message is returned.
+ */
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await auth.api.getSession({ headers: await headers() });
