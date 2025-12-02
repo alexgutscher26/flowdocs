@@ -102,8 +102,8 @@ export default function ImpersonatePage(props: PageProps) {
               columnCount={5}
               rowCount={10}
               filterCount={2}
-              withViewOptions={true}
-              withPagination={true}
+              withViewOptions
+              withPagination
               cellRenderer={(rowIndex, colIndex) => {
                 if (colIndex === 0) {
                   return (

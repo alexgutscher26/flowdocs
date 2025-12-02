@@ -6,9 +6,10 @@ import { GoogleDriveFile } from "@/lib/integrations/google-drive";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Search, FileIcon, ImageIcon, FolderIcon } from "lucide-react";
+import { Loader2, Search, FileIcon, ImageIcon, FolderIcon, AlertCircle } from "lucide-react";
 import { useDebounce } from "use-debounce";
 import { toast } from "sonner";
+import Link from "next/link";
 
 interface GoogleDriveBrowserProps {
   onSelect?: (file: GoogleDriveFile) => void;

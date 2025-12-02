@@ -309,7 +309,7 @@ function SortableContent(props: SortableContentProps) {
   const ContentPrimitive = asChild ? Slot : "div";
 
   return (
-    <SortableContentContext.Provider value={true}>
+    <SortableContentContext.Provider value>
       <SortableContext items={context.items} strategy={strategyProp ?? context.strategy}>
         {withoutSlot ? (
           children
@@ -510,7 +510,7 @@ function SortableOverlay(props: SortableOverlayProps) {
       className={cn(!context.flatCursor && "cursor-grabbing")}
       {...overlayProps}
     >
-      <SortableOverlayContext.Provider value={true}>
+      <SortableOverlayContext.Provider value>
         {context.activeId
           ? typeof children === "function"
             ? children({ value: context.activeId })

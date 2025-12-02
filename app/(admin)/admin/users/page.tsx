@@ -89,8 +89,8 @@ export default function UsersPage(props: PageProps) {
               columnCount={9}
               rowCount={4}
               filterCount={2}
-              withViewOptions={true}
-              withPagination={true}
+              withViewOptions
+              withPagination
               cellRenderer={(rowIndex, colIndex) => {
                 if (colIndex === 0) {
                   return (

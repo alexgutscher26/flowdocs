@@ -3,7 +3,21 @@
 import { useState, useRef, useCallback, KeyboardEvent, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Send, Paperclip, X, Loader2, Bold, Italic, Code, Eye, Edit2, AtSign } from "lucide-react";
+import {
+  Send,
+  Paperclip,
+  X,
+  Loader2,
+  Bold,
+  Italic,
+  Code,
+  Eye,
+  Edit2,
+  AtSign,
+  HardDrive,
+} from "lucide-react";
+import { GoogleDrivePicker } from "@/components/integrations/google-drive-picker";
+import { GoogleDriveFile } from "@/lib/integrations/google-drive";
 import { useFileUpload } from "@/hooks/use-file-upload";
 import { formatFileSize, getFileTypeIcon } from "@/lib/message-utils";
 import { cn } from "@/lib/utils";
@@ -31,6 +45,20 @@ interface MessageInputProps {
   workspaceId?: string;
 }
 
+/**
+ * Renders a message input component for sending messages with optional file attachments and mentions.
+ *
+ * This component manages the state for message content, file uploads, and typing indicators. It handles user interactions such as typing, file selection, drag-and-drop, and mentions. The component also integrates with a file upload hook and provides a preview mode for the message content. Upon sending, it processes attachments and invokes the provided `onSend` callback with the message content and any uploaded files.
+ *
+ * @param onSend - Callback function to be called when the message is sent.
+ * @param onTypingStart - Callback function to be called when typing starts.
+ * @param onTypingStop - Callback function to be called when typing stops.
+ * @param placeholder - Placeholder text for the input area (default: "Type a message...").
+ * @param disabled - Flag to disable the input (default: false).
+ * @param threadId - Optional thread ID for the message context (default: null).
+ * @param channelMembers - List of channel members for mention suggestions (default: []).
+ * @param workspaceId - ID of the workspace for file uploads.
+ */
 export function MessageInput({
   onSend,
   onTypingStart,
@@ -44,6 +72,7 @@ export function MessageInput({
   const [content, setContent] = useState("");
   const [sending, setSending] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [selectedDriveFiles, setSelectedDriveFiles] = useState<GoogleDriveFile[]>([]);
   const [isPreview, setIsPreview] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [mentionQuery, setMentionQuery] = useState<string | null>(null);
@@ -168,9 +197,45 @@ export function MessageInput({
     setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
+  // Handle Google Drive file selection
+  /**
+   * Adds a selected GoogleDriveFile to the list of selected drive files.
+   */
+  const handleDriveFileSelect = (file: GoogleDriveFile) => {
+    setSelectedDriveFiles((prev) => [...prev, file]);
+  };
+
+  // Remove selected Drive file
+  const removeDriveFile = (index: number) => {
+    setSelectedDriveFiles((prev) => prev.filter((_, i) => i !== index));
+  };
+
   // Handle send
+  /**
+   * Handles the sending of a message with optional file attachments.
+   *
+   * The function checks if there is content to send and if files are selected. It uploads any selected files and prepares attachments, including Google Drive files. After sending the message, it resets the input fields and handles any errors that occur during the process.
+   *
+   * @param content - The message content to be sent.
+   * @param selectedFiles - An array of files selected for upload.
+   * @param selectedDriveFiles - An array of Google Drive files selected for attachment.
+   * @param onSend - A callback function to send the message.
+   * @param setContent - A function to reset the message input.
+   * @param setSelectedFiles - A function to clear the selected files.
+   * @param setSelectedDriveFiles - A function to clear the selected Google Drive files.
+   * @param clearUploads - A function to clear the upload state.
+   * @param setIsPreview - A function to toggle the preview state.
+   * @param textareaRef - A reference to the textarea element for adjusting its height.
+   * @param onTypingStop - An optional callback for when typing stops.
+   * @param typingTimeoutRef - A reference to manage the typing timeout.
+   * @returns void
+   */
   const handleSend = async () => {
-    if ((!content.trim() && selectedFiles.length === 0) || sending) return;
+    if (
+      (!content.trim() && selectedFiles.length === 0 && selectedDriveFiles.length === 0) ||
+      sending
+    )
+      return;
 
     setSending(true);
 
@@ -193,11 +258,21 @@ export function MessageInput({
         }
       }
 
+      // Add Google Drive files to attachments
+      if (selectedDriveFiles.length > 0) {
+        const driveAttachments = selectedDriveFiles.map((file) => ({
+          type: "google-drive",
+          ...file,
+        }));
+        attachments = [...attachments, ...driveAttachments];
+      }
+
       console.log("[MessageInput] Sending message with attachments:", attachments);
       await onSend(content.trim(), attachments.length > 0 ? attachments : undefined);
 
       setContent("");
       setSelectedFiles([]);
+      setSelectedDriveFiles([]);
       clearUploads();
       setIsPreview(false);
 
@@ -309,6 +384,32 @@ export function MessageInput({
         </div>
       )}
 
+      {/* Google Drive file previews */}
+      {selectedDriveFiles.length > 0 && (
+        <div className="mb-3 flex flex-wrap gap-2">
+          {selectedDriveFiles.map((file, index) => (
+            <div
+              key={index}
+              className="bg-muted/50 border-primary/20 flex items-center gap-2 rounded-lg border px-3 py-2"
+            >
+              <HardDrive className="h-4 w-4 text-primary" />
+              <div className="min-w-0 flex-1">
+                <p className="max-w-[200px] truncate text-sm font-medium">{file.name}</p>
+                <p className="text-muted-foreground text-xs">Google Drive</p>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-6 w-6 p-0"
+                onClick={() => removeDriveFile(index)}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+          ))}
+        </div>
+      )}
+
       {/* Upload progress */}
       {uploads.length > 0 && (
         <div className="mb-3 space-y-2">
@@ -343,6 +444,20 @@ export function MessageInput({
         >
           <Paperclip className="text-muted-foreground h-5 w-5" />
         </Button>
+
+        <GoogleDrivePicker
+          onSelect={handleDriveFileSelect}
+          trigger={
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-9 w-9 p-0"
+              disabled={disabled || isUploading}
+            >
+              <HardDrive className="text-muted-foreground h-5 w-5" />
+            </Button>
+          }
+        />
 
         <div className="relative flex-1">
           {isPreview ? (

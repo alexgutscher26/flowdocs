@@ -29,9 +29,8 @@ interface ChatLayoutProps {
  *
  * This component manages the state of the active channel, handles WebSocket connections for real-time messaging,
  * and provides functionalities for sending messages, managing typing indicators, and displaying online users.
- * It also fetches channel details and updates the UI based on user interactions, such as joining channels and
- * sending reactions to messages. The component integrates various subcomponents for message input, message list,
- * and channel sidebar, ensuring a cohesive chat experience.
+ * It fetches channel details, subscribes to typing and presence updates, and integrates various subcomponents for
+ * a cohesive chat experience, including message input, message list, and channel sidebar.
  *
  * @param workspaceId - The ID of the workspace to which the chat belongs.
  * @param userId - The ID of the current user.
