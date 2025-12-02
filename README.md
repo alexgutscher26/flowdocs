@@ -1,183 +1,108 @@
-<a href="https://www.prismstack.com/hagenkit">
-  <h1 align="center">FlowDocs: Team Communication & Knowledge Base Hybrid</h1>
+<a href="https://flowdocs.dev">
+  <h1 align="center">FlowDocs</h1>
 </a>
 
 <p align="center">
-  Chat that becomes documentation automatically—no more lost context in endless Slack threads.
+  <strong>Team Communication & Knowledge Base Hybrid</strong><br>
+  The open-source alternative to Slack + Notion.
 </p>
 
 <p align="center">
-  <img width="1200" alt="FlowDocs dashboard mockup" src="public/hero.png" />
-</p>
-
-<p align="center">
-  <a href="https://github.com/codehagen/hagenkit/blob/main/LICENSE.md">
-    <img src="https://img.shields.io/badge/license-AGPL--3.0-blue.svg" alt="License: AGPL-3.0" />
-  </a>
-</p>
-
-<p align="center">
-  <a href="#introduction"><strong>Introduction</strong></a> ·
-  <a href="#installation"><strong>Installation</strong></a> ·
-  <a href="#tech-stack--features"><strong>Tech Stack + Features</strong></a> ·
-  <a href="#architecture"><strong>Architecture</strong></a> ·
-  <a href="#directory-structure"><strong>Directory Structure</strong></a> ·
-  <a href="#contributing"><strong>Contributing</strong></a>
+  <a href="#features"><strong>Features</strong></a> ·
+  <a href="#getting-started"><strong>Getting Started</strong></a> ·
+  <a href="#tech-stack"><strong>Tech Stack</strong></a> ·
+  <a href="#documentation"><strong>Documentation</strong></a>
 </p>
 <br/>
 
 ## Introduction
 
-HagenKit is a batteries-included SaaS boilerplate that combines modern product design with production-ready infrastructure. Built on Next.js 16 and the App Router, it delivers authentication, multi-tenant workspaces, dashboards, and a marketing site so you can focus on customer value instead of scaffolding.
+FlowDocs is a modern collaboration platform that combines real-time chat with structured documentation. It solves the problem of lost context by allowing you to easily convert chat threads into permanent wiki pages, all searchable through a powerful AI assistant.
 
-**Highlights**
+## Features
 
-- **Multi-tenant SaaS foundations** – Workspace model with owner/admin/member/viewer roles, invitations, and default workspace management.
-- **Authentication that scales** – Better Auth with email/password, Google OAuth, session management, and client helpers for hydration-safe flows.
-- **Responsive UI system** – Shadcn UI + Tailwind CSS components, marketing sections, and dashboard primitives tuned for accessibility.
-- **Email-ready out of the box** – React Email templates and Resend integration for transactional messages.
-- **Developer velocity** – TypeScript everywhere, server actions, data hooks, and deploy-ready configuration for Vercel.
+### 💬 Real-time Communication
+- **Channels & Threads**: Organize discussions by topic.
+- **Direct Messages**: Private 1:1 or group conversations.
+- **Rich Text Editor**: Markdown support, code blocks, and file attachments.
+- **Reactions & Mentions**: Express yourself and notify teammates.
 
-## Installation
+### 📚 Knowledge Base (Wiki)
+- **Structured Documentation**: Create and organize wiki pages with a hierarchy.
+- **Thread-to-Wiki**: One-click conversion of chat threads into documentation.
+- **Version History**: Track changes and revert if needed.
+- **Collaborative Editing**: Real-time updates (coming soon).
 
-Clone the repository and install dependencies:
+### 🤖 AI Assistant (RAG)
+- **Context-Aware Answers**: Ask questions about your workspace content.
+- **Source Citations**: See exactly which messages or wiki pages were used.
+- **Summarization**: Get quick summaries of long threads.
+- **Proactive Suggestions**: AI suggests when to create a wiki page from a discussion.
+- **Powered by OpenRouter**: Use Claude 3.5 Sonnet, GPT-4o, or any other model.
 
-```bash
-git clone https://github.com/your-org/hagenkit.git
-cd hagenkit
-pnpm install
-```
+### 🔍 Search & Discovery
+- **Full-Text Search**: Powered by Typesense for lightning-fast results.
+- **Unified Search**: Search across messages, files, and wiki pages.
+- **Filters**: Narrow down by user, channel, date, or tag.
 
-Set up environment variables:
+## Getting Started
 
-```bash
-cp .env.example .env.local
-```
+### Prerequisites
+- Node.js 18+
+- PostgreSQL
+- Typesense (for search)
+- OpenRouter API Key (for AI features)
 
-Update `.env.local` with your credentials:
+### Installation
 
-- `DATABASE_URL` for PostgreSQL (direct connection).
-- `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, `NEXT_PUBLIC_APP_URL`.
-- OAuth providers such as `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`.
-- Optional integrations (`RESEND_API_KEY`, Stripe keys, etc.).
+1.  **Clone the repository**
+    ```bash
+    git clone https://github.com/your-org/flowdocs.git
+    cd flowdocs
+    ```
 
-Generate the Prisma client and sync the schema:
+2.  **Install dependencies**
+    ```bash
+    bun install
+    ```
 
-```bash
-pnpm prisma:generate
-pnpm prisma:push
-```
+3.  **Set up environment variables**
+    ```bash
+    cp .env.example .env.local
+    ```
+    Update `.env.local` with your credentials:
+    - `DATABASE_URL` (PostgreSQL)
+    - `TYPESENSE_API_KEY` & Host
+    - `OPENROUTER_API_KEY` (Get from [openrouter.ai](https://openrouter.ai))
+    - `BETTER_AUTH_SECRET` & URL
 
-Start the development server with Turbopack:
+4.  **Initialize Database**
+    ```bash
+    bun prisma:generate
+    bun prisma:push
+    ```
 
-```bash
-pnpm dev
-```
+5.  **Start Development Server**
+    ```bash
+    bun dev
+    ```
 
-- `pnpm email` – launch the React Email preview server.
-- `pnpm lint` – run ESLint with the project config.
+## Tech Stack
 
-## Magic Link Setup
+- **Framework**: Next.js 16 (App Router)
+- **Database**: PostgreSQL + Prisma ORM
+- **Auth**: Better Auth
+- **Search**: Typesense
+- **AI**: Vercel AI SDK + OpenRouter
+- **Styling**: Tailwind CSS + Shadcn UI
+- **Real-time**: WebSocket (Custom implementation)
+- **File Storage**: AWS S3 / Cloudflare R2
 
-HagenKit supports Magic Link authentication out of the box.
+## Documentation
 
-### Development
+- [Security Policy](SECURITY.md)
+- [Contributing Guidelines](CONTRIBUTING.md)
 
-For a seamless developer experience, if you do not provide a `RESEND_API_KEY` in your `.env.local` file while in development mode, **emails will be logged to your terminal console**.
+## License
 
-1.  Go to the Sign In page.
-2.  Enter your email and click "Sign in with Magic Link".
-3.  Check your terminal where `pnpm dev` is running.
-4.  Click the link printed in the console to sign in.
-
-### Production
-
-For production, you must set up Resend:
-
-1.  Create an account at [Resend](https://resend.com).
-2.  Get your API Key.
-3.  Add `RESEND_API_KEY` to your environment variables.
-4.  Verify your domain in Resend to ensure emails are delivered reliably.
-
-## 🛡️ Security: First User Setup
-
-**Automatic Admin Assignment:**
-HagenKit automatically assigns the `admin` role to the **first user** who signs up. This ensures you have immediate access to the admin panel without any manual database manipulation.
-
-1.  **First Sign-Up**: The first user created in the system will be granted the `admin` role.
-2.  **Subsequent Users**: All users signing up after the first one will be assigned the default `user` role.
-
-**No manual schema changes or migrations are required.** The system handles this logic securely via database hooks.
-
-## Tech Stack + Features
-
-### Frameworks & Platforms
-
-- **Next.js 16** – App Router, Server Actions, and edge-ready rendering.
-- **Prisma ORM v7 + PostgreSQL** – Type-safe ORM with `@prisma/adapter-pg` driver for direct TCP connections. Generated client in `app/generated/prisma`.
-- **Better Auth** – Composable auth with cookie/session helpers and social providers.
-- **Vercel** – First-class deployment target with optimized build output.
-
-### UI & UX
-
-- **Shadcn UI & Tailwind CSS** – Component library with design tokens and Radix primitives.
-- **Framer Motion (via `motion`)** – Micro-interactions and animation choreography.
-- **Lucide & Tabler Icons** – Consistent iconography across marketing and product surfaces.
-- **Responsive marketing shell** – Polished landing page in `app/(marketing)` with reusable layout primitives.
-
-### Application Capabilities
-
-- **Dashboard modules** – Team, analytics, lifecycle, and settings routes ready for data wiring.
-- **Workspace management** – Invitations, member role updates, and ownership safeguards.
-- **Settings UI** – Account, profile, and workspace panels using configurable data tables (`@tanstack/react-table`).
-- **Search & filtering utilities** – `nuqs` for deep-linkable filters and stateful navigation.
-- **Productivity hooks** – Debounced callbacks, media queries, and mobile detection helpers.
-
-### Communications
-
-- **React Email** templates in `emails/` ready for transactional flows.
-- **Resend** integration glue for real email delivery.
-
-## Architecture
-
-HagenKit separates concerns to keep features composable and scalable:
-
-- **App Router segmentation** – Marketing `app/(marketing)`, auth flows `app/(auth)`, admin area `app/(admin)`, and the authenticated dashboard under `app/dashboard`.
-- **Server Actions** – Business logic lives in `app/actions/*` with typed inputs and output helpers (`ActionResult`).
-- **Data Layer** – Prisma schema models users, sessions, workspaces, invitations, and roles for robust multi-tenancy.
-- **Configuration** – Centralized metadata in `lib/config.ts` powers SEO, social cards, and upgrade CTAs.
-- **UI System** – Shared primitives in `components/ui`, marketing layout helpers, and specialized dashboard/admin components.
-
-## Directory Structure
-
-```
-.
-├── app
-│   ├── (marketing)        # Public marketing landing experience
-│   ├── (auth)             # Sign-in and sign-up flows
-│   ├── (admin)            # Admin panel entry
-│   ├── dashboard          # Authenticated product surface
-│   ├── actions            # Server actions for auth, workspaces, admin tools
-│   └── generated/prisma   # Generated Prisma client (keep in sync)
-├── components
-│   ├── ui                 # Shadcn-derived component library
-│   ├── auth               # Auth-specific views and helpers
-│   ├── dashboard          # Dashboard shell and empty states
-│   ├── settings           # Settings navigation, forms, tables
-│   └── marketing          # Landing page layout primitives
-├── emails                 # React Email templates and preview entrypoint
-├── hooks                  # Reusable client hooks (media queries, debounce, tables)
-├── lib                    # Auth, config, utilities, and Prisma helpers
-├── prisma                 # Database schema and migrations
-└── public                 # Static assets (hero imagery, icons, og assets)
-```
-
-## Contributing
-
-We welcome contributions! To get involved:
-
-- Open an issue for bugs, feature requests, or questions.
-- Submit a pull request with clear scope, tests when applicable, and a concise changelog entry.
-- Share feedback on developer experience, documentation, or onboarding.
-
-Let's build production-grade SaaS products faster—together.
+AGPL-3.0
