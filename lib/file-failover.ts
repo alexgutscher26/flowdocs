@@ -13,11 +13,15 @@ export interface FileWithBackup {
 }
 
 /**
- * Get the best available URL for a file with automatic failover
+ * Get the best available URL for a file with automatic failover.
  *
- * @param file - File object with primary and backup URLs
- * @param preferBackup - If true, prefer backup URL over primary (useful for testing)
- * @returns Promise<string> - The working URL
+ * This function attempts to retrieve a working URL for a given file by first checking the backup URL if preferred.
+ * If the backup URL is not valid or not preferred, it checks the primary URL. If both URLs fail, an error is thrown.
+ *
+ * @param file - File object with primary and backup URLs.
+ * @param preferBackup - If true, prefer backup URL over primary (useful for testing).
+ * @returns A promise that resolves to the working URL.
+ * @throws Error If both primary and backup URLs are unavailable.
  */
 export async function getFileUrl(file: FileWithBackup, preferBackup = false): Promise<string> {
   const primaryUrl = file.url;
@@ -70,12 +74,12 @@ async function testUrl(url: string): Promise<boolean> {
 }
 
 /**
- * Get multiple file URLs with failover
- * Optimized to test URLs in parallel
+ * Get multiple file URLs with failover.
  *
- * @param files - Array of files with backup URLs
- * @param preferBackup - If true, prefer backup URLs
- * @returns Promise<Map<string, string>> - Map of file IDs to working URLs
+ * This function retrieves URLs for a list of files, utilizing a backup URL if specified. It processes the files in parallel using `Promise.all`, ensuring that each file's URL is fetched asynchronously. If an error occurs while fetching a URL, it logs the error without interrupting the retrieval of other URLs.
+ *
+ * @param files - Array of files with backup URLs, each containing an `id` property.
+ * @param preferBackup - If true, prefer backup URLs when fetching.
  */
 export async function getFileUrls(
   files: (FileWithBackup & { id: string })[],
