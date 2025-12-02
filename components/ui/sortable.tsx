@@ -301,6 +301,9 @@ interface SortableContentProps extends React.ComponentProps<"div"> {
   withoutSlot?: boolean;
 }
 
+/**
+ * Renders sortable content with optional slot and strategy.
+ */
 function SortableContent(props: SortableContentProps) {
   const { strategy: strategyProp, asChild, withoutSlot, children, ref, ...contentProps } = props;
 
@@ -309,7 +312,7 @@ function SortableContent(props: SortableContentProps) {
   const ContentPrimitive = asChild ? Slot : "div";
 
   return (
-    <SortableContentContext.Provider value={true}>
+    <SortableContentContext.Provider value>
       <SortableContext items={context.items} strategy={strategyProp ?? context.strategy}>
         {withoutSlot ? (
           children
@@ -510,7 +513,7 @@ function SortableOverlay(props: SortableOverlayProps) {
       className={cn(!context.flatCursor && "cursor-grabbing")}
       {...overlayProps}
     >
-      <SortableOverlayContext.Provider value={true}>
+      <SortableOverlayContext.Provider value>
         {context.activeId
           ? typeof children === "function"
             ? children({ value: context.activeId })

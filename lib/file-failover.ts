@@ -101,7 +101,6 @@ export async function getFileUrls(
  * Download file with automatic failover
  *
  * @param file - File object with primary and backup URLs
- * @returns Promise<Response> - Fetch response with file data
  */
 export async function downloadFile(file: FileWithBackup): Promise<Response> {
   const url = await getFileUrl(file);

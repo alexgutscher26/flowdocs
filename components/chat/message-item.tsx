@@ -5,7 +5,7 @@ import { ExtendedMessage, PresenceStatus } from "@/types/chat";
 import { formatMessageTime } from "@/lib/message-utils";
 import { UserPresence } from "./user-presence";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal, Reply, Pencil, Trash2, File as FileIcon } from "lucide-react";
+import { MoreHorizontal, Reply, Pencil, Trash2, File as FileIcon, HardDrive, ExternalLink } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,6 +32,25 @@ interface MessageItemProps {
   totalChannelMembers?: number;
 }
 
+/**
+ * Render a message item with various interactive features.
+ *
+ * This function displays a message along with its user information, content, attachments, and reactions.
+ * It handles hover states to show action buttons, and allows for replying, editing, deleting, and pinning messages.
+ * The component also manages the display of read receipts and user presence based on the provided props.
+ *
+ * @param message - The message object containing details such as user information, content, and attachments.
+ * @param isGrouped - A boolean indicating if the message is part of a grouped conversation.
+ * @param showAvatar - A boolean indicating if the user's avatar should be displayed.
+ * @param currentUserId - The ID of the current user for comparison with the message sender.
+ * @param onReply - Callback function to handle replying to the message.
+ * @param onEdit - Callback function to handle editing the message.
+ * @param onDelete - Callback function to handle deleting the message.
+ * @param onReaction - Callback function to handle adding a reaction to the message.
+ * @param onReactionRemove - Callback function to handle removing a reaction from the message.
+ * @param onPin - Callback function to handle pinning or unpinning the message.
+ * @param totalChannelMembers - The total number of members in the channel for read receipts.
+ */
 export function MessageItem({
   message,
   isGrouped = false,
@@ -111,7 +130,23 @@ export function MessageItem({
             <div className="mt-2 space-y-2">
               {message.attachments.map((attachment, index) => (
                 <div key={index}>
-                  {isImageFile(attachment.type) ? (
+                  {attachment.type === "google-drive" ? (
+                    <a
+                      href={attachment.webViewLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-muted/50 hover:bg-muted border-primary/20 flex max-w-sm items-center gap-2 rounded-lg border p-3 transition-colors"
+                    >
+                      <HardDrive className="h-5 w-5 text-primary" />
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-medium">{attachment.name}</p>
+                        <p className="text-muted-foreground text-xs flex items-center gap-1">
+                          Google Drive
+                          <ExternalLink className="h-3 w-3" />
+                        </p>
+                      </div>
+                    </a>
+                  ) : isImageFile(attachment.type) ? (
                     <a
                       href={attachment.url}
                       target="_blank"

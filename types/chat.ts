@@ -82,6 +82,7 @@ export interface ExtendedMessage extends Message {
 }
 
 export interface MessageAttachment {
+  [x: string]: string | undefined;
   key?: string; // UploadThing key
   name: string;
   url: string;
