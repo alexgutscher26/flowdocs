@@ -1,6 +1,6 @@
-import Typesense from "typesense";
+import Typesense, { Client } from "typesense";
 
-let client: Typesense.Client | null = null;
+let client: Client | null = null;
 
 function getClient() {
   if (!client) {

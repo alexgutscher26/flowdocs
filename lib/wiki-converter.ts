@@ -1,4 +1,5 @@
 import { ExtendedMessage } from "@/types/chat";
+import { summarizeThread } from "@/lib/ai/knowledge-base";
 
 /**
  * Configuration options for wiki conversion
@@ -315,8 +316,15 @@ export class WikiConverter {
     analysis: ThreadAnalysis
   ): Promise<string> {
     if (this.options.useAI) {
-      // TODO: Integrate with AI service for smart summaries
-      return this.generateBasicSummary(messages, analysis);
+      try {
+        // Use AI to summarize the thread
+        // We need to cast to any because of type mismatch between manual types and Prisma types
+        // but the structure is compatible for what summarizeThread needs (userId, content)
+        return await summarizeThread(messages as any);
+      } catch (error) {
+        console.error("Failed to generate AI summary, falling back to basic summary:", error);
+        return this.generateBasicSummary(messages, analysis);
+      }
     }
 
     return this.generateBasicSummary(messages, analysis);
