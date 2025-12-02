@@ -76,9 +76,9 @@ export function GoogleDriveBrowser({ onSelect }: GoogleDriveBrowserProps) {
   };
 
   return (
-    <div className="flex flex-col gap-4 h-[500px]">
+    <div className="flex h-[500px] flex-col gap-4">
       <div className="relative">
-        <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+        <Search className="text-muted-foreground absolute top-2.5 left-2 h-4 w-4" />
         <Input
           placeholder="Search Drive..."
           value={searchQuery}
@@ -87,18 +87,18 @@ export function GoogleDriveBrowser({ onSelect }: GoogleDriveBrowserProps) {
         />
       </div>
 
-      <ScrollArea className="h-[400px] border rounded-md" type="always">
+      <ScrollArea className="h-[400px] rounded-md border" type="always">
         <div className="p-4">
           {loading && files.length === 0 ? (
-            <div className="flex items-center justify-center h-full min-h-[200px]">
-              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+            <div className="flex h-full min-h-[200px] items-center justify-center">
+              <Loader2 className="text-muted-foreground h-6 w-6 animate-spin" />
             </div>
           ) : files.length > 0 ? (
             <div className="flex flex-col gap-2">
               {files.map((file) => (
                 <div
                   key={file.id}
-                  className="flex items-center gap-3 p-2 hover:bg-muted rounded-md cursor-pointer transition-colors"
+                  className="hover:bg-muted flex cursor-pointer items-center gap-3 rounded-md p-2 transition-colors"
                   onClick={() => onSelect?.(file)}
                 >
                   {file.thumbnailLink ? (
@@ -111,8 +111,8 @@ export function GoogleDriveBrowser({ onSelect }: GoogleDriveBrowserProps) {
                     getFileIcon(file.mimeType)
                   )}
                   <div className="flex flex-col overflow-hidden">
-                    <span className="text-sm font-medium truncate">{file.name}</span>
-                    <span className="text-xs text-muted-foreground truncate">{file.mimeType}</span>
+                    <span className="truncate text-sm font-medium">{file.name}</span>
+                    <span className="text-muted-foreground truncate text-xs">{file.mimeType}</span>
                   </div>
                 </div>
               ))}
@@ -124,13 +124,13 @@ export function GoogleDriveBrowser({ onSelect }: GoogleDriveBrowserProps) {
                   disabled={loading}
                   className="mt-2 w-full"
                 >
-                  {loading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
+                  {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                   Load More
                 </Button>
               )}
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center h-full min-h-[200px] text-muted-foreground">
+            <div className="text-muted-foreground flex h-full min-h-[200px] flex-col items-center justify-center">
               <p>No files found</p>
             </div>
           )}

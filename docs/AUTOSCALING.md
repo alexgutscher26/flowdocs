@@ -5,6 +5,7 @@ This document describes the auto-scaling configurations available for FlowDocs a
 ## Overview
 
 Auto-scaling configurations are provided for:
+
 - Vercel (serverless)
 - Docker Compose (local/development)
 - Kubernetes (K8s)
@@ -15,6 +16,7 @@ Auto-scaling configurations are provided for:
 **File:** `vercel.json`
 
 Vercel provides automatic serverless scaling. Configuration includes:
+
 - Function memory limits (512MB for API routes, 1GB for app routes)
 - Maximum execution duration (30s for API, 60s for app)
 - Regional deployment (iad1 - US East)
@@ -28,6 +30,7 @@ Vercel automatically scales based on incoming requests with no manual configurat
 **File:** `docker-compose.yml`
 
 For local development and small deployments:
+
 - 2 replicas by default
 - Resource limits: 1 CPU, 1GB memory per container
 - Resource reservations: 0.5 CPU, 512MB memory
@@ -35,6 +38,7 @@ For local development and small deployments:
 - Health checks every 30 seconds
 
 **Usage:**
+
 ```bash
 docker-compose up -d --scale app=3
 ```
@@ -44,6 +48,7 @@ docker-compose up -d --scale app=3
 **Files:** `k8s/deployment.yaml`, `k8s/hpa.yaml`, `k8s/configmap.yaml`
 
 ### Deployment
+
 - Initial replicas: 3
 - Resource requests: 500m CPU, 512Mi memory
 - Resource limits: 1000m CPU, 1Gi memory
@@ -51,20 +56,24 @@ docker-compose up -d --scale app=3
 - Session affinity enabled (3-hour timeout)
 
 ### Horizontal Pod Autoscaler (HPA)
+
 - Min replicas: 2
 - Max replicas: 10
 - CPU target: 70% utilization
 - Memory target: 80% utilization
 
 **Scale-up behavior:**
+
 - Immediate scaling (0s stabilization)
 - Can scale up by 100% or 4 pods per 30 seconds
 
 **Scale-down behavior:**
+
 - 5-minute stabilization window
 - Can scale down by 50% or 2 pods per 60 seconds
 
 **Deployment:**
+
 ```bash
 kubectl apply -f k8s/configmap.yaml
 kubectl apply -f k8s/deployment.yaml
@@ -72,6 +81,7 @@ kubectl apply -f k8s/hpa.yaml
 ```
 
 **Monitoring:**
+
 ```bash
 kubectl get hpa flowdocs-hpa --watch
 kubectl top pods -l app=flowdocs
@@ -79,12 +89,14 @@ kubectl top pods -l app=flowdocs
 
 ## AWS ECS Fargate
 
-**Files:** 
+**Files:**
+
 - `aws/ecs-task-definition.json`
 - `aws/ecs-service-autoscaling.json`
 - `aws/cloudformation-autoscaling.yaml`
 
 ### Task Definition
+
 - CPU: 1024 (1 vCPU)
 - Memory: 2048 MB
 - Health checks every 30 seconds
@@ -110,11 +122,13 @@ Three target tracking policies:
    - Scale-in cooldown: 300s
 
 ### Capacity
+
 - Min: 2 tasks
 - Max: 10 tasks
 - Desired: 3 tasks
 
 ### Deployment Strategy
+
 - Maximum: 200% (allows full replacement)
 - Minimum healthy: 100%
 - Circuit breaker enabled with automatic rollback
@@ -122,11 +136,13 @@ Three target tracking policies:
 ### CloudFormation Deployment
 
 **Prerequisites:**
+
 1. VPC with public subnets
 2. ECR repository with Docker image
 3. Secrets in AWS Secrets Manager
 
 **Deploy:**
+
 ```bash
 aws cloudformation create-stack \
   --stack-name flowdocs-autoscaling \
@@ -142,6 +158,7 @@ aws cloudformation create-stack \
 ```
 
 **Monitor:**
+
 ```bash
 aws ecs describe-services \
   --cluster flowdocs-cluster \
@@ -157,6 +174,7 @@ aws application-autoscaling describe-scaling-activities \
 **File:** `Dockerfile`
 
 Multi-stage build optimized for production:
+
 - Base: Node 20 Alpine
 - Stages: deps, builder, runner
 - Non-root user (nextjs:nodejs)
@@ -164,11 +182,13 @@ Multi-stage build optimized for production:
 - Standalone output for minimal image size
 
 **Build:**
+
 ```bash
 docker build -t flowdocs:latest .
 ```
 
 **Run locally:**
+
 ```bash
 docker run -p 3000:3000 \
   -e DATABASE_URL="postgresql://..." \
@@ -181,6 +201,7 @@ docker run -p 3000:3000 \
 ## Health Check Endpoint
 
 All configurations rely on `/api/health` endpoint. Ensure this endpoint exists and returns:
+
 - Status code: 200
 - Response time: < 5 seconds
 
@@ -217,17 +238,20 @@ All configurations rely on `/api/health` endpoint. Ensure this endpoint exists a
 ## Troubleshooting
 
 ### Pods/Tasks not scaling up
+
 - Check metrics server is running (K8s)
 - Verify resource requests are set
 - Check HPA/scaling policy status
 - Review CloudWatch/metrics
 
 ### Frequent scaling oscillation
+
 - Increase stabilization window
 - Adjust target utilization thresholds
 - Review scale-in/scale-out cooldowns
 
 ### Health checks failing
+
 - Increase startup period
 - Check application logs
 - Verify health endpoint response time

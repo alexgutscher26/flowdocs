@@ -77,10 +77,10 @@ export function WikiBreadcrumbs({
       : []);
 
   return (
-    <nav className="flex items-center text-sm text-muted-foreground">
+    <nav className="text-muted-foreground flex items-center text-sm">
       <Link
         href={`/dashboard/wiki/${workspaceId}`}
-        className="flex items-center hover:text-foreground"
+        className="hover:text-foreground flex items-center"
       >
         <Home className="h-4 w-4" />
       </Link>
@@ -94,7 +94,7 @@ export function WikiBreadcrumbs({
               <div key={item.id} className="flex items-center">
                 {index > 0 && <ChevronRight className="mx-2 h-4 w-4" />}
                 {isLast ? (
-                  <span className="font-medium text-foreground">{item.title}</span>
+                  <span className="text-foreground font-medium">{item.title}</span>
                 ) : (
                   <Link
                     href={`/dashboard/wiki/${workspaceId}/${item.slug}`}

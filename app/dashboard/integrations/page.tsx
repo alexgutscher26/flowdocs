@@ -120,18 +120,18 @@ export default function IntegrationsPage() {
           <Card key={integration.id} className="flex flex-col">
             <CardHeader className="flex flex-row items-start justify-between gap-4 space-y-0">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted">
+                <div className="bg-muted flex h-10 w-10 items-center justify-center rounded-lg">
                   <integration.icon className="h-6 w-6" />
                 </div>
                 <div className="flex flex-col">
                   <CardTitle className="text-base">{integration.name}</CardTitle>
-                  <span className="text-xs text-muted-foreground">{integration.category}</span>
+                  <span className="text-muted-foreground text-xs">{integration.category}</span>
                 </div>
               </div>
               {integration.connected && (
                 <Badge
                   variant="secondary"
-                  className="bg-green-500/10 text-green-600 hover:bg-green-500/20 hover:text-green-700 border-green-200"
+                  className="border-green-200 bg-green-500/10 text-green-600 hover:bg-green-500/20 hover:text-green-700"
                 >
                   Connected
                 </Badge>

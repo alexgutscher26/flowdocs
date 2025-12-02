@@ -1,29 +1,29 @@
-AWSTemplateFormatVersion: '2010-09-09'
-Description: 'FlowDocs ECS Fargate Auto-Scaling Infrastructure'
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "FlowDocs ECS Fargate Auto-Scaling Infrastructure"
 
 Parameters:
   VpcId:
     Type: AWS::EC2::VPC::Id
     Description: VPC ID for the ECS cluster
-  
+
   SubnetIds:
     Type: List<AWS::EC2::Subnet::Id>
     Description: Subnet IDs for the ECS tasks
-  
+
   ImageUri:
     Type: String
     Description: ECR image URI
-  
+
   MinCapacity:
     Type: Number
     Default: 2
     Description: Minimum number of tasks
-  
+
   MaxCapacity:
     Type: Number
     Default: 10
     Description: Maximum number of tasks
-  
+
   DesiredCapacity:
     Type: Number
     Default: 3
@@ -51,8 +51,8 @@ Resources:
       NetworkMode: awsvpc
       RequiresCompatibilities:
         - FARGATE
-      Cpu: '1024'
-      Memory: '2048'
+      Cpu: "1024"
+      Memory: "2048"
       ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
       TaskRoleArn: !GetAtt TaskRole.Arn
       ContainerDefinitions:
@@ -66,7 +66,7 @@ Resources:
             - Name: NODE_ENV
               Value: production
             - Name: PORT
-              Value: '3000'
+              Value: "3000"
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -76,7 +76,7 @@ Resources:
           HealthCheck:
             Command:
               - CMD-SHELL
-              - node -e "require('http').get('http://localhost:3000/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
+              - node -e "require('http').get('http://localhost:3000/api/health', (r) => {process.exit(r.statusCode === 200 ? 0: 1)})"
             Interval: 30
             Timeout: 5
             Retries: 3
@@ -154,7 +154,7 @@ Resources:
       TargetTrackingScalingPolicyConfiguration:
         PredefinedMetricSpecification:
           PredefinedMetricType: ALBRequestCountPerTarget
-          ResourceLabel: !Sub 
+          ResourceLabel: !Sub
             - ${LoadBalancerFullName}/${TargetGroupFullName}
             - LoadBalancerFullName: !GetAtt LoadBalancer.LoadBalancerFullName
               TargetGroupFullName: !GetAtt TargetGroup.TargetGroupFullName
@@ -278,11 +278,11 @@ Outputs:
   LoadBalancerDNS:
     Description: DNS name of the load balancer
     Value: !GetAtt LoadBalancer.DNSName
-  
+
   ServiceName:
     Description: Name of the ECS service
     Value: !GetAtt Service.Name
-  
+
   ClusterName:
     Description: Name of the ECS cluster
     Value: !Ref ECSCluster

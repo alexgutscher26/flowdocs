@@ -60,7 +60,7 @@ export function WikiSidebar({ workspaceId }: WikiSidebarProps) {
 
   if (!tree || tree.length === 0) {
     return (
-      <div className="p-4 text-sm text-muted-foreground">
+      <div className="text-muted-foreground p-4 text-sm">
         No pages found. Create one to get started.
       </div>
     );

@@ -11,8 +11,8 @@
   },
   "regions": ["iad1"],
   "framework": "nextjs",
-  "buildCommand": "npm run build",
-  "installCommand": "npm ci",
+  "buildCommand": "bun run build",
+  "installCommand": "bun ci",
   "env": {
     "NODE_ENV": "production"
   },

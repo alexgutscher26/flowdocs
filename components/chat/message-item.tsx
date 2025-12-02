@@ -145,10 +145,10 @@ export function MessageItem({
                       rel="noopener noreferrer"
                       className="bg-muted/50 hover:bg-muted border-primary/20 flex max-w-sm items-center gap-2 rounded-lg border p-3 transition-colors"
                     >
-                      <HardDrive className="h-5 w-5 text-primary" />
+                      <HardDrive className="text-primary h-5 w-5" />
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-sm font-medium">{attachment.name}</p>
-                        <p className="text-muted-foreground text-xs flex items-center gap-1">
+                        <p className="text-muted-foreground flex items-center gap-1 text-xs">
                           Google Drive
                           <ExternalLink className="h-3 w-3" />
                         </p>
@@ -164,14 +164,14 @@ export function MessageItem({
                       <img
                         src={attachment.url}
                         alt={attachment.name}
-                        className="max-h-96 max-w-full h-auto rounded-lg border object-contain transition-opacity hover:opacity-90"
+                        className="h-auto max-h-96 max-w-full rounded-lg border object-contain transition-opacity hover:opacity-90"
                       />
                     </a>
                   ) : isVideoFile(attachment.type) ? (
                     <video
                       src={attachment.url}
                       controls
-                      className="max-h-96 max-w-full h-auto rounded-lg border"
+                      className="h-auto max-h-96 max-w-full rounded-lg border"
                     />
                   ) : (
                     <a

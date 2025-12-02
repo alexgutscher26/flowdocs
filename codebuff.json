@@ -3,7 +3,7 @@
   "startupProcesses": [
     {
       "name": "dev-server",
-      "command": "npm run dev",
+      "command": "bun run dev",
       "stdoutFile": "logs/dev-server.log"
     }
   ],

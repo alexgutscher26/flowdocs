@@ -58,14 +58,14 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
 
       - name: Install dependencies (base)
         run: npm ci
 
       - name: Build base
-        run: npm run build
+        run: bun run build
         env:
           DATABASE_URL: postgresql://user:password@localhost:5432/test
           BETTER_AUTH_SECRET: test-secret
@@ -84,7 +84,7 @@ jobs:
         run: npm ci
 
       - name: Build PR
-        run: npm run build
+        run: bun run build
         env:
           DATABASE_URL: postgresql://user:password@localhost:5432/test
           BETTER_AUTH_SECRET: test-secret
@@ -104,7 +104,7 @@ jobs:
             const prSize = parseInt('${{ steps.pr-size.outputs.size }}');
             const diff = prSize - baseSize;
             const diffPercent = ((diff / baseSize) * 100).toFixed(2);
-            
+
             const formatBytes = (bytes) => {
               if (bytes === 0) return '0 Bytes';
               const k = 1024;
@@ -112,20 +112,20 @@ jobs:
               const i = Math.floor(Math.log(bytes) / Math.log(k));
               return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
             };
-            
+
             const emoji = diff > 0 ? '📈' : diff < 0 ? '📉' : '➡️';
             const sign = diff > 0 ? '+' : '';
-            
+
             const comment = `## ${emoji} Bundle Size Report
-            
+
             | Metric | Size |
             |--------|------|
             | Base | ${formatBytes(baseSize)} |
             | PR | ${formatBytes(prSize)} |
             | Diff | ${sign}${formatBytes(Math.abs(diff))} (${sign}${diffPercent}%) |
-            
+
             ${Math.abs(diff) > 1024 * 1024 ? '⚠️ Bundle size changed by more than 1MB' : ''}`;
-            
+
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
@@ -147,19 +147,19 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
 
       - name: Generate Prisma Client
-        run: npm run prisma:generate
+        run: bun run prisma:generate
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
       - name: Build
-        run: npm run build
+        run: bun run build
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}

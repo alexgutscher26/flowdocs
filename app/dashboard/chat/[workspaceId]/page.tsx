@@ -1,4 +1,5 @@
 import { ChatLayout } from "@/components/chat";
+import { AIChatWidget } from "@/components/ai";
 import { getCurrentUser } from "@/app/actions/user";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
@@ -59,6 +60,7 @@ export default async function ChatPage({ params }: ChatPageProps) {
         userName={user.name || user.email}
         className="h-full"
       />
+      <AIChatWidget workspaceId={workspace.id} />
     </div>
   );
 }

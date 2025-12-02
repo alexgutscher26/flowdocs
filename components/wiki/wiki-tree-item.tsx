@@ -53,14 +53,14 @@ export function WikiTreeItem({ node, workspaceId, level = 0 }: WikiTreeItemProps
     <Collapsible open={isOpen} onOpenChange={setIsOpen}>
       <div
         className={cn(
-          "group flex items-center gap-2 rounded-md px-2 py-1.5 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
+          "group hover:bg-accent hover:text-accent-foreground flex items-center gap-2 rounded-md px-2 py-1.5 text-sm font-medium",
           isActive && "bg-accent text-accent-foreground"
         )}
         style={{ paddingLeft: `${level * 12 + 8}px` }}
       >
         {hasChildren ? (
           <CollapsibleTrigger asChild onClick={handleToggle}>
-            <button className="h-4 w-4 shrink-0 hover:text-foreground/80">
+            <button className="hover:text-foreground/80 h-4 w-4 shrink-0">
               <ChevronRight
                 className={cn("h-4 w-4 transition-transform duration-200", isOpen && "rotate-90")}
               />
@@ -81,7 +81,7 @@ export function WikiTreeItem({ node, workspaceId, level = 0 }: WikiTreeItemProps
               <Folder className="h-4 w-4 shrink-0 text-blue-500" />
             )
           ) : (
-            <FileText className="h-4 w-4 shrink-0 text-muted-foreground" />
+            <FileText className="text-muted-foreground h-4 w-4 shrink-0" />
           )}
           <span className="truncate">{node.title}</span>
         </Link>

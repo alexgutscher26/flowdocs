@@ -392,7 +392,7 @@ export function MessageInput({
               key={index}
               className="bg-muted/50 border-primary/20 flex items-center gap-2 rounded-lg border px-3 py-2"
             >
-              <HardDrive className="h-4 w-4 text-primary" />
+              <HardDrive className="text-primary h-4 w-4" />
               <div className="min-w-0 flex-1">
                 <p className="max-w-[200px] truncate text-sm font-medium">{file.name}</p>
                 <p className="text-muted-foreground text-xs">Google Drive</p>

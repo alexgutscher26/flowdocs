@@ -16,13 +16,13 @@ A Next.js application with real-time collaboration features.
 
 ## Key Commands
 
-- `npm run dev` - Start development server with WebSocket support
-- `npm run build` - Build for production
-- `npm run email` - Preview email templates
-- `npm run prisma:migrate` - Run database migrations
-- `npm run prisma:generate` - Generate Prisma client
-- `npm run lint` - Run ESLint
-- `npm run format` - Format code with Prettier
+- `bun run dev` - Start development server with WebSocket support
+- `bun run build` - Build for production
+- `bun run email` - Preview email templates
+- `bun run prisma:migrate` - Run database migrations
+- `bun run prisma:generate` - Generate Prisma client
+- `bun run lint` - Run ESLint
+- `bun run format` - Format code with Prettier
 
 ## Project Structure
 

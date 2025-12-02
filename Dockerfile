@@ -20,7 +20,7 @@ RUN npx prisma generate
 
 # Build Next.js application
 ENV NEXT_TELEMETRY_DISABLED=1
-RUN npm run build
+RUN bun run build
 
 # Production image, copy all the files and run next
 FROM base AS runner

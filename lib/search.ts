@@ -26,6 +26,7 @@ const messagesSchema = {
     { name: "content", type: "string" },
     { name: "channelId", type: "string", facet: true },
     { name: "userId", type: "string", facet: true },
+    { name: "threadId", type: "string", facet: true, optional: true },
     { name: "createdAt", type: "int64", sort: true },
   ],
   default_sorting_field: "createdAt",
@@ -111,6 +112,7 @@ export async function indexMessage(message: any) {
       content: message.content,
       channelId: message.channelId,
       userId: message.userId,
+      threadId: message.threadId,
       createdAt: new Date(message.createdAt).getTime(),
     };
     await getClient().collections("messages").documents().upsert(document);

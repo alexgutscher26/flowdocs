@@ -500,7 +500,7 @@ export function WikiPageView({
                         type="checkbox"
                         checked={isChecked}
                         onChange={() => handleCheckboxChange(index)}
-                        className="mr-2 h-4 w-4 cursor-pointer rounded border-gray-300 text-primary focus:ring-2 focus:ring-primary"
+                        className="text-primary focus:ring-primary mr-2 h-4 w-4 cursor-pointer rounded border-gray-300 focus:ring-2"
                       />
                     );
                   }

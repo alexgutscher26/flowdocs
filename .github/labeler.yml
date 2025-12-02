@@ -1,42 +1,42 @@
 # Auto-labeling configuration for PRs
 
-'dependencies':
+"dependencies":
   - package.json
   - package-lock.json
   - bun.lock
 
-'database':
+"database":
   - prisma/**/*
   - prisma.config.ts
 
-'frontend':
+"frontend":
   - app/**/*
   - components/**/*
   - hooks/**/*
 
-'backend':
+"backend":
   - server.ts
   - lib/**/*
   - emails/**/*
 
-'documentation':
-  - '*.md'
+"documentation":
+  - "*.md"
   - content/**/*
 
-'ci/cd':
+"ci/cd":
   - .github/**/*
 
-'config':
-  - '*.config.*'
-  - '*.json'
+"config":
+  - "*.config.*"
+  - "*.json"
   - .env.example
 
-'styles':
-  - '**/*.css'
+"styles":
+  - "**/*.css"
   - tailwind.config.ts
   - postcss.config.mjs
 
-'tests':
-  - '**/*.test.*'
-  - '**/*.spec.*'
+"tests":
+  - "**/*.test.*"
+  - "**/*.spec.*"
   - __checks__/**/*
