@@ -16,12 +16,14 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Generate Prisma Client
+# Generate Prisma Client (requires DATABASE_URL placeholder)
+ARG DATABASE_URL="postgresql://placeholder:placeholder@placeholder:5432/placeholder"
+ENV DATABASE_URL=$DATABASE_URL
 RUN npx prisma generate
 
 # Build Next.js application
 ENV NEXT_TELEMETRY_DISABLED=1
-RUN bun run build
+RUN npm run build
 
 # Production image, copy all the files and run next
 FROM base AS runner

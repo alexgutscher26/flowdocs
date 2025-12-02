@@ -84,6 +84,9 @@ docker-compose down -v
 ### Build fails with "Prisma Schema not found"
 Ensure `prisma/schema.prisma` exists in your project.
 
+### Build fails with "Missing required environment variable: DATABASE_URL"
+This is fixed in the Dockerfile with a placeholder DATABASE_URL for build time. The actual DATABASE_URL is set at runtime via docker-compose.yml or environment variables.
+
 ### Port 3000 already in use
 Change the port mapping in `docker-compose.yml`:
 ```yaml

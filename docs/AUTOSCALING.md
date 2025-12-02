@@ -224,8 +224,10 @@ docker run -p 3000:3000 \
 
 **Troubleshooting:**
 - If build fails with "Prisma Schema not found", ensure `prisma/schema.prisma` exists
+- If build fails with "Missing required environment variable: DATABASE_URL", the Dockerfile includes a placeholder for build time
 - If npm install fails, check that all dependencies are compatible
 - For permission errors, verify the nextjs user has correct permissions
+- The build uses `npm run build` (not `bun run build`) for compatibility
 
 ## Health Check Endpoint
 
