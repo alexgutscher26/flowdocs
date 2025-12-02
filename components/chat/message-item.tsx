@@ -5,7 +5,15 @@ import { ExtendedMessage, PresenceStatus } from "@/types/chat";
 import { formatMessageTime } from "@/lib/message-utils";
 import { UserPresence } from "./user-presence";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal, Reply, Pencil, Trash2, File as FileIcon, HardDrive, ExternalLink } from "lucide-react";
+import {
+  MoreHorizontal,
+  Reply,
+  Pencil,
+  Trash2,
+  File as FileIcon,
+  HardDrive,
+  ExternalLink,
+} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
