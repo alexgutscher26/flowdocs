@@ -11,6 +11,7 @@ services:
       - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET:-change-me-in-production}
       - BETTER_AUTH_URL=${BETTER_AUTH_URL:-http://localhost:3000}
       - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
+      - NEXT_PUBLIC_C15T_URL=${NEXT_PUBLIC_C15T_URL:-https://placeholder.c15t.dev}
     depends_on:
       postgres:
         condition: service_healthy

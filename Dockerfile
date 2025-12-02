@@ -22,6 +22,8 @@ ENV DATABASE_URL=$DATABASE_URL
 RUN npx prisma generate
 
 # Build Next.js application
+ARG NEXT_PUBLIC_C15T_URL="https://placeholder.c15t.dev"
+ENV NEXT_PUBLIC_C15T_URL=$NEXT_PUBLIC_C15T_URL
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 
