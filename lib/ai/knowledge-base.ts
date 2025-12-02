@@ -65,9 +65,7 @@ export async function answerQuestion(query: string, workspaceId: string) {
  * Summarize a conversation thread.
  */
 export async function summarizeThread(messages: Message[]) {
-  const transcript = messages
-    .map((m) => `${m.userId}: ${m.content}`)
-    .join("\n");
+  const transcript = messages.map((m) => `${m.userId}: ${m.content}`).join("\n");
 
   const { text } = await generateText({
     model,
@@ -83,9 +81,7 @@ export async function summarizeThread(messages: Message[]) {
  * Returns title, slug, and markdown content.
  */
 export async function suggestWikiPage(messages: Message[]) {
-  const transcript = messages
-    .map((m) => `${m.userId}: ${m.content}`)
-    .join("\n");
+  const transcript = messages.map((m) => `${m.userId}: ${m.content}`).join("\n");
 
   const { object } = await generateObject({
     model,
@@ -129,7 +125,7 @@ export async function findRelatedConversations(query: string, workspaceId: strin
 
   return Array.from(related.entries()).map(([id, data]) => ({
     id,
-    ...data
+    ...data,
   }));
 }
 
@@ -140,11 +136,13 @@ export async function extractActionItems(text: string) {
   const { object } = await generateObject({
     model,
     schema: z.object({
-      actionItems: z.array(z.object({
-        task: z.string(),
-        assignee: z.string().optional(),
-        priority: z.enum(["low", "medium", "high"]).optional(),
-      })),
+      actionItems: z.array(
+        z.object({
+          task: z.string(),
+          assignee: z.string().optional(),
+          priority: z.enum(["low", "medium", "high"]).optional(),
+        })
+      ),
     }),
     system: "You are a project manager. Extract action items from the text.",
     prompt: `Extract all action items from the following text:\n\n${text}`,
