@@ -4,7 +4,6 @@ import { z } from "zod";
 import { searchMessages, searchWikiPages, SearchOptions } from "@/lib/search";
 import { Message } from "@/generated/prisma/client";
 
-
 // Configure OpenRouter
 const openrouter = createOpenAI({
   apiKey: process.env.OPENROUTER_API_KEY,
@@ -62,9 +61,11 @@ FlowDocs Features:
 - User mentions and notifications
 - Message reactions and pinning
 
-${hasContext
-      ? "Answer the user's question based on the provided context from their workspace. Be specific and cite the sources."
-      : "The workspace doesn't have any indexed content yet. Provide helpful information about FlowDocs features and how to get started. Encourage them to create channels, send messages, and create wiki pages to build their knowledge base."}
+${
+  hasContext
+    ? "Answer the user's question based on the provided context from their workspace. Be specific and cite the sources."
+    : "The workspace doesn't have any indexed content yet. Provide helpful information about FlowDocs features and how to get started. Encourage them to create channels, send messages, and create wiki pages to build their knowledge base."
+}
 
 Keep answers concise and professional.`;
 
@@ -83,9 +84,7 @@ Keep answers concise and professional.`;
  * Summarize a conversation thread.
  */
 export async function summarizeThread(messages: Message[]) {
-  const transcript = messages
-    .map((m) => `${m.userId}: ${m.content}`)
-    .join("\n");
+  const transcript = messages.map((m) => `${m.userId}: ${m.content}`).join("\n");
 
   const { text } = await generateText({
     model,
@@ -101,9 +100,7 @@ export async function summarizeThread(messages: Message[]) {
  * Returns title, slug, and markdown content.
  */
 export async function suggestWikiPage(messages: Message[]) {
-  const transcript = messages
-    .map((m) => `${m.userId}: ${m.content}`)
-    .join("\n");
+  const transcript = messages.map((m) => `${m.userId}: ${m.content}`).join("\n");
 
   const { object } = await generateObject({
     model,
@@ -147,7 +144,7 @@ export async function findRelatedConversations(query: string, workspaceId: strin
 
   return Array.from(related.entries()).map(([id, data]) => ({
     id,
-    ...data
+    ...data,
   }));
 }
 
@@ -158,11 +155,13 @@ export async function extractActionItems(text: string) {
   const { object } = await generateObject({
     model,
     schema: z.object({
-      actionItems: z.array(z.object({
-        task: z.string(),
-        assignee: z.string().optional(),
-        priority: z.enum(["low", "medium", "high"]).optional(),
-      })),
+      actionItems: z.array(
+        z.object({
+          task: z.string(),
+          assignee: z.string().optional(),
+          priority: z.enum(["low", "medium", "high"]).optional(),
+        })
+      ),
     }),
     system: "You are a project manager. Extract action items from the text.",
     prompt: `Extract all action items from the following text:\n\n${text}`,
