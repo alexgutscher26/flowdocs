@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: flowdocs-config
+  labels:
+    app: flowdocs
+data:
+  auth-url: "https://your-domain.com"
+  app-url: "https://your-domain.com"
+  node-env: "production"

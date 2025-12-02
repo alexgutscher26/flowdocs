@@ -1,0 +1,45 @@
+{
+  "ServiceName": "flowdocs-service",
+  "AutoScaling": {
+    "MinCapacity": 2,
+    "MaxCapacity": 10,
+    "TargetTrackingScalingPolicies": [
+      {
+        "PolicyName": "flowdocs-cpu-scaling",
+        "TargetValue": 70.0,
+        "PredefinedMetricSpecification": {
+          "PredefinedMetricType": "ECSServiceAverageCPUUtilization"
+        },
+        "ScaleInCooldown": 300,
+        "ScaleOutCooldown": 60
+      },
+      {
+        "PolicyName": "flowdocs-memory-scaling",
+        "TargetValue": 80.0,
+        "PredefinedMetricSpecification": {
+          "PredefinedMetricType": "ECSServiceAverageMemoryUtilization"
+        },
+        "ScaleInCooldown": 300,
+        "ScaleOutCooldown": 60
+      },
+      {
+        "PolicyName": "flowdocs-alb-request-count",
+        "TargetValue": 1000.0,
+        "PredefinedMetricSpecification": {
+          "PredefinedMetricType": "ALBRequestCountPerTarget",
+          "ResourceLabel": "app/flowdocs-alb/TARGET_GROUP_ID"
+        },
+        "ScaleInCooldown": 300,
+        "ScaleOutCooldown": 60
+      }
+    ]
+  },
+  "DeploymentConfiguration": {
+    "MaximumPercent": 200,
+    "MinimumHealthyPercent": 100,
+    "DeploymentCircuitBreaker": {
+      "Enable": true,
+      "Rollback": true
+    }
+  }
+}
