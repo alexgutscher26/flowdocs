@@ -144,6 +144,9 @@ function FieldDescription({ className, ...props }: React.ComponentProps<"p">) {
   );
 }
 
+/**
+ * Renders a field separator component with optional children.
+ */
 function FieldSeparator({
   children,
   className,
