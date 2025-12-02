@@ -1095,9 +1095,7 @@
 
 - [x] CI/CD pipeline setup (GitHub Actions)
 - [ ] Automated testing in pipeline
-- [ ] Blue-green deployment strategy
 - [ ] Database migration automation
-- [ ] Environment-specific configurations
 - [ ] Rollback procedures
 - [ ] Feature flags for gradual rollouts
 - [ ] Infrastructure as Code (Terraform)
