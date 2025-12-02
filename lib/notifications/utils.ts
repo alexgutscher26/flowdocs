@@ -157,7 +157,7 @@ export function getSupportEmail(): string {
  * Useful for development/testing environments
  */
 export function isEmailEnabled(): boolean {
-  return !!process.env.RESEND_API_KEY;
+  return Boolean(process.env.RESEND_API_KEY);
 }
 
 /**

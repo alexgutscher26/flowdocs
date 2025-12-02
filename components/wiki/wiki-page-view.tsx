@@ -345,7 +345,7 @@ export function WikiPageView({
                     variant="ghost"
                     size="sm"
                     className="h-8"
-                    asChild={!onEdit && !!workspaceId}
+                    asChild={!onEdit && Boolean(workspaceId)}
                   >
                     {onEdit ? (
                       <>

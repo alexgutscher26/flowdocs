@@ -257,7 +257,7 @@ export function MessageItem({
               )}
               {/* Pin/Unpin Option */}
               {onPin && (
-                <DropdownMenuItem onClick={() => onPin(message.id, !!message.isPinned)}>
+                <DropdownMenuItem onClick={() => onPin(message.id, Boolean(message.isPinned))}>
                   <span className="mr-2 h-4 w-4">📌</span>
                   {message.isPinned ? "Unpin message" : "Pin message"}
                 </DropdownMenuItem>
