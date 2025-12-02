@@ -15,7 +15,7 @@ jobs:
     if: github.event.pull_request.draft == false
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -51,7 +51,7 @@ jobs:
     if: github.event.pull_request.draft == false
     steps:
       - name: Checkout base
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.base_ref }}
 
@@ -78,7 +78,7 @@ jobs:
           echo "size=$SIZE" >> $GITHUB_OUTPUT
 
       - name: Checkout PR
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install dependencies (PR)
         run: npm ci
@@ -142,7 +142,7 @@ jobs:
       url: ${{ steps.deploy.outputs.url }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
@@ -183,7 +183,7 @@ jobs:
       pull-requests: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Label PR based on files
         uses: actions/labeler@v5
