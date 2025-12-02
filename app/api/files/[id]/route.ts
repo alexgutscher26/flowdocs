@@ -76,7 +76,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 /**
  * Deletes a file from the database and storage.
  *
- * This function first checks the user's session for authorization. It retrieves the file based on the provided ID and checks if the user has permission to delete it, either as the uploader or as an admin/owner of the workspace. If authorized, it deletes the file and its thumbnail from storage, updates the storage usage, and removes the file from the database. In case of errors, appropriate responses are returned.
+ * This function checks the user's session for authorization and retrieves the file based on the provided ID. It verifies if the user has permission to delete the file, either as the uploader or as an admin/owner of the workspace. If authorized, it deletes the file and its thumbnail from storage, updates the storage usage, and removes the file from the database. In case of errors, appropriate responses are returned.
  *
  * @param req - The NextRequest object representing the HTTP request.
  * @param params - A promise that resolves to an object containing the file ID.
