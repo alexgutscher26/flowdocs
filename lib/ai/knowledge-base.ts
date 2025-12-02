@@ -36,7 +36,9 @@ const model = openrouter(OPENROUTER_MODEL);
  */
 export async function answerQuestion(query: string, workspaceId: string) {
   if (!OPENROUTER_API_KEY) {
-    throw new Error("OpenRouter API key is not configured. Please set OPENROUTER_API_KEY in your environment variables.");
+    throw new Error(
+      "OpenRouter API key is not configured. Please set OPENROUTER_API_KEY in your environment variables."
+    );
   }
 
   if (!query?.trim()) {
@@ -114,9 +116,11 @@ FlowDocs Features:
 - File storage with AWS S3/Cloudflare R2 integration
 - User presence and typing indicators
 
-${hasContext
-        ? "Answer the user's question based on the provided context from their workspace. Be specific, helpful, and cite the sources when relevant. If the context doesn't contain enough information, acknowledge what you know and what you don't."
-        : "The workspace doesn't have any indexed content yet. Provide helpful information about FlowDocs features and how to get started. Encourage them to create channels, send messages, and create wiki pages to build their knowledge base."}
+${
+  hasContext
+    ? "Answer the user's question based on the provided context from their workspace. Be specific, helpful, and cite the sources when relevant. If the context doesn't contain enough information, acknowledge what you know and what you don't."
+    : "The workspace doesn't have any indexed content yet. Provide helpful information about FlowDocs features and how to get started. Encourage them to create channels, send messages, and create wiki pages to build their knowledge base."
+}
 
 Keep answers concise, professional, and actionable.`;
 
@@ -130,14 +134,12 @@ Keep answers concise, professional, and actionable.`;
 
     return {
       answer: text,
-      sources: hasContext ? [...new Set(sources)].slice(0, 5) : []
+      sources: hasContext ? [...new Set(sources)].slice(0, 5) : [],
     };
   } catch (error) {
     console.error("Error in answerQuestion:", error);
     throw new Error(
-      error instanceof Error
-        ? `AI Error: ${error.message}`
-        : "Failed to generate AI response"
+      error instanceof Error ? `AI Error: ${error.message}` : "Failed to generate AI response"
     );
   }
 }
@@ -157,13 +159,12 @@ export async function summarizeThread(messages: Message[]) {
   }
 
   try {
-    const transcript = messages
-      .map((m) => `${m.userId}: ${m.content}`)
-      .join("\n");
+    const transcript = messages.map((m) => `${m.userId}: ${m.content}`).join("\n");
 
     const { text } = await generateText({
       model,
-      system: "You are a helpful assistant that summarizes conversation threads. Focus on key points, decisions, and action items.",
+      system:
+        "You are a helpful assistant that summarizes conversation threads. Focus on key points, decisions, and action items.",
       prompt: `Please provide a concise summary of the following conversation thread (${messages.length} messages):\n\n${transcript.substring(0, MAX_CONTEXT_LENGTH)}`,
     });
 
@@ -194,9 +195,7 @@ export async function suggestWikiPage(messages: Message[]) {
   }
 
   try {
-    const transcript = messages
-      .map((m) => `${m.userId}: ${m.content}`)
-      .join("\n");
+    const transcript = messages.map((m) => `${m.userId}: ${m.content}`).join("\n");
 
     const { object } = await generateObject({
       model,
@@ -207,7 +206,8 @@ export async function suggestWikiPage(messages: Message[]) {
         tags: z.array(z.string()).describe("3-5 relevant tags for categorization"),
         excerpt: z.string().optional().describe("A brief 1-2 sentence summary"),
       }),
-      system: "You are an expert technical writer. Create well-structured, informative wiki pages from conversations. Focus on extracting key information, decisions, and actionable insights.",
+      system:
+        "You are an expert technical writer. Create well-structured, informative wiki pages from conversations. Focus on extracting key information, decisions, and actionable insights.",
       prompt: `Create a comprehensive wiki page that documents the key information from this conversation (${messages.length} messages):\n\n${transcript.substring(0, MAX_CONTEXT_LENGTH)}`,
     });
 
@@ -248,7 +248,7 @@ export async function findRelatedConversations(query: string, workspaceId: strin
 
   return Array.from(related.entries()).map(([id, data]) => ({
     id,
-    ...data
+    ...data,
   }));
 }
 
@@ -276,11 +276,13 @@ export async function extractActionItems(text: string) {
     const { object } = await generateObject({
       model,
       schema: z.object({
-        actionItems: z.array(z.object({
-          task: z.string(),
-          assignee: z.string().optional(),
-          priority: z.enum(["low", "medium", "high"]).optional(),
-        })),
+        actionItems: z.array(
+          z.object({
+            task: z.string(),
+            assignee: z.string().optional(),
+            priority: z.enum(["low", "medium", "high"]).optional(),
+          })
+        ),
       }),
       system: "You are a project manager. Extract action items from the text.",
       prompt: `Extract all action items from the following text:\n\n${text.substring(0, MAX_CONTEXT_LENGTH)}`,
