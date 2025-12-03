@@ -4,6 +4,7 @@ import "./globals.css";
 import { constructMetadata } from "@/lib/constructMetadata";
 import { Providers } from "@/components/providers";
 import { ConsentManager } from "./consent-manager";
+import { UserJotWidget } from "@/components/userjot-widget";
 
 export const metadata = constructMetadata();
 
@@ -25,6 +26,7 @@ export default function RootLayout({
             </div>
           </Providers>
         </ConsentManager>
+        <UserJotWidget />
       </body>
     </html>
   );

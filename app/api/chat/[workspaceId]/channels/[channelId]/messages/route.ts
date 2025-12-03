@@ -77,6 +77,17 @@ export async function GET(
             replies: true,
           },
         },
+        reactions: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                image: true,
+              },
+            },
+          },
+        },
       },
       orderBy: {
         createdAt: "desc",

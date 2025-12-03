@@ -67,8 +67,11 @@ export async function POST(
     }
 
     return NextResponse.json(reaction, { status: 201 });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error adding reaction:", error);
+    if (error.code === 'P2002') {
+      return NextResponse.json({ error: "Reaction already exists" }, { status: 409 });
+    }
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

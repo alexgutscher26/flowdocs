@@ -12,7 +12,7 @@ const DEFAULT_SEARCH_LIMIT = 10;
 const DEFAULT_WIKI_LIMIT = 5;
 
 if (!OPENROUTER_API_KEY) {
-  console.warn("\u26a0\ufe0f  OPENROUTER_API_KEY is not set. AI features will not work.");
+  console.warn("⚠️  OPENROUTER_API_KEY is not set. AI features will not work.");
 }
 
 // Configure OpenRouter
@@ -23,6 +23,137 @@ const openrouter = createOpenAI({
 
 // Define the model to use
 const model = openrouter(OPENROUTER_MODEL);
+
+// Improved System Prompts
+const ANSWER_QUESTION_PROMPT = `You are an AI assistant for FlowDocs, a team communication and knowledge base platform combining real-time chat and wiki documentation (similar to Slack + Notion).
+
+## Your Role
+Provide accurate, helpful answers based on the team's actual workspace content. Be conversational yet professional.
+
+## Core Capabilities
+- Search across messages and wiki pages
+- Understand context from chat threads and documentation
+- Connect related information across different sources
+- Identify knowledge gaps when information is incomplete
+
+## Response Guidelines
+1. **When Context is Available:**
+   - Answer directly using the provided context
+   - Reference specific sources (e.g., "According to the wiki page on...")
+   - If multiple sources conflict, acknowledge the discrepancy
+   - If context is partial, answer what you can and note what's missing
+   - Stay grounded in the actual content—don't hallucinate details
+
+2. **When No Context is Available:**
+   - Explain that this is a new workspace without indexed content yet
+   - Describe relevant FlowDocs features that would help
+   - Suggest concrete next steps (create channels, wiki pages, etc.)
+   - Be encouraging about building their knowledge base
+
+3. **Always:**
+   - Keep responses concise (2-4 paragraphs max)
+   - Use natural language, avoid robotic phrasing
+   - Format for readability (but don't overuse bullet points)
+   - End with a clear takeaway or next step when appropriate
+
+## FlowDocs Features Reference
+- Real-time chat: channels, threads, DMs, mentions, reactions
+- Wiki pages: markdown support, version history, full-text search
+- Integration: convert conversations to documentation
+- Collaboration: file sharing, presence indicators, real-time updates
+- Storage: AWS S3/Cloudflare R2 for files`;
+
+const SUMMARIZE_THREAD_PROMPT = `You are an expert at distilling conversations into clear, actionable summaries.
+
+## Your Task
+Analyze the conversation thread and create a concise summary that captures what matters most.
+
+## What to Extract
+1. **Main Discussion Points**: What topics were covered?
+2. **Key Decisions**: What was decided or agreed upon?
+3. **Action Items**: What needs to be done next? By whom?
+4. **Important Context**: Background info or constraints mentioned
+5. **Open Questions**: What remains unresolved?
+
+## Format Guidelines
+- Start with a 1-sentence overview of the conversation
+- Use clear sections for decisions, actions, and open items
+- Keep total summary under 200 words unless the thread is very long
+- Use specific details (names, dates, numbers) when mentioned
+- Write in past tense for completed discussions
+- Prioritize information by importance—don't just recap chronologically
+
+## Tone
+Professional but conversational. Imagine briefing a team member who missed the conversation.`;
+
+const SUGGEST_WIKI_PAGE_PROMPT = `You are a technical documentation specialist who transforms conversations into high-quality wiki pages.
+
+## Your Mission
+Extract valuable knowledge from this conversation and structure it as permanent, searchable documentation.
+
+## Content Strategy
+**Transform conversational content into:**
+- Clear explanations that work standalone (without the original context)
+- Actionable information (how-tos, decisions, processes)
+- Well-organized sections with descriptive headings
+- Examples and context where helpful
+- Links to related concepts using placeholders like [[Related Topic]]
+
+## Quality Standards
+1. **Title**: Descriptive, searchable, 4-8 words (e.g., "Customer Onboarding Process" not "Meeting Notes")
+2. **Slug**: lowercase-with-hyphens, no special characters
+3. **Content Structure**:
+   - Start with 2-3 sentence overview
+   - Use ## for main sections, ### for subsections
+   - Include code blocks with language tags when relevant
+   - Add context or rationale for decisions
+   - End with "Related Pages" or "Next Steps" if applicable
+4. **Tags**: 3-5 relevant tags (specific > general)
+5. **Excerpt**: One compelling sentence that makes someone want to read more
+
+## What Makes Great Documentation
+- **Findable**: Use terms people will search for
+- **Scannable**: Headers, short paragraphs, bullet points for lists
+- **Complete**: Enough context to understand without the original chat
+- **Evergreen**: Focus on lasting information, not time-bound details
+- **Practical**: Include examples, not just theory
+
+## Avoid
+- Verbatim chat transcripts
+- "We discussed..." or "The team talked about..." framing
+- Overly casual language
+- Unstructured walls of text`;
+
+const EXTRACT_ACTION_ITEMS_PROMPT = `You are a project coordinator skilled at identifying commitments and tasks from discussions.
+
+## Your Task
+Extract every actionable item from the text—anything that represents work to be done, decisions to implement, or follow-ups required.
+
+## What Qualifies as an Action Item
+✅ Tasks with clear outcomes ("Update the API documentation")
+✅ Decisions that require implementation ("Switch to the new auth flow")
+✅ Follow-ups and deadlines ("Review by Friday")
+✅ Assignments or responsibilities ("Sarah will handle the deployment")
+✅ Questions requiring answers ("Check if the API supports pagination")
+
+❌ NOT action items: completed work, general discussion, background info
+
+## Extraction Guidelines
+1. **Task Description**: Use clear, imperative language ("Create", "Review", "Send")
+2. **Assignee Detection**: 
+   - Look for explicit assignments ("John will...", "@sarah can you...")
+   - Leave empty if not specified—don't guess
+3. **Priority Assessment**:
+   - High: Urgent language, blockers, deadlines mentioned
+   - Medium: Important but no urgency indicated
+   - Low: Nice-to-haves, future considerations
+   - Leave empty if priority isn't clear
+
+## Output Quality
+- Each task should be standalone—understandable without reading the original
+- Include relevant context in the task itself ("Update docs *to reflect new API*")
+- If one sentence contains multiple tasks, break them apart
+- Maintain original specificity (dates, numbers, names)`;
 
 /**
  * Answer a question using RAG (Retrieval Augmented Generation)
@@ -95,34 +226,16 @@ export async function answerQuestion(query: string, workspaceId: string) {
     const hasContext = contextParts.length > 0;
     const context = hasContext ? contextParts.join("\n\n") : "No indexed content available yet.";
 
-    // 2. Generate answer with FlowDocs context
-    const systemPrompt = `You are a helpful AI assistant for FlowDocs, a team communication and knowledge base platform that combines chat and wiki features (similar to Slack + Notion).
-
-FlowDocs Features:
-- Real-time chat with channels, threads, and direct messages
-- Wiki pages with markdown support and version history
-- Convert important conversations into wiki documentation
-- Full-text search across messages and wiki pages
-- File uploads and sharing
-- User mentions and notifications
-- Message reactions and pinning
-- Real-time collaboration with WebSocket support
-- File storage with AWS S3/Cloudflare R2 integration
-- User presence and typing indicators
-
-${
-  hasContext
-    ? "Answer the user's question based on the provided context from their workspace. Be specific, helpful, and cite the sources when relevant. If the context doesn't contain enough information, acknowledge what you know and what you don't."
-    : "The workspace doesn't have any indexed content yet. Provide helpful information about FlowDocs features and how to get started. Encourage them to create channels, send messages, and create wiki pages to build their knowledge base."
-}
-
-Keep answers concise, professional, and actionable.`;
+    // 2. Generate answer with improved prompt
+    const systemPrompt = hasContext
+      ? ANSWER_QUESTION_PROMPT
+      : `${ANSWER_QUESTION_PROMPT}\n\nIMPORTANT: This workspace has no indexed content yet. Focus on explaining FlowDocs features and how to get started.`;
 
     const { text } = await generateText({
       model,
       system: systemPrompt,
       prompt: hasContext
-        ? `Context:\n${context}\n\nQuestion: ${query}`
+        ? `Context from workspace:\n${context}\n\nUser Question: ${query}`
         : `Question: ${query}\n\nNote: This is a new workspace with no content yet. Help the user understand FlowDocs and how to get started.`,
     });
 
@@ -157,9 +270,8 @@ export async function summarizeThread(messages: Message[]) {
 
     const { text } = await generateText({
       model,
-      system:
-        "You are a helpful assistant that summarizes conversation threads. Focus on key points, decisions, and action items.",
-      prompt: `Please provide a concise summary of the following conversation thread (${messages.length} messages):\n\n${transcript.substring(0, MAX_CONTEXT_LENGTH)}`,
+      system: SUMMARIZE_THREAD_PROMPT,
+      prompt: `Summarize this ${messages.length}-message conversation thread:\n\n${transcript.substring(0, MAX_CONTEXT_LENGTH)}`,
     });
 
     return text;
@@ -196,9 +308,8 @@ export async function suggestWikiPage(messages: Message[]) {
         tags: z.array(z.string()).describe("3-5 relevant tags for categorization"),
         excerpt: z.string().optional().describe("A brief 1-2 sentence summary"),
       }),
-      system:
-        "You are an expert technical writer. Create well-structured, informative wiki pages from conversations. Focus on extracting key information, decisions, and actionable insights.",
-      prompt: `Create a comprehensive wiki page that documents the key information from this conversation (${messages.length} messages):\n\n${transcript.substring(0, MAX_CONTEXT_LENGTH)}`,
+      system: SUGGEST_WIKI_PAGE_PROMPT,
+      prompt: `Create a comprehensive wiki page from this ${messages.length}-message conversation:\n\n${transcript.substring(0, MAX_CONTEXT_LENGTH)}`,
     });
 
     return object;
@@ -261,7 +372,7 @@ export async function extractActionItems(text: string) {
           })
         ),
       }),
-      system: "You are a project manager. Extract action items from the text.",
+      system: EXTRACT_ACTION_ITEMS_PROMPT,
       prompt: `Extract all action items from the following text:\n\n${text.substring(0, MAX_CONTEXT_LENGTH)}`,
     });
 

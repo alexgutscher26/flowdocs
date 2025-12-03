@@ -34,7 +34,10 @@ export function useChatMessages({
   });
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const { onMessage, connected } = useWebSocket({ workspaceId, userId });
+  const { onMessage, connected, onReactionAdded, onReactionRemoved } = useWebSocket({
+    workspaceId,
+    userId,
+  });
 
   // Fetch initial messages
   const fetchMessages = useCallback(
@@ -57,10 +60,21 @@ export function useChatMessages({
         }
 
         const data = await response.json();
+        console.log("[fetchMessages] First message reactions (raw):", data.messages[0]?.reactions);
+
+        // Transform messages to match frontend interface (flatten reaction user data)
+        const messages = data.messages.map((msg: any) => ({
+          ...msg,
+          reactions: msg.reactions?.map((r: any) => ({
+            ...r,
+            userName: r.user?.name,
+            userImage: r.user?.image,
+          })),
+        }));
 
         setState((prev) => ({
           ...prev,
-          messages: cursor ? [...prev.messages, ...data.messages] : data.messages,
+          messages: cursor ? [...prev.messages, ...messages] : messages,
           hasMore: Boolean(data.nextCursor),
           nextCursor: data.nextCursor,
           loading: false,
@@ -262,8 +276,68 @@ export function useChatMessages({
       }
     });
 
-    return unsubscribe;
-  }, [connected, onMessage, channelId, scrollToBottom]);
+    const unsubscribeReactionAdded = onReactionAdded?.((payload: { messageId: string; reaction: any }) => {
+      const { messageId, reaction } = payload;
+
+      // Transform reaction to match frontend interface
+      const formattedReaction = {
+        ...reaction,
+        userName: reaction.user?.name,
+        userImage: reaction.user?.image,
+      };
+
+      setState((prev) => ({
+        ...prev,
+        messages: prev.messages.map((msg) => {
+          if (msg.id !== messageId) return msg;
+
+          // Avoid duplicates (if we already have this reaction, e.g. from optimistic update)
+          const exists = msg.reactions?.some(r => r.id === reaction.id);
+          if (exists) return msg;
+
+          // If we have a temp reaction for this emoji/user, replace it
+          // Otherwise add new
+          const tempReactionIndex = msg.reactions?.findIndex(
+            r => r.id.startsWith("temp-") && r.emoji === reaction.emoji && r.userId === reaction.userId
+          );
+
+          let newReactions = [...(msg.reactions || [])];
+
+          if (tempReactionIndex !== undefined && tempReactionIndex !== -1) {
+            newReactions[tempReactionIndex] = formattedReaction;
+          } else {
+            newReactions.push(formattedReaction);
+          }
+
+          return {
+            ...msg,
+            reactions: newReactions,
+          };
+        }),
+      }));
+    });
+
+    const unsubscribeReactionRemoved = onReactionRemoved?.((payload: { messageId: string; reactionId: string }) => {
+      const { messageId, reactionId } = payload;
+
+      setState((prev) => ({
+        ...prev,
+        messages: prev.messages.map((msg) => {
+          if (msg.id !== messageId) return msg;
+          return {
+            ...msg,
+            reactions: (msg.reactions || []).filter((r) => r.id !== reactionId),
+          };
+        }),
+      }));
+    });
+
+    return () => {
+      unsubscribe?.();
+      unsubscribeReactionAdded?.();
+      unsubscribeReactionRemoved?.();
+    };
+  }, [connected, onMessage, onReactionAdded, onReactionRemoved, channelId, scrollToBottom]);
 
   // Fetch messages on mount or when channel changes
   useEffect(() => {
@@ -285,12 +359,130 @@ export function useChatMessages({
     deleteMessage,
     editMessage: updateMessage,
     reactToMessage: async (messageId: string, emoji: string) => {
-      // TODO: Implement reaction logic
-      console.log("React to message:", messageId, emoji);
+      console.log("[reactToMessage] Called with:", { messageId, emoji, userId });
+
+      // Check if already reacted to avoid duplicate requests
+      const message = state.messages.find((m) => m.id === messageId);
+      if (!message) {
+        console.log("[reactToMessage] Message not found:", messageId);
+        return;
+      }
+
+      console.log("[reactToMessage] Message found, reactions:", message.reactions);
+
+      const existingReaction = message.reactions?.find(
+        (r) => r.emoji === emoji && r.userId === userId
+      );
+
+      if (existingReaction) {
+        console.log("[reactToMessage] Already reacted, skipping");
+        return;
+      }
+
+      console.log("[reactToMessage] Adding optimistic update...");
+
+      try {
+        // Optimistic update
+        setState((prev) => ({
+          ...prev,
+          messages: prev.messages.map((msg) => {
+            if (msg.id !== messageId) return msg;
+
+            // Check if reaction already exists
+            const existingReaction = msg.reactions?.find(
+              (r) => r.emoji === emoji && r.userId === userId
+            );
+
+            if (existingReaction) return msg;
+
+            // Add new reaction
+            const newReaction = {
+              id: `temp-${Date.now()}`,
+              emoji,
+              userId,
+              messageId,
+              createdAt: new Date(),
+              userName: "You",
+              userImage: undefined,
+            };
+
+            return {
+              ...msg,
+              reactions: [...(msg.reactions || []), newReaction],
+            };
+          }),
+        }));
+
+        const response = await fetch(
+          `/api/chat/${workspaceId}/channels/${channelId}/messages/${messageId}/reactions`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ emoji }),
+          }
+        );
+
+        if (!response.ok) {
+          // If reaction already exists (409 Conflict), treat as success
+          if (response.status === 409) {
+            console.log("Reaction already exists in DB, keeping optimistic update");
+            return;
+          }
+
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.error || "Failed to add reaction");
+        }
+
+        const savedReaction = await response.json();
+        const formattedReaction = {
+          ...savedReaction,
+          userName: savedReaction.user?.name,
+          userImage: savedReaction.user?.image,
+        };
+
+        // Update with real data
+        setState((prev) => ({
+          ...prev,
+          messages: prev.messages.map((msg) => {
+            if (msg.id !== messageId) return msg;
+            return {
+              ...msg,
+              reactions: (msg.reactions || []).map((r) =>
+                r.id.startsWith("temp-") && r.emoji === emoji ? formattedReaction : r
+              ),
+            };
+          }),
+        }));
+      } catch (error) {
+        console.error("Error adding reaction:", error);
+        // Revert optimistic update (simplified: just refresh messages or remove the temp one)
+        // For now, we'll just log it, but a robust app would revert the specific change
+        fetchMessages(); // Fallback: refresh to get correct state
+      }
     },
     removeReaction: async (reactionId: string) => {
-      // TODO: Implement remove reaction logic
-      console.log("Remove reaction:", reactionId);
+      try {
+        // Optimistic update
+        setState((prev) => ({
+          ...prev,
+          messages: prev.messages.map((msg) => ({
+            ...msg,
+            reactions: msg.reactions?.filter((r) => r.id !== reactionId) || [],
+          })),
+        }));
+
+        const response = await fetch(
+          `/api/chat/${workspaceId}/channels/${channelId}/messages/reactions/${reactionId}`,
+          {
+            method: "DELETE",
+          }
+        );
+
+        if (!response.ok) throw new Error("Failed to remove reaction");
+      } catch (error) {
+        console.error("Error removing reaction:", error);
+        fetchMessages(); // Fallback: refresh to get correct state
+      }
     },
     refreshMessages: () => fetchMessages(null),
     loadMore: () => {

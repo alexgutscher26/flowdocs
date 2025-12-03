@@ -36,7 +36,9 @@ export function ThreadView({
     loadMore,
     sendMessage,
     deleteMessage,
-    updateMessage,
+    editMessage,
+    reactToMessage,
+    removeReaction,
     messagesEndRef,
   } = useChatMessages({
     workspaceId,
@@ -110,9 +112,11 @@ export function ThreadView({
           onEdit={(msg) => {
             const newContent = prompt("Edit message:", msg.content);
             if (newContent) {
-              updateMessage(msg.id, newContent);
+              editMessage(msg.id, newContent);
             }
           }}
+          onReaction={reactToMessage}
+          onReactionRemove={removeReaction}
           messagesEndRef={messagesEndRef as React.RefObject<HTMLDivElement>}
         />
 

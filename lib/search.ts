@@ -19,6 +19,44 @@ function getClient() {
   return client;
 }
 
+export interface MessageDocument {
+  id: string;
+  content: string;
+  channelId: string;
+  userId: string;
+  threadId?: string;
+  createdAt: number;
+}
+
+export interface WikiPageDocument {
+  id: string;
+  title: string;
+  content: string;
+  slug: string;
+  workspaceId: string;
+  authorId: string;
+  tags: string[];
+  createdAt: number;
+}
+
+export interface FileDocument {
+  id: string;
+  name: string;
+  content?: string;
+  type: string;
+  workspaceId: string;
+  uploadedBy: string;
+  createdAt: number;
+}
+
+export interface UserDocument {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  createdAt: number;
+}
+
 // Schema definitions
 const messagesSchema = {
   name: "messages",
@@ -221,7 +259,7 @@ export async function searchMessages(
       searchParameters.highlight_affix_num_tokens = 8;
     }
 
-    return await getClient().collections("messages").documents().search(searchParameters);
+    return await getClient().collections<MessageDocument>("messages").documents().search(searchParameters);
   } catch (error) {
     console.error("Error searching messages:", error);
     return { hits: [], found: 0 };
@@ -264,7 +302,7 @@ export async function searchWikiPages(
       searchParameters.highlight_affix_num_tokens = 8;
     }
 
-    return await getClient().collections("wiki_pages").documents().search(searchParameters);
+    return await getClient().collections<WikiPageDocument>("wiki_pages").documents().search(searchParameters);
   } catch (error) {
     console.error("Error searching wiki pages:", error);
     return { hits: [], found: 0 };
@@ -304,7 +342,7 @@ export async function searchFiles(
       searchParameters.highlight_affix_num_tokens = 8;
     }
 
-    return await getClient().collections("files").documents().search(searchParameters);
+    return await getClient().collections<FileDocument>("files").documents().search(searchParameters);
   } catch (error) {
     console.error("Error searching files:", error);
     return { hits: [], found: 0 };
@@ -326,7 +364,7 @@ export async function searchUsers(query: string, options: SearchOptions = {}) {
       searchParameters.highlight_affix_num_tokens = 8;
     }
 
-    return await getClient().collections("users").documents().search(searchParameters);
+    return await getClient().collections<UserDocument>("users").documents().search(searchParameters);
   } catch (error) {
     console.error("Error searching users:", error);
     return { hits: [], found: 0 };

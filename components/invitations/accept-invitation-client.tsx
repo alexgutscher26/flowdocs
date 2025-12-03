@@ -68,7 +68,7 @@ export function AcceptInvitationClient({ token, userEmail }: AcceptInvitationCli
           </CardTitle>
           <CardDescription>
             {state === "loading" && "Please wait while we process your invitation"}
-            {state === "success" && "You've successfully joined the workspace. Redirecting..."}
+            {state === "success" && "You've successfully joined the workspace! Redirecting to your dashboard..."}
             {state === "error" && errorMessage}
           </CardDescription>
         </CardHeader>

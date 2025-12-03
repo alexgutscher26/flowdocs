@@ -82,6 +82,8 @@ export function ChatLayout({
     sendMessage,
     deleteMessage,
     editMessage,
+    reactToMessage,
+    removeReaction,
     messagesEndRef,
   } = useChatMessages({
     workspaceId,
@@ -192,32 +194,12 @@ export function ChatLayout({
 
   // Handle reaction add
   const handleAddReaction = async (messageId: string, emoji: string) => {
-    try {
-      await fetch(
-        `/api/chat/${workspaceId}/channels/${activeChannelId}/messages/${messageId}/reactions`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ emoji }),
-        }
-      );
-    } catch (error) {
-      console.error("Error adding reaction:", error);
-    }
+    await reactToMessage(messageId, emoji);
   };
 
   // Handle reaction remove
   const handleRemoveReaction = async (reactionId: string) => {
-    try {
-      await fetch(
-        `/api/chat/${workspaceId}/channels/${activeChannelId}/messages/${reactionId}/reactions/${reactionId}`,
-        {
-          method: "DELETE",
-        }
-      );
-    } catch (error) {
-      console.error("Error removing reaction:", error);
-    }
+    await removeReaction(reactionId);
   };
 
   // Get channel icon

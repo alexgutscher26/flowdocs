@@ -353,7 +353,7 @@ export async function acceptInvitation(
       };
     }
 
-    // Create workspace member and mark invitation as accepted
+    // Create workspace member, mark invitation as accepted, and mark user as onboarded
     await prisma.$transaction([
       prisma.workspaceMember.create({
         data: {
@@ -365,6 +365,14 @@ export async function acceptInvitation(
       prisma.workspaceInvitation.update({
         where: { id: invitation.id },
         data: { acceptedAt: new Date() },
+      }),
+      // Mark user as onboarded and set default workspace since they now have a workspace
+      prisma.user.update({
+        where: { id: session.user.id },
+        data: {
+          onboardingCompleted: true,
+          defaultWorkspaceId: invitation.workspaceId,
+        },
       }),
     ]);
 

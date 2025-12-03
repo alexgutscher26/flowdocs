@@ -27,10 +27,12 @@ export function MessageReactions({
         acc[reaction.emoji] = [];
       }
       acc[reaction.emoji].push(reaction);
-      return {};
+      return acc;
     },
     {} as Record<string, MessageReaction[]>
   );
+
+  console.log("[MessageReactions] Grouped reactions:", groupedReactions);
 
   return (
     <div className="mt-1 flex flex-wrap gap-1">
@@ -38,6 +40,8 @@ export function MessageReactions({
         const hasReacted = reactionList.some((r) => r.userId === currentUserId);
         const myReaction = reactionList.find((r) => r.userId === currentUserId);
         const count = reactionList.length;
+
+        console.log(`[MessageReactions] Emoji: ${emoji}, Count: ${count}, List:`, reactionList);
 
         const tooltipContent = reactionList.map((r) => r.userName || "Unknown").join(", ");
 

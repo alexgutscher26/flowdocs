@@ -177,5 +177,24 @@ export function useWebSocket({ workspaceId, userId, enabled = true }: UseWebSock
     onMessage,
     onTyping,
     onPresence,
+    onReactionAdded: useCallback((callback: (payload: { messageId: string; reaction: any }) => void) => {
+      if (socketRef.current) {
+        socketRef.current.on(WebSocketEvent.REACTION_ADDED, callback);
+        return () => {
+          socketRef.current?.off(WebSocketEvent.REACTION_ADDED, callback);
+        };
+      }
+    }, []),
+    onReactionRemoved: useCallback(
+      (callback: (payload: { messageId: string; reactionId: string }) => void) => {
+        if (socketRef.current) {
+          socketRef.current.on(WebSocketEvent.REACTION_REMOVED, callback);
+          return () => {
+            socketRef.current?.off(WebSocketEvent.REACTION_REMOVED, callback);
+          };
+        }
+      },
+      []
+    ),
   };
 }
