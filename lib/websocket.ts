@@ -78,6 +78,15 @@ export const initSocketServer = (httpServer: HttpServer) => {
     const pubClient = new Redis(process.env.REDIS_URL);
     const subClient = pubClient.duplicate();
 
+    // Add error handlers to prevent unhandled error warnings
+    pubClient.on("error", (err) => {
+      console.error("Redis Pub Client Error:", err);
+    });
+
+    subClient.on("error", (err) => {
+      console.error("Redis Sub Client Error:", err);
+    });
+
     io.adapter(createAdapter(pubClient, subClient));
     console.log("Socket.IO Redis adapter configured");
   } else {

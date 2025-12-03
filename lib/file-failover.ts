@@ -146,10 +146,16 @@ export async function checkStorageHealth(): Promise<{
   const primaryAvailable = await testUrl(testFile.url);
   const primaryLatency = Date.now() - primaryStart;
 
-  // For backup, you'd need a known test file in S3/R2
-  // For now, we'll just return a placeholder
-  const backupAvailable = false;
-  const backupLatency = 0;
+  // Check backup storage if configured
+  let backupAvailable = false;
+  let backupLatency = 0;
+
+  const backupTestUrl = process.env.BACKUP_STORAGE_TEST_URL;
+  if (backupTestUrl) {
+    const backupStart = Date.now();
+    backupAvailable = await testUrl(backupTestUrl);
+    backupLatency = Date.now() - backupStart;
+  }
 
   return {
     primary: {
