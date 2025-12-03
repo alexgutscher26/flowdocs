@@ -353,28 +353,52 @@ export async function acceptInvitation(
       };
     }
 
-    // Create workspace member, mark invitation as accepted, and mark user as onboarded
-    await prisma.$transaction([
-      prisma.workspaceMember.create({
+    // Create workspace member, mark invitation as accepted, mark user as onboarded, and add to public channels
+    await prisma.$transaction(async (tx) => {
+      // Create workspace member
+      await tx.workspaceMember.create({
         data: {
           userId: session.user.id,
           workspaceId: invitation.workspaceId,
           role: invitation.role,
         },
-      }),
-      prisma.workspaceInvitation.update({
+      });
+
+      // Mark invitation as accepted
+      await tx.workspaceInvitation.update({
         where: { id: invitation.id },
         data: { acceptedAt: new Date() },
-      }),
-      // Mark user as onboarded and set default workspace since they now have a workspace
-      prisma.user.update({
+      });
+
+      // Mark user as onboarded and set default workspace
+      await tx.user.update({
         where: { id: session.user.id },
         data: {
           onboardingCompleted: true,
           defaultWorkspaceId: invitation.workspaceId,
         },
-      }),
-    ]);
+      });
+
+      // Get all public channels in the workspace
+      const publicChannels = await tx.channel.findMany({
+        where: {
+          workspaceId: invitation.workspaceId,
+          type: 'PUBLIC',
+        },
+        select: { id: true },
+      });
+
+      // Add user to all public channels as MEMBER
+      if (publicChannels.length > 0) {
+        await tx.channelMember.createMany({
+          data: publicChannels.map(channel => ({
+            channelId: channel.id,
+            userId: session.user.id,
+            role: 'MEMBER',
+          })),
+        });
+      }
+    });
 
     // Revalidate paths
     revalidatePath("/dashboard");

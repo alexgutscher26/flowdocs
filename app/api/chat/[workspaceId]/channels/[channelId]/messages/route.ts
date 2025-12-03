@@ -134,19 +134,48 @@ export async function POST(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Verify user is member of channel
-    const channelMember = await prisma.channelMember.findFirst({
-      where: {
-        channelId,
-        userId: session.user.id,
-      },
+    // Get channel to check type
+    const channel = await prisma.channel.findUnique({
+      where: { id: channelId },
+      select: { type: true, workspaceId: true },
     });
 
-    if (!channelMember) {
-      console.error(
-        `[Messages API] Forbidden: User ${session.user.id} is not a member of channel ${channelId}`
-      );
-      return NextResponse.json({ error: "You must be a member of this channel" }, { status: 403 });
+    if (!channel) {
+      console.error(`[Messages API] Channel not found: ${channelId}`);
+      return NextResponse.json({ error: "Channel not found" }, { status: 404 });
+    }
+
+    // For PUBLIC channels, verify user is a workspace member
+    // For PRIVATE/DM channels, verify user is a channel member
+    if (channel.type === 'PUBLIC') {
+      const workspaceMember = await prisma.workspaceMember.findFirst({
+        where: {
+          workspaceId: channel.workspaceId,
+          userId: session.user.id,
+        },
+      });
+
+      if (!workspaceMember) {
+        console.error(
+          `[Messages API] Forbidden: User ${session.user.id} is not a member of workspace ${channel.workspaceId}`
+        );
+        return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      }
+    } else {
+      // For PRIVATE/DM channels, require explicit channel membership
+      const channelMember = await prisma.channelMember.findFirst({
+        where: {
+          channelId,
+          userId: session.user.id,
+        },
+      });
+
+      if (!channelMember) {
+        console.error(
+          `[Messages API] Forbidden: User ${session.user.id} is not a member of channel ${channelId}`
+        );
+        return NextResponse.json({ error: "You must be a member of this channel" }, { status: 403 });
+      }
     }
 
     const body = await request.json();

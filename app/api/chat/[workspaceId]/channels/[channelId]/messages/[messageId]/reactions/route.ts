@@ -25,16 +25,41 @@ export async function POST(
       return NextResponse.json({ error: "Emoji is required" }, { status: 400 });
     }
 
-    // Verify user has access to channel
-    const channelMember = await prisma.channelMember.findFirst({
-      where: {
-        channelId,
-        userId: session.user.id,
-      },
+    // Get channel to check type
+    const channel = await prisma.channel.findUnique({
+      where: { id: channelId },
+      select: { type: true, workspaceId: true },
     });
 
-    if (!channelMember) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    if (!channel) {
+      return NextResponse.json({ error: "Channel not found" }, { status: 404 });
+    }
+
+    // For PUBLIC channels, verify user is a workspace member
+    // For PRIVATE channels, verify user is a channel member
+    if (channel.type === 'PUBLIC') {
+      const workspaceMember = await prisma.workspaceMember.findFirst({
+        where: {
+          workspaceId: channel.workspaceId,
+          userId: session.user.id,
+        },
+      });
+
+      if (!workspaceMember) {
+        return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      }
+    } else {
+      // For PRIVATE/DM channels, require explicit channel membership
+      const channelMember = await prisma.channelMember.findFirst({
+        where: {
+          channelId,
+          userId: session.user.id,
+        },
+      });
+
+      if (!channelMember) {
+        return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      }
     }
 
     // Create reaction in database
