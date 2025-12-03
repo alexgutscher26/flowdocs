@@ -388,7 +388,7 @@ export async function acceptInvitation(
       const publicChannels = await tx.channel.findMany({
         where: {
           workspaceId: invitation.workspaceId,
-          type: 'PUBLIC',
+          type: "PUBLIC",
         },
         select: { id: true },
       });
@@ -396,10 +396,10 @@ export async function acceptInvitation(
       // Add user to all public channels as MEMBER
       if (publicChannels.length > 0) {
         await tx.channelMember.createMany({
-          data: publicChannels.map(channel => ({
+          data: publicChannels.map((channel) => ({
             channelId: channel.id,
             userId: session.user.id,
-            role: 'MEMBER',
+            role: "MEMBER",
           })),
         });
       }
