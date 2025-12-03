@@ -6,6 +6,15 @@ import { broadcastToChannel } from "@/lib/websocket";
 import { WebSocketEvent } from "@/types/chat";
 
 // POST /api/chat/[workspaceId]/channels/[channelId]/messages/[messageId]/reactions - Add reaction
+/**
+ * Handles the POST request to add a reaction to a message.
+ *
+ * This function retrieves the workspace, channel, and message IDs from the request parameters, checks the user's session for authorization, and validates the presence of an emoji. It then verifies the user's membership based on the channel type (PUBLIC or PRIVATE) before creating a reaction in the database. Finally, it broadcasts the reaction via WebSocket and handles any potential errors that may arise during the process.
+ *
+ * @param request - The NextRequest object containing the request data.
+ * @param params - An object containing a Promise that resolves to an object with workspaceId, channelId, and messageId.
+ * @returns A JSON response containing the created reaction or an error message with the appropriate status code.
+ */
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ workspaceId: string; channelId: string; messageId: string }> }
