@@ -126,10 +126,10 @@ export async function getFileBuffer(file: FileWithBackup): Promise<Buffer> {
 }
 
 /**
- * Check health of both storage providers
- * Useful for monitoring and alerting
- *
- * @returns Promise<StorageHealth> - Health status of both providers
+ * Check the health of both primary and backup storage providers.
+ * This function tests the availability and latency of a specified file in the primary storage and, if configured, in the backup storage.
+ * It uses the `testUrl` function to perform the checks and calculates the latency based on the time taken for each request.
+ * The results are returned as an object containing the health status of both storage providers.
  */
 export async function checkStorageHealth(): Promise<{
   primary: { available: boolean; latency?: number };
