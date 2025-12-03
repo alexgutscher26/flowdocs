@@ -276,61 +276,68 @@ export function useChatMessages({
       }
     });
 
-    const unsubscribeReactionAdded = onReactionAdded?.((payload: { messageId: string; reaction: any }) => {
-      const { messageId, reaction } = payload;
+    const unsubscribeReactionAdded = onReactionAdded?.(
+      (payload: { messageId: string; reaction: any }) => {
+        const { messageId, reaction } = payload;
 
-      // Transform reaction to match frontend interface
-      const formattedReaction = {
-        ...reaction,
-        userName: reaction.user?.name,
-        userImage: reaction.user?.image,
-      };
+        // Transform reaction to match frontend interface
+        const formattedReaction = {
+          ...reaction,
+          userName: reaction.user?.name,
+          userImage: reaction.user?.image,
+        };
 
-      setState((prev) => ({
-        ...prev,
-        messages: prev.messages.map((msg) => {
-          if (msg.id !== messageId) return msg;
+        setState((prev) => ({
+          ...prev,
+          messages: prev.messages.map((msg) => {
+            if (msg.id !== messageId) return msg;
 
-          // Avoid duplicates (if we already have this reaction, e.g. from optimistic update)
-          const exists = msg.reactions?.some(r => r.id === reaction.id);
-          if (exists) return msg;
+            // Avoid duplicates (if we already have this reaction, e.g. from optimistic update)
+            const exists = msg.reactions?.some((r) => r.id === reaction.id);
+            if (exists) return msg;
 
-          // If we have a temp reaction for this emoji/user, replace it
-          // Otherwise add new
-          const tempReactionIndex = msg.reactions?.findIndex(
-            r => r.id.startsWith("temp-") && r.emoji === reaction.emoji && r.userId === reaction.userId
-          );
+            // If we have a temp reaction for this emoji/user, replace it
+            // Otherwise add new
+            const tempReactionIndex = msg.reactions?.findIndex(
+              (r) =>
+                r.id.startsWith("temp-") &&
+                r.emoji === reaction.emoji &&
+                r.userId === reaction.userId
+            );
 
-          let newReactions = [...(msg.reactions || [])];
+            let newReactions = [...(msg.reactions || [])];
 
-          if (tempReactionIndex !== undefined && tempReactionIndex !== -1) {
-            newReactions[tempReactionIndex] = formattedReaction;
-          } else {
-            newReactions.push(formattedReaction);
-          }
+            if (tempReactionIndex !== undefined && tempReactionIndex !== -1) {
+              newReactions[tempReactionIndex] = formattedReaction;
+            } else {
+              newReactions.push(formattedReaction);
+            }
 
-          return {
-            ...msg,
-            reactions: newReactions,
-          };
-        }),
-      }));
-    });
+            return {
+              ...msg,
+              reactions: newReactions,
+            };
+          }),
+        }));
+      }
+    );
 
-    const unsubscribeReactionRemoved = onReactionRemoved?.((payload: { messageId: string; reactionId: string }) => {
-      const { messageId, reactionId } = payload;
+    const unsubscribeReactionRemoved = onReactionRemoved?.(
+      (payload: { messageId: string; reactionId: string }) => {
+        const { messageId, reactionId } = payload;
 
-      setState((prev) => ({
-        ...prev,
-        messages: prev.messages.map((msg) => {
-          if (msg.id !== messageId) return msg;
-          return {
-            ...msg,
-            reactions: (msg.reactions || []).filter((r) => r.id !== reactionId),
-          };
-        }),
-      }));
-    });
+        setState((prev) => ({
+          ...prev,
+          messages: prev.messages.map((msg) => {
+            if (msg.id !== messageId) return msg;
+            return {
+              ...msg,
+              reactions: (msg.reactions || []).filter((r) => r.id !== reactionId),
+            };
+          }),
+        }));
+      }
+    );
 
     return () => {
       unsubscribe?.();
