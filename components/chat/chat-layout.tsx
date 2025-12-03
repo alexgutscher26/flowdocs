@@ -198,6 +198,9 @@ export function ChatLayout({
   };
 
   // Handle reaction remove
+  /**
+   * Removes a reaction by its ID.
+   */
   const handleRemoveReaction = async (reactionId: string) => {
     await removeReaction(reactionId);
   };
