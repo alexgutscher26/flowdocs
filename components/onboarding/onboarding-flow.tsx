@@ -262,10 +262,11 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
                           key={roleOption.value}
                           onClick={() => setRole(roleOption.value)}
                           type="button"
-                          className={`rounded-lg border-2 p-4 text-left transition-all ${role === roleOption.value
+                          className={`rounded-lg border-2 p-4 text-left transition-all ${
+                            role === roleOption.value
                               ? "border-primary bg-primary/5"
                               : "border-border hover:border-primary/50"
-                            }`}
+                          }`}
                         >
                           <span className="font-medium">{roleOption.label}</span>
                         </button>
@@ -320,10 +321,11 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
                           key={useCaseOption.value}
                           onClick={() => setUseCase(useCaseOption.value)}
                           type="button"
-                          className={`rounded-lg border-2 p-4 text-left transition-all ${useCase === useCaseOption.value
+                          className={`rounded-lg border-2 p-4 text-left transition-all ${
+                            useCase === useCaseOption.value
                               ? "border-primary bg-primary/5"
                               : "border-border hover:border-primary/50"
-                            }`}
+                          }`}
                         >
                           <span className="text-sm font-medium">{useCaseOption.label}</span>
                         </button>
@@ -339,10 +341,11 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
                           key={source.value}
                           onClick={() => setDiscoverySource(source.value)}
                           type="button"
-                          className={`rounded-lg border-2 p-4 text-left transition-all ${discoverySource === source.value
+                          className={`rounded-lg border-2 p-4 text-left transition-all ${
+                            discoverySource === source.value
                               ? "border-primary bg-primary/5"
                               : "border-border hover:border-primary/50"
-                            }`}
+                          }`}
                         >
                           <span className="text-sm font-medium">{source.label}</span>
                         </button>
