@@ -45,8 +45,8 @@ interface MessageItemProps {
  * Render a message item with various interactive features.
  *
  * This function displays a message along with its user information, content, attachments, and reactions.
- * It handles hover states to show action buttons, and allows for replying, editing, deleting, and pinning messages.
- * The component also manages the display of read receipts and user presence based on the provided props.
+ * It manages hover states to show action buttons, allows for replying, editing, deleting, and pinning messages,
+ * and handles the display of read receipts and user presence based on the provided props.
  *
  * @param message - The message object containing details such as user information, content, and attachments.
  * @param isGrouped - A boolean indicating if the message is part of a grouped conversation.
