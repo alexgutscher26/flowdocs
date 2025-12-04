@@ -53,6 +53,16 @@ const discoverySources = [
   { value: "other", label: "Other" },
 ];
 
+/**
+ * Manages the onboarding flow for new users, guiding them through multiple steps to create a workspace and invite teammates.
+ *
+ * The function maintains state for the current step, user details, workspace information, and loading/error states. It handles workspace creation and sending invitations asynchronously, updating the UI accordingly. The onboarding process includes user introduction, project description, workspace setup, and team invitations, with appropriate error handling and user feedback through toasts.
+ *
+ * @param {Object} props - The properties for onboarding flow.
+ * @param {string} props.userName - The name of the user.
+ * @param {string} props.userEmail - The email of the user.
+ * @returns {JSX.Element} The rendered onboarding flow component.
+ */
 export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const [firstName, setFirstName] = useState(userName || "");
