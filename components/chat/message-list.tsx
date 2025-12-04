@@ -26,6 +26,28 @@ interface MessageListProps {
   messagesEndRef?: React.RefObject<HTMLDivElement>;
 }
 
+/**
+ * Renders a list of messages grouped by date in a chat interface.
+ *
+ * The function utilizes the useInView hook to trigger loading more messages when the user scrolls to the top.
+ * It groups messages by date and handles various states such as loading and empty message lists.
+ * Additionally, it provides functionality for replying, editing, deleting, reacting, and pinning messages.
+ *
+ * @param messages - An array of message objects to be displayed.
+ * @param currentUserId - The ID of the current user for message interactions.
+ * @param workspaceId - The ID of the workspace to which the messages belong.
+ * @param loading - A boolean indicating if messages are currently being loaded (default is false).
+ * @param hasMore - A boolean indicating if there are more messages to load (default is false).
+ * @param onLoadMore - A callback function to load more messages.
+ * @param onReply - A callback function for replying to a message.
+ * @param onEdit - A callback function for editing a message.
+ * @param onDelete - A callback function for deleting a message.
+ * @param onReaction - A callback function for adding a reaction to a message.
+ * @param onReactionRemove - A callback function for removing a reaction from a message.
+ * @param onPin - A callback function for pinning a message.
+ * @param totalChannelMembers - The total number of members in the channel.
+ * @param messagesEndRef - A reference for the end of the messages list for auto-scrolling.
+ */
 export function MessageList({
   messages,
   currentUserId,
