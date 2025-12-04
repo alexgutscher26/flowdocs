@@ -7,7 +7,7 @@ interface HelpTopicCardProps {
   title: string;
   description: string;
   href: string;
-  icon: React.ComponentType<IconProps | React.ComponentProps<LucideIcon>>;
+  icon: React.ComponentType<IconProps> | LucideIcon;
 }
 
 export function HelpTopicCard({ title, description, href, icon: Icon }: HelpTopicCardProps) {

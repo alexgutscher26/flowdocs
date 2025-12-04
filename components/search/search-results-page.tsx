@@ -1,6 +1,6 @@
 "use client";
 
-import { useSearch, type SearchFilters, type SearchOptions } from "@/hooks/use-search";
+import { useSearch } from "@/hooks/use-search";
 import { useQueryState, parseAsString, parseAsInteger } from "nuqs";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -15,7 +15,6 @@ import { SearchFilters as SearchFiltersComponent } from "./search-filters";
 import { Download, Save, SlidersHorizontal } from "lucide-react";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { SavedSearches } from "./saved-searches";
 import { SearchResultCard } from "./search-result-card";

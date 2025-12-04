@@ -5,7 +5,6 @@ import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 import { WikiPageView } from "@/components/wiki";
 import { Button } from "@/components/ui/button";
-import { Plus, Loader2 } from "lucide-react";
 import Link from "next/link";
 
 interface WikiPageProps {

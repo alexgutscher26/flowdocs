@@ -30,7 +30,7 @@ export function WikiTreeItem({ node, workspaceId, level = 0 }: WikiTreeItemProps
   const [isOpen, setIsOpen] = React.useState(false);
   const hasChildren = node.children && node.children.length > 0;
 
-  // Auto-expand if active page is a child (this would require checking children recursively)
+  // TODO: Auto-expand if active page is a child (this would require checking children recursively)
   // For now, we'll just expand if the current node is active or if we've manually opened it
 
   // Simple persistence for folder state

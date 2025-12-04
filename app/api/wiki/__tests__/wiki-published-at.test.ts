@@ -61,7 +61,7 @@ describe("Wiki Page publishedAt Logic", () => {
       const published = true;
       const newPublished = published ?? existingPage.published;
 
-      let publishedAt = existingPage.publishedAt;
+      let publishedAt: Date | null = existingPage.publishedAt;
       if (newPublished && !existingPage.published) {
         publishedAt = new Date();
       } else if (!newPublished && existingPage.published) {
@@ -85,7 +85,7 @@ describe("Wiki Page publishedAt Logic", () => {
       const published = undefined; // not specified, should keep existing
       const newPublished = published ?? existingPage.published;
 
-      let publishedAt = existingPage.publishedAt;
+      let publishedAt: Date | null = existingPage.publishedAt;
       if (newPublished && !existingPage.published) {
         publishedAt = new Date();
       } else if (!newPublished && existingPage.published) {
@@ -107,7 +107,7 @@ describe("Wiki Page publishedAt Logic", () => {
       const published = false;
       const newPublished = published ?? existingPage.published;
 
-      let publishedAt = existingPage.publishedAt;
+      let publishedAt: Date | null = existingPage.publishedAt;
       if (newPublished && !existingPage.published) {
         publishedAt = new Date();
       } else if (!newPublished && existingPage.published) {
@@ -129,7 +129,7 @@ describe("Wiki Page publishedAt Logic", () => {
       const published = undefined;
       const newPublished = published ?? existingPage.published;
 
-      let publishedAt = existingPage.publishedAt;
+      let publishedAt: Date | null = existingPage.publishedAt;
       if (newPublished && !existingPage.published) {
         publishedAt = new Date();
       } else if (!newPublished && existingPage.published) {
@@ -151,7 +151,7 @@ describe("Wiki Page publishedAt Logic", () => {
       const published = false;
       const newPublished = published ?? existingPage.published;
 
-      let publishedAt = existingPage.publishedAt;
+      let publishedAt: Date | null = existingPage.publishedAt;
       if (newPublished && !existingPage.published) {
         publishedAt = new Date();
       } else if (!newPublished && existingPage.published) {

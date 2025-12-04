@@ -25,7 +25,7 @@ export function WikiBreadcrumbs({
   currentPageTitle,
   currentPageSlug,
 }: WikiBreadcrumbsProps) {
-  // We fetch the tree to calculate breadcrumbs
+  // TODO: We fetch the tree to calculate breadcrumbs
   // In a real app with many pages, we might want a dedicated API for this
   // or return parent info in the page details API
   const { data: tree } = useQuery<WikiPageNode[]>({
@@ -60,7 +60,7 @@ export function WikiBreadcrumbs({
 
   const breadcrumbs = tree && currentPageId ? findPath(tree, currentPageId) : [];
 
-  // If we have the current page details but tree isn't loaded or page not found in tree yet
+  // TODO: If we have the current page details but tree isn't loaded or page not found in tree yet
   // we can at least show the current page
   const displayBreadcrumbs =
     breadcrumbs ||

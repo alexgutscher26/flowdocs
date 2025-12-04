@@ -147,7 +147,7 @@ export async function POST(
 
     // For PUBLIC channels, verify user is a workspace member
     // For PRIVATE/DM channels, verify user is a channel member
-    if (channel.type === 'PUBLIC') {
+    if (channel.type === "PUBLIC") {
       const workspaceMember = await prisma.workspaceMember.findFirst({
         where: {
           workspaceId: channel.workspaceId,
@@ -174,7 +174,10 @@ export async function POST(
         console.error(
           `[Messages API] Forbidden: User ${session.user.id} is not a member of channel ${channelId}`
         );
-        return NextResponse.json({ error: "You must be a member of this channel" }, { status: 403 });
+        return NextResponse.json(
+          { error: "You must be a member of this channel" },
+          { status: 403 }
+        );
       }
     }
 

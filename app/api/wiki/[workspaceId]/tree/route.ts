@@ -43,7 +43,7 @@ export async function GET(
       return NextResponse.json({ error: "Not a member of this workspace" }, { status: 403 });
     }
 
-    // Fetch all pages for the workspace
+    // TODO: Fetch all pages for the workspace
     // We fetch all pages and build the tree in memory to avoid N+1 queries
     // For very large wikis, we might want to switch to lazy loading children
     const pages = await prisma.wikiPage.findMany({

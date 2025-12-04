@@ -43,14 +43,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { WikiBreadcrumbs } from "./wiki-breadcrumbs";
 import { useRouter } from "next/navigation";
@@ -156,7 +148,6 @@ function generateGradient(str: string) {
  */
 export function WikiPageView({
   page,
-  workspaceName,
   workspaceId,
   canEdit = false,
   currentUserId,

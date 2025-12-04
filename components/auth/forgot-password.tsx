@@ -23,7 +23,7 @@ export default function ForgotPasswordAuth() {
     setError(null);
 
     try {
-      await authClient.forgetPassword({
+      await (authClient as any).forgetPassword({
         email,
         redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/reset-password`,
       });

@@ -37,7 +37,7 @@ export async function POST(
 
     // For PUBLIC channels, verify user is a workspace member
     // For PRIVATE channels, verify user is a channel member
-    if (channel.type === 'PUBLIC') {
+    if (channel.type === "PUBLIC") {
       const workspaceMember = await prisma.workspaceMember.findFirst({
         where: {
           workspaceId: channel.workspaceId,
@@ -94,7 +94,7 @@ export async function POST(
     return NextResponse.json(reaction, { status: 201 });
   } catch (error: any) {
     console.error("Error adding reaction:", error);
-    if (error.code === 'P2002') {
+    if (error.code === "P2002") {
       return NextResponse.json({ error: "Reaction already exists" }, { status: 409 });
     }
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

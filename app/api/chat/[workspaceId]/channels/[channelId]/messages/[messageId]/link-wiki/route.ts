@@ -35,7 +35,7 @@ export async function POST(
       return NextResponse.json({ error: "Not a member of this workspace" }, { status: 403 });
     }
 
-    // The relationship is already established when creating the WikiPage (it sets messageId).
+    // TODO: The relationship is already established when creating the WikiPage (it sets messageId).
     // This endpoint exists to satisfy the frontend call and could be used for
     // additional logic later (e.g. posting a system message to the thread).
     // For now, we verify the link exists.

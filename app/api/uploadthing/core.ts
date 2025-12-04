@@ -57,7 +57,7 @@ export const ourFileRouter = {
           scanFileForViruses,
         } = await import("@/lib/file-storage");
 
-        let processedBuffer = fileBuffer;
+        let processedBuffer: Buffer = fileBuffer;
         let width: number | undefined;
         let height: number | undefined;
         let thumbnailUrl: string | undefined;

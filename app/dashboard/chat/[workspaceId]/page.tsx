@@ -29,7 +29,7 @@ export default async function ChatPage({ params }: ChatPageProps) {
   });
 
   if (!workspace) {
-    // Handle case where workspace is not found
+    // TODO: Handle case where workspace is not found
     // For now, redirect to dashboard or show error
     // If "default" was passed and no workspace found, maybe redirect to create workspace?
     if (workspaceId === "default") {

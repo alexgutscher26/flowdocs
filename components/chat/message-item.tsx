@@ -140,7 +140,7 @@ export function MessageItem({
                 <div key={index}>
                   {attachment.type === "google-drive" ? (
                     <a
-                      href={attachment.webViewLink}
+                      href={attachment.webViewLink as string}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="bg-muted/50 hover:bg-muted border-primary/20 flex max-w-sm items-center gap-2 rounded-lg border p-3 transition-colors"

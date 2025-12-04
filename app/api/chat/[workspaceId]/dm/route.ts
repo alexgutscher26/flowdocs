@@ -90,7 +90,7 @@ export async function POST(
       return NextResponse.json(existingDm);
     }
 
-    // Create new DM channel
+    // TODO: Create new DM channel
     // We'll use a generated name, but frontend will display other user's name
     const sortedIds = [session.user.id, targetUserId].sort();
     const channelName = `dm-${sortedIds.join("-")}`;
