@@ -12,6 +12,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 interface MessageListProps {
   messages: ExtendedMessage[];
   currentUserId: string;
+  workspaceId: string;
   loading?: boolean;
   hasMore?: boolean;
   onLoadMore?: () => void;
@@ -28,6 +29,7 @@ interface MessageListProps {
 export function MessageList({
   messages,
   currentUserId,
+  workspaceId,
   loading = false,
   hasMore = false,
   onLoadMore,
@@ -109,6 +111,7 @@ export function MessageList({
                   <MessageItem
                     key={msg.id}
                     message={msg}
+                    workspaceId={workspaceId}
                     isGrouped={index > 0}
                     showAvatar={index === 0}
                     currentUserId={currentUserId}

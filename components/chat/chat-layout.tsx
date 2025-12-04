@@ -273,6 +273,7 @@ export function ChatLayout({
             <MessageList
               messages={messages}
               currentUserId={userId}
+              workspaceId={workspaceId}
               loading={loading}
               hasMore={hasMore}
               onLoadMore={loadMore}

@@ -29,6 +29,7 @@ import { RichTextRenderer } from "./rich-text-renderer";
 
 interface MessageItemProps {
   message: ExtendedMessage;
+  workspaceId: string;
   isGrouped?: boolean;
   showAvatar?: boolean;
   currentUserId: string;
@@ -62,6 +63,7 @@ interface MessageItemProps {
  */
 export function MessageItem({
   message,
+  workspaceId,
   isGrouped = false,
   showAvatar = true,
   currentUserId,
@@ -132,7 +134,7 @@ export function MessageItem({
           )}
 
           {/* Message text */}
-          <RichTextRenderer content={message.content} className="text-sm" />
+          <RichTextRenderer content={message.content} workspaceId={workspaceId} className="text-sm" />
 
           {/* Attachments */}
           {message.attachments && message.attachments.length > 0 && (

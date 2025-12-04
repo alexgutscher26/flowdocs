@@ -312,15 +312,15 @@
 
 #### Mention System
 
-- [ ] **File**: `lib/mentions.ts` (new)
-  - [ ] @user mentions with autocomplete
-  - [ ] @channel and @here mentions
-  - [ ] @wiki page mentions for linking
-  - [ ] @team and @group mentions
-  - [ ] Mention suggestion algorithm with ML ranking
-  - [ ] Notification batching to reduce noise
-  - [ ] Smart mention parsing in markdown
-  - [ ] Highlight mentioned users in message
+- [x] **File**: `lib/mentions.ts` (new)
+  - [x] @user mentions with autocomplete
+  - [x] @channel and @here mentions
+  - [x] @wiki page mentions for linking
+  - [x] @team and @group mentions
+  - [x] Mention suggestion algorithm with ML ranking
+  - [x] Notification batching to reduce noise
+  - [x] Smart mention parsing in markdown
+  - [x] Highlight mentioned users in message
   - **Acceptance**: Seamless mention experience like Slack
 
 #### Notification Engine

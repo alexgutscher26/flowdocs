@@ -112,19 +112,17 @@ export function getMentionSuggestions(
     const normalizedQuery = query.toLowerCase();
     const suggestions: MentionSuggestion[] = [];
 
-    // 1. Special mentions (if query matches)
-    if (query.length > 0) {
-        SPECIAL_MENTIONS.forEach(special => {
-            if (special.display.startsWith(normalizedQuery)) {
-                suggestions.push(special);
-            }
-        });
-    }
+    // 1. Special mentions (show all if query is empty, otherwise filter)
+    SPECIAL_MENTIONS.forEach(special => {
+        if (query.length === 0 || special.display.startsWith(normalizedQuery)) {
+            suggestions.push(special);
+        }
+    });
 
-    // 2. Users
+    // 2. Users (show all if query is empty, otherwise filter)
     users.forEach(member => {
         const name = member.user.name || "Unknown";
-        if (name.toLowerCase().includes(normalizedQuery)) {
+        if (query.length === 0 || name.toLowerCase().includes(normalizedQuery)) {
             suggestions.push({
                 id: member.userId,
                 display: name,
@@ -134,10 +132,9 @@ export function getMentionSuggestions(
         }
     });
 
-    // 3. Wiki Pages (if we had them passed in)
-    // For now, we can mock or leave empty until we integrate wiki search
+    // 3. Wiki Pages (show all if query is empty, otherwise filter)
     wikiPages.forEach(page => {
-        if (page.title.toLowerCase().includes(normalizedQuery)) {
+        if (query.length === 0 || page.title.toLowerCase().includes(normalizedQuery)) {
             suggestions.push({
                 id: page.id,
                 display: page.title,

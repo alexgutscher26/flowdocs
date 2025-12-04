@@ -128,6 +128,7 @@ export function MessageInput({
       // If there's a space, we assume the mention is done or invalid for now
       // unless we want to support multi-word mentions which is harder
       if (!textAfterAt.includes(" ")) {
+        // Show suggestions even with empty query (when user just types @)
         setMentionQuery(textAfterAt);
         setMentionIndex(lastAtPos);
       } else {
