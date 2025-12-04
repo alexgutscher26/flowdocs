@@ -45,6 +45,20 @@ interface MessageInputProps {
   workspaceId?: string;
 }
 
+/**
+ * Renders a message input component with file upload and mention support.
+ *
+ * This component manages the state for message content, file selections, and mentions. It handles user interactions such as typing, file uploads, and sending messages. The component also fetches wiki pages for mention suggestions and adjusts the textarea height dynamically. It includes drag-and-drop functionality for file uploads and provides visual feedback for the upload progress.
+ *
+ * @param onSend - Callback function to handle sending the message.
+ * @param onTypingStart - Callback function to indicate typing has started.
+ * @param onTypingStop - Callback function to indicate typing has stopped.
+ * @param placeholder - Placeholder text for the input area (default: "Type a message...").
+ * @param disabled - Flag to disable the input (default: false).
+ * @param threadId - Optional identifier for the thread (default: null).
+ * @param channelMembers - List of channel members for mention suggestions.
+ * @param workspaceId - Identifier for the workspace.
+ */
 export function MessageInput({
   onSend,
   onTypingStart,
@@ -115,6 +129,16 @@ export function MessageInput({
   }, [mentionQuery, channelMembers, wikiPages]);
 
   // Handle content change
+  /**
+   * Handles changes to the content and manages mentions and typing indicators.
+   *
+   * This function updates the content state with the provided value, adjusts the textarea height,
+   * and checks for mentions triggered by the '@' character. It determines if the mention is valid
+   * based on the presence of a space following the '@'. Additionally, it manages typing indicators
+   * by starting and stopping a timeout based on user input.
+   *
+   * @param value - The new content value to be set.
+   */
   const handleContentChange = (value: string) => {
     setContent(value);
     adjustTextareaHeight();
@@ -174,6 +198,16 @@ export function MessageInput({
   };
 
   // Handle mention selection
+  /**
+   * Handles the selection of a mention suggestion and updates the content accordingly.
+   *
+   * This function checks if a mention is currently being edited. If so, it constructs a new content string
+   * by replacing the mention with a formatted mention text. It then updates the state to reflect the new content,
+   * resets the mention query and index, and clears the suggestions. Finally, it focuses the textarea and
+   * adjusts the cursor position to be after the newly inserted mention.
+   *
+   * @param suggestion - The mention suggestion object containing display, type, and id.
+   */
   const handleMentionSelect = (suggestion: MentionSuggestion) => {
     if (mentionIndex === -1) return;
 
@@ -232,6 +266,9 @@ export function MessageInput({
   };
 
   // Handle Google Drive file selection
+  /**
+   * Adds a selected Google Drive file to the list of selected drive files.
+   */
   const handleDriveFileSelect = (file: GoogleDriveFile) => {
     setSelectedDriveFiles((prev) => [...prev, file]);
   };
@@ -242,6 +279,28 @@ export function MessageInput({
   };
 
   // Handle send
+  /**
+   * Handles the sending of a message with optional file attachments.
+   *
+   * The function checks if there is content to send and if files are selected. It uploads any selected files,
+   * adds Google Drive files to the attachments, and then sends the message with the attachments.
+   * It also manages the UI state, including resetting the input fields and handling typing indicators.
+   *
+   * @param content - The message content to be sent.
+   * @param selectedFiles - An array of files selected for upload.
+   * @param selectedDriveFiles - An array of Google Drive files selected for attachment.
+   * @param onSend - A callback function to send the message.
+   * @param setContent - A function to reset the message input.
+   * @param setSelectedFiles - A function to clear the selected files.
+   * @param setSelectedDriveFiles - A function to clear the selected Google Drive files.
+   * @param clearUploads - A function to clear the upload state.
+   * @param setIsPreview - A function to toggle the preview state.
+   * @param textareaRef - A reference to the textarea element for adjusting its height.
+   * @param onTypingStop - An optional callback for when typing stops.
+   * @param typingTimeoutRef - A reference to manage the typing timeout.
+   * @returns {Promise<void>} A promise that resolves when the message is sent.
+   * @throws Error If there is an error during file upload or message sending.
+   */
   const handleSend = async () => {
     if (
       (!content.trim() && selectedFiles.length === 0 && selectedDriveFiles.length === 0) ||
@@ -306,6 +365,15 @@ export function MessageInput({
   };
 
   // Handle keyboard shortcuts
+  /**
+   * Handles keyboard events for suggestion navigation and message sending.
+   *
+   * The function processes various key events to navigate through suggestions, select a suggestion, clear suggestions, or send a message.
+   * It updates the active suggestion index based on the ArrowUp and ArrowDown keys, selects a suggestion with Enter or Tab,
+   * clears suggestions with Escape, and sends a message with Enter when the Shift key is not pressed.
+   *
+   * @param e - The keyboard event triggered by user interaction with the textarea.
+   */
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     // Handle suggestion navigation
     if (suggestions.length > 0) {
