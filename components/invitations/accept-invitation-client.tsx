@@ -15,6 +15,18 @@ interface AcceptInvitationClientProps {
 
 type InvitationState = "loading" | "success" | "error";
 
+/**
+ * Accepts an invitation for a user to join a workspace.
+ *
+ * The function manages the invitation acceptance process by handling the loading, success, and error states.
+ * It utilizes the `acceptInvitation` function to process the invitation and updates the UI accordingly.
+ * If the invitation is accepted successfully, it redirects the user to the dashboard after a brief delay.
+ * It also handles specific error cases, including when the user is already a member of the workspace.
+ *
+ * @param {Object} props - The properties for accepting the invitation.
+ * @param {string} props.token - The invitation token.
+ * @param {string} props.userEmail - The email of the user accepting the invitation.
+ */
 export function AcceptInvitationClient({ token, userEmail }: AcceptInvitationClientProps) {
   const [state, setState] = useState<InvitationState>("loading");
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -27,6 +39,15 @@ export function AcceptInvitationClient({ token, userEmail }: AcceptInvitationCli
     if (hasCalledRef.current) return;
     hasCalledRef.current = true;
 
+    /**
+     * Handles the acceptance of an invitation to a workspace.
+     *
+     * This asynchronous function attempts to accept an invitation using the `acceptInvitation` function with a provided token.
+     * If successful, it updates the state to "success", sets the workspace ID, and displays a success message.
+     * It then redirects the user to the dashboard after a 2-second delay.
+     * If the invitation acceptance fails due to the user already being a member, it treats this as a success and redirects accordingly.
+     * Any other errors will update the state to "error" and display the relevant error message.
+     */
     async function handleAcceptInvitation() {
       try {
         const result = await acceptInvitation({ token });
