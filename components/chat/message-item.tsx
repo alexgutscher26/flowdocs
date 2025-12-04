@@ -134,7 +134,11 @@ export function MessageItem({
           )}
 
           {/* Message text */}
-          <RichTextRenderer content={message.content} workspaceId={workspaceId} className="text-sm" />
+          <RichTextRenderer
+            content={message.content}
+            workspaceId={workspaceId}
+            className="text-sm"
+          />
 
           {/* Attachments */}
           {message.attachments && message.attachments.length > 0 && (
