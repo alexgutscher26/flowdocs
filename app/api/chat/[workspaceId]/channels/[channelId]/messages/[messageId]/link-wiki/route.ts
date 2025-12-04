@@ -3,6 +3,19 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import prisma from "@/lib/prisma";
 
+/**
+ * Handles the POST request to link a wiki page to a message.
+ *
+ * This function retrieves the session of the user, checks for authorization, and validates the presence of a wikiPageId.
+ * It verifies that the user is a member of the specified workspace and checks if the wiki page exists and is linked to the correct messageId.
+ * If any checks fail, appropriate error responses are returned.
+ * Finally, it returns a success response if all validations pass.
+ *
+ * @param request - The NextRequest object containing the request data.
+ * @param props - An object containing a promise that resolves to the parameters including workspaceId, channelId, and messageId.
+ * @returns A JSON response indicating success or an error message with the appropriate status code.
+ * @throws Error If there is an issue linking the wiki page.
+ */
 export async function POST(
   request: NextRequest,
   props: { params: Promise<{ workspaceId: string; channelId: string; messageId: string }> }
