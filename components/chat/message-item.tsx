@@ -25,6 +25,7 @@ import { formatFileSize, isImageFile, isVideoFile } from "@/lib/message-utils";
 import { ReactionPicker } from "./reaction-picker";
 import { MessageReactions } from "./message-reactions";
 import { ReadReceipts } from "./read-receipts";
+import { RichTextRenderer } from "./rich-text-renderer";
 
 interface MessageItemProps {
   message: ExtendedMessage;
@@ -131,7 +132,7 @@ export function MessageItem({
           )}
 
           {/* Message text */}
-          <div className="text-sm break-words whitespace-pre-wrap">{message.content}</div>
+          <RichTextRenderer content={message.content} className="text-sm" />
 
           {/* Attachments */}
           {message.attachments && message.attachments.length > 0 && (

@@ -299,13 +299,13 @@
 
 #### AI UI Components
 
-- [ ] **File**: `components/ai/ai-chat-widget.tsx` (new)
-  - [ ] Floating chat bubble interface
-  - [ ] Conversation history and context
-  - [ ] Source citation for AI responses
-  - [ ] Feedback mechanism (helpful/not helpful)
-  - [ ] Context-aware suggestions
-  - [ ] Proactive recommendations
+- [x] **File**: `components/ai/ai-chat-widget.tsx` (new)
+  - [x] Floating chat bubble interface
+  - [x] Conversation history and context
+  - [x] Source citation for AI responses
+  - [x] Feedback mechanism (helpful/not helpful)
+  - [x] Context-aware suggestions
+  - [x] Proactive recommendations
   - **Acceptance**: Intuitive AI assistance within chat interface
 
 ### Epic 7: Mentions and Notifications

@@ -13,7 +13,6 @@ import {
   Code,
   Eye,
   Edit2,
-  AtSign,
   HardDrive,
 } from "lucide-react";
 import { GoogleDrivePicker } from "@/components/integrations/google-drive-picker";
@@ -23,7 +22,9 @@ import { formatFileSize, getFileTypeIcon } from "@/lib/message-utils";
 import { cn } from "@/lib/utils";
 import { Progress } from "@/components/ui/progress";
 import { EmojiPicker } from "./emoji-picker";
-import { Command, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
+import { getMentionSuggestions, MentionSuggestion } from "@/lib/mentions";
+import { MentionList } from "./mention-list";
+import { RichTextRenderer } from "./rich-text-renderer";
 
 interface ChannelMember {
   userId: string;
@@ -44,20 +45,6 @@ interface MessageInputProps {
   workspaceId?: string;
 }
 
-/**
- * Renders a message input component for sending messages with optional file attachments and mentions.
- *
- * This component manages the state for message content, file uploads, and typing indicators. It handles user interactions such as typing, file selection, drag-and-drop, and mentions. The component also integrates with a file upload hook and provides a preview mode for the message content. Upon sending, it processes attachments and invokes the provided `onSend` callback with the message content and any uploaded files.
- *
- * @param onSend - Callback function to be called when the message is sent.
- * @param onTypingStart - Callback function to be called when typing starts.
- * @param onTypingStop - Callback function to be called when typing stops.
- * @param placeholder - Placeholder text for the input area (default: "Type a message...").
- * @param disabled - Flag to disable the input (default: false).
- * @param threadId - Optional thread ID for the message context (default: null).
- * @param channelMembers - List of channel members for mention suggestions (default: []).
- * @param workspaceId - ID of the workspace for file uploads.
- */
 export function MessageInput({
   onSend,
   onTypingStart,
@@ -74,14 +61,38 @@ export function MessageInput({
   const [selectedDriveFiles, setSelectedDriveFiles] = useState<GoogleDriveFile[]>([]);
   const [isPreview, setIsPreview] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+
+  // Mentions state
   const [mentionQuery, setMentionQuery] = useState<string | null>(null);
   const [mentionIndex, setMentionIndex] = useState<number>(-1);
+  const [suggestions, setSuggestions] = useState<MentionSuggestion[]>([]);
+  const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(0);
+  const [wikiPages, setWikiPages] = useState<{ id: string; title: string }[]>([]);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
   const { uploads, uploadFiles, isUploading, clearUploads } = useFileUpload(workspaceId);
+
+  // Fetch wiki pages for suggestions
+  useEffect(() => {
+    if (!workspaceId) return;
+
+    const fetchWikiPages = async () => {
+      try {
+        const response = await fetch(`/api/wiki/${workspaceId}/pages?limit=100`);
+        if (response.ok) {
+          const data = await response.json();
+          setWikiPages(data.pages.map((p: any) => ({ id: p.id, title: p.title })));
+        }
+      } catch (error) {
+        console.error("Failed to fetch wiki pages for suggestions:", error);
+      }
+    };
+
+    fetchWikiPages();
+  }, [workspaceId]);
 
   // Auto-resize textarea
   const adjustTextareaHeight = useCallback(() => {
@@ -92,24 +103,40 @@ export function MessageInput({
     }
   }, []);
 
+  // Update suggestions when query changes
+  useEffect(() => {
+    if (mentionQuery !== null) {
+      const newSuggestions = getMentionSuggestions(mentionQuery, channelMembers, wikiPages);
+      setSuggestions(newSuggestions);
+      setActiveSuggestionIndex(0);
+    } else {
+      setSuggestions([]);
+    }
+  }, [mentionQuery, channelMembers, wikiPages]);
+
   // Handle content change
   const handleContentChange = (value: string) => {
     setContent(value);
     adjustTextareaHeight();
 
     // Check for mention trigger
-    const lastChar = value.slice(-1);
-    if (lastChar === "@") {
-      setMentionQuery("");
-      setMentionIndex(value.length - 1);
-    } else if (mentionQuery !== null) {
-      const query = value.slice(mentionIndex + 1);
-      if (query.includes(" ")) {
+    // We need to find the last @ that is not followed by a space
+    const lastAtPos = value.lastIndexOf("@");
+
+    if (lastAtPos !== -1) {
+      const textAfterAt = value.slice(lastAtPos + 1);
+      // If there's a space, we assume the mention is done or invalid for now
+      // unless we want to support multi-word mentions which is harder
+      if (!textAfterAt.includes(" ")) {
+        setMentionQuery(textAfterAt);
+        setMentionIndex(lastAtPos);
+      } else {
         setMentionQuery(null);
         setMentionIndex(-1);
-      } else {
-        setMentionQuery(query);
       }
+    } else {
+      setMentionQuery(null);
+      setMentionIndex(-1);
     }
 
     // Typing indicators
@@ -147,19 +174,27 @@ export function MessageInput({
   };
 
   // Handle mention selection
-  const handleMentionSelect = (userName: string) => {
+  const handleMentionSelect = (suggestion: MentionSuggestion) => {
     if (mentionIndex === -1) return;
 
     const beforeMention = content.substring(0, mentionIndex);
+    // We replace everything after the @ until the end or next space
     const afterMention = content.substring(mentionIndex + (mentionQuery?.length || 0) + 1);
-    const newContent = `${beforeMention}@${userName} ${afterMention}`;
+
+    // Insert rich mention format: @[display](type:id)
+    const mentionText = `@[${suggestion.display}](${suggestion.type}:${suggestion.id})`;
+    const newContent = `${beforeMention}${mentionText} ${afterMention}`;
 
     setContent(newContent);
     setMentionQuery(null);
     setMentionIndex(-1);
+    setSuggestions([]);
 
     setTimeout(() => {
       textareaRef.current?.focus();
+      // Set cursor after the inserted mention + space
+      const newCursorPos = mentionIndex + mentionText.length + 1;
+      textareaRef.current?.setSelectionRange(newCursorPos, newCursorPos);
       adjustTextareaHeight();
     }, 0);
   };
@@ -197,9 +232,6 @@ export function MessageInput({
   };
 
   // Handle Google Drive file selection
-  /**
-   * Adds a selected GoogleDriveFile to the list of selected drive files.
-   */
   const handleDriveFileSelect = (file: GoogleDriveFile) => {
     setSelectedDriveFiles((prev) => [...prev, file]);
   };
@@ -210,25 +242,6 @@ export function MessageInput({
   };
 
   // Handle send
-  /**
-   * Handles the sending of a message with optional file attachments.
-   *
-   * The function checks if there is content to send and if files are selected. It uploads any selected files and prepares attachments, including Google Drive files. After sending the message, it resets the input fields and handles any errors that occur during the process.
-   *
-   * @param content - The message content to be sent.
-   * @param selectedFiles - An array of files selected for upload.
-   * @param selectedDriveFiles - An array of Google Drive files selected for attachment.
-   * @param onSend - A callback function to send the message.
-   * @param setContent - A function to reset the message input.
-   * @param setSelectedFiles - A function to clear the selected files.
-   * @param setSelectedDriveFiles - A function to clear the selected Google Drive files.
-   * @param clearUploads - A function to clear the upload state.
-   * @param setIsPreview - A function to toggle the preview state.
-   * @param textareaRef - A reference to the textarea element for adjusting its height.
-   * @param onTypingStop - An optional callback for when typing stops.
-   * @param typingTimeoutRef - A reference to manage the typing timeout.
-   * @returns void
-   */
   const handleSend = async () => {
     if (
       (!content.trim() && selectedFiles.length === 0 && selectedDriveFiles.length === 0) ||
@@ -294,20 +307,36 @@ export function MessageInput({
 
   // Handle keyboard shortcuts
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    // Handle suggestion navigation
+    if (suggestions.length > 0) {
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setActiveSuggestionIndex((prev) => (prev + 1) % suggestions.length);
+        return;
+      }
+      if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setActiveSuggestionIndex((prev) => (prev - 1 + suggestions.length) % suggestions.length);
+        return;
+      }
+      if (e.key === "Enter" || e.key === "Tab") {
+        e.preventDefault();
+        handleMentionSelect(suggestions[activeSuggestionIndex]);
+        return;
+      }
+      if (e.key === "Escape") {
+        e.preventDefault();
+        setSuggestions([]);
+        setMentionQuery(null);
+        return;
+      }
+    }
+
     if (e.key === "Enter" && !e.shiftKey) {
-      if (mentionQuery !== null) return; // Let enter select mention
       e.preventDefault();
       handleSend();
     }
   };
-
-  // Filter members for mention
-  const filteredMembers =
-    mentionQuery !== null
-      ? channelMembers
-          .filter((member) => member.user.name?.toLowerCase().includes(mentionQuery.toLowerCase()))
-          .slice(0, 5)
-      : [];
 
   return (
     <div
@@ -462,7 +491,7 @@ export function MessageInput({
           {isPreview ? (
             <div className="bg-muted/20 prose prose-sm dark:prose-invert max-h-[200px] min-h-[40px] overflow-y-auto rounded-md border p-2">
               {content ? (
-                <div className="whitespace-pre-wrap">{content}</div>
+                <RichTextRenderer content={content} />
               ) : (
                 <span className="text-muted-foreground italic">Nothing to preview</span>
               )}
@@ -481,35 +510,12 @@ export function MessageInput({
           )}
 
           {/* Mention Popup */}
-          {mentionQuery !== null && filteredMembers.length > 0 && (
-            <div className="bg-popover absolute bottom-full left-0 mb-2 w-64 rounded-md border p-1 shadow-md">
-              <Command>
-                <CommandList>
-                  <CommandGroup heading="Members">
-                    {filteredMembers.map((member) => (
-                      <CommandItem
-                        key={member.userId}
-                        onSelect={() => handleMentionSelect(member.user.name || "")}
-                        className="flex cursor-pointer items-center gap-2"
-                      >
-                        <div className="bg-muted flex h-6 w-6 items-center justify-center overflow-hidden rounded-full">
-                          {member.user.image ? (
-                            <img
-                              src={member.user.image}
-                              alt={member.user.name || ""}
-                              className="h-full w-full object-cover"
-                            />
-                          ) : (
-                            <span className="text-xs">{member.user.name?.[0]}</span>
-                          )}
-                        </div>
-                        <span>{member.user.name}</span>
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
-                </CommandList>
-              </Command>
-            </div>
+          {suggestions.length > 0 && (
+            <MentionList
+              suggestions={suggestions}
+              onSelect={handleMentionSelect}
+              activeIndex={activeSuggestionIndex}
+            />
           )}
         </div>
 

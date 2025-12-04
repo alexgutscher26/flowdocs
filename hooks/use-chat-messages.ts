@@ -469,6 +469,18 @@ export function useChatMessages({
     },
     removeReaction: async (reactionId: string) => {
       try {
+        // Find message containing the reaction
+        const message = state.messages.find((msg) =>
+          msg.reactions?.some((r) => r.id === reactionId)
+        );
+
+        if (!message) {
+          console.error("Message not found for reaction:", reactionId);
+          return;
+        }
+
+        const messageId = message.id;
+
         // Optimistic update
         setState((prev) => ({
           ...prev,
@@ -479,7 +491,7 @@ export function useChatMessages({
         }));
 
         const response = await fetch(
-          `/api/chat/${workspaceId}/channels/${channelId}/messages/reactions/${reactionId}`,
+          `/api/chat/${workspaceId}/channels/${channelId}/messages/${messageId}/reactions/${reactionId}`,
           {
             method: "DELETE",
           }
