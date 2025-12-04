@@ -8,6 +8,16 @@ interface RichTextRendererProps {
     className?: string;
 }
 
+/**
+ * Renders rich text content with mentions and styles based on mention types.
+ *
+ * The function parses the input content for mentions and text parts, then maps over these parts to render them accordingly.
+ * Mentions are styled based on their type (special, wiki, or user), with wiki mentions linking to a specific page using the workspaceId.
+ * The function returns a div containing the rendered parts.
+ *
+ * @param {RichTextRendererProps} props - The properties for rendering rich text, including content, workspaceId, and className.
+ * @returns {JSX.Element} The rendered rich text as a JSX element.
+ */
 export function RichTextRenderer({ content, workspaceId, className }: RichTextRendererProps) {
     const parts = parseMentions(content);
 
