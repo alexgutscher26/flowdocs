@@ -396,6 +396,7 @@ export async function acceptInvitation(
             userId: session.user.id,
             role: 'MEMBER',
           })),
+          skipDuplicates: true, // Skip if user is already a member of some channels
         });
       }
     });

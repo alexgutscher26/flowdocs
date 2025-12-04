@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { acceptInvitation } from "@/app/actions/workspace-invitations";
 import { Button } from "@/components/ui/button";
@@ -21,7 +21,12 @@ export function AcceptInvitationClient({ token, userEmail }: AcceptInvitationCli
   const [workspaceId, setWorkspaceId] = useState<string>("");
   const router = useRouter();
 
+  const hasCalledRef = useRef(false);
+
   useEffect(() => {
+    if (hasCalledRef.current) return;
+    hasCalledRef.current = true;
+
     async function handleAcceptInvitation() {
       try {
         const result = await acceptInvitation({ token });
@@ -37,9 +42,20 @@ export function AcceptInvitationClient({ token, userEmail }: AcceptInvitationCli
             window.location.href = "/dashboard";
           }, 2000);
         } else {
-          setState("error");
-          setErrorMessage(result.error || "Failed to accept invitation");
-          toast.error(result.error || "Failed to accept invitation");
+          // If the error is "You are already a member...", we should treat it as success
+          // because it likely means a race condition or previous success
+          if (result.error === "You are already a member of this workspace") {
+            setState("success");
+            // We don't have the workspace ID in the error case, but we can redirect to dashboard
+            toast.success("You are already a member of this workspace");
+            setTimeout(() => {
+              window.location.href = "/dashboard";
+            }, 2000);
+          } else {
+            setState("error");
+            setErrorMessage(result.error || "Failed to accept invitation");
+            toast.error(result.error || "Failed to accept invitation");
+          }
         }
       } catch (error) {
         setState("error");
@@ -53,7 +69,7 @@ export function AcceptInvitationClient({ token, userEmail }: AcceptInvitationCli
   }, [token, router]);
 
   return (
-    <div className="container flex min-h-screen items-center justify-center py-8">
+    <div className="flex min-h-screen w-full items-center justify-center py-8">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="bg-primary/10 mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full">
