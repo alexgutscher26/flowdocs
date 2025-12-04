@@ -28,17 +28,19 @@ interface OnboardingFlowProps {
 
 const roles = [
   { value: "founder", label: "Founder" },
-  { value: "developer", label: "Developer" },
-  { value: "designer", label: "Designer" },
-  { value: "marketer", label: "Marketer" },
+  { value: "engineer", label: "Engineering" },
+  { value: "product", label: "Product" },
+  { value: "design", label: "Design" },
+  { value: "marketing", label: "Marketing" },
+  { value: "other", label: "Other" },
 ];
 
 const useCases = [
-  { value: "b2b-saas", label: "B2B SaaS Product" },
-  { value: "b2c-saas", label: "B2C SaaS Product" },
-  { value: "marketplace", label: "Marketplace/Platform" },
-  { value: "productivity", label: "Productivity Tool" },
-  { value: "ai-app", label: "AI Application" },
+  { value: "team-communication", label: "Team Communication" },
+  { value: "knowledge-base", label: "Knowledge Base / Wiki" },
+  { value: "project-management", label: "Project Documentation" },
+  { value: "community", label: "Community" },
+  { value: "personal", label: "Personal Use" },
   { value: "other", label: "Other" },
 ];
 
@@ -260,11 +262,10 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
                           key={roleOption.value}
                           onClick={() => setRole(roleOption.value)}
                           type="button"
-                          className={`rounded-lg border-2 p-4 text-left transition-all ${
-                            role === roleOption.value
+                          className={`rounded-lg border-2 p-4 text-left transition-all ${role === roleOption.value
                               ? "border-primary bg-primary/5"
                               : "border-border hover:border-primary/50"
-                          }`}
+                            }`}
                         >
                           <span className="font-medium">{roleOption.label}</span>
                         </button>
@@ -312,18 +313,17 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
               <div className="grid gap-6">
                 <div className="grid gap-4">
                   <div className="grid gap-3">
-                    <Label>What type of SaaS are you building? *</Label>
+                    <Label>How will you use FlowDocs? *</Label>
                     <div className="grid grid-cols-2 gap-3">
                       {useCases.map((useCaseOption) => (
                         <button
                           key={useCaseOption.value}
                           onClick={() => setUseCase(useCaseOption.value)}
                           type="button"
-                          className={`rounded-lg border-2 p-4 text-left transition-all ${
-                            useCase === useCaseOption.value
+                          className={`rounded-lg border-2 p-4 text-left transition-all ${useCase === useCaseOption.value
                               ? "border-primary bg-primary/5"
                               : "border-border hover:border-primary/50"
-                          }`}
+                            }`}
                         >
                           <span className="text-sm font-medium">{useCaseOption.label}</span>
                         </button>
@@ -339,11 +339,10 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
                           key={source.value}
                           onClick={() => setDiscoverySource(source.value)}
                           type="button"
-                          className={`rounded-lg border-2 p-4 text-left transition-all ${
-                            discoverySource === source.value
+                          className={`rounded-lg border-2 p-4 text-left transition-all ${discoverySource === source.value
                               ? "border-primary bg-primary/5"
                               : "border-border hover:border-primary/50"
-                          }`}
+                            }`}
                         >
                           <span className="text-sm font-medium">{source.label}</span>
                         </button>
