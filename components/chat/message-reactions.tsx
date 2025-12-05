@@ -12,6 +12,17 @@ interface MessageReactionsProps {
   onReactionRemove: (reactionId: string) => void;
 }
 
+/**
+ * Renders a list of message reactions grouped by emoji.
+ *
+ * The function first checks if there are any reactions; if not, it returns null. It then groups the reactions by emoji using reduce, creating an object where each key is an emoji and the value is an array of reactions. For each emoji, it determines if the current user has reacted and displays the appropriate button with a tooltip showing the number of reactions and the users who reacted.
+ *
+ * @param reactions - An array of MessageReaction objects representing the reactions to a message.
+ * @param currentUserId - The ID of the current user to check for their reactions.
+ * @param onReactionClick - A callback function to handle adding a reaction when the button is clicked.
+ * @param onReactionRemove - A callback function to handle removing a reaction when the button is clicked.
+ * @returns A JSX element representing the grouped reactions or null if there are no reactions.
+ */
 export function MessageReactions({
   reactions,
   currentUserId,
@@ -64,10 +75,12 @@ export function MessageReactions({
                     {emoji}
                   </span>
                   {count > 1 && (
-                    <span className={cn(
-                      "text-xs font-medium tabular-nums",
-                      hasReacted ? "text-primary" : "text-muted-foreground"
-                    )}>
+                    <span
+                      className={cn(
+                        "text-xs font-medium tabular-nums",
+                        hasReacted ? "text-primary" : "text-muted-foreground"
+                      )}
+                    >
                       {count}
                     </span>
                   )}
@@ -78,7 +91,8 @@ export function MessageReactions({
                   <p className="text-xs font-medium">
                     {reactionList.length === 1
                       ? "Reacted with"
-                      : `${reactionList.length} people reacted with`} {emoji}
+                      : `${reactionList.length} people reacted with`}{" "}
+                    {emoji}
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {reactionList.slice(0, 5).map((r) => (

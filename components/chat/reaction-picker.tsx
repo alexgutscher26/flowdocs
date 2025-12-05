@@ -14,6 +14,9 @@ interface ReactionPickerProps {
   onSelect: (emoji: string) => void;
 }
 
+/**
+ * Renders a reaction picker component that allows users to select emojis.
+ */
 export function ReactionPicker({ onSelect }: ReactionPickerProps) {
   const [open, setOpen] = useState(false);
   const [theme, setTheme] = useState<Theme>("auto");
@@ -24,6 +27,9 @@ export function ReactionPicker({ onSelect }: ReactionPickerProps) {
     setTheme(isDark ? "dark" : "light");
 
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    /**
+     * Handles theme changes based on media query matches.
+     */
     const handler = (e: MediaQueryListEvent) => setTheme(e.matches ? "dark" : "light");
 
     mediaQuery.addEventListener("change", handler);
