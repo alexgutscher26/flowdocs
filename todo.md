@@ -360,10 +360,10 @@
   - [x] Save/bookmark messages for later
   - [x] Copy message link/permalink
   - [x] Forward message to another channel
-  - [ ] Remind me about this message (snooze) - *Deferred (complex)*
+  - [ ] Remind me about this message (snooze) - _Deferred (complex)_
   - [x] Mark as unread
   - [x] Quote reply functionality
-  - [ ] Share to other workspaces - *Deferred (complex)*
+  - [ ] Share to other workspaces - _Deferred (complex)_
   - **Acceptance**: Comprehensive message interaction options
 
 ### Epic 9: Advanced Wiki Features
