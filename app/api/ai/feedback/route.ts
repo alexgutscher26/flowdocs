@@ -3,10 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 /**
  * Handles the POST request to process feedback for a message.
  *
- * This function extracts the `messageId` and `feedback` from the request body.
- * It checks for the presence of these fields and logs the feedback if they are valid.
- * In case of missing fields, it returns a 400 error response. If an error occurs during processing,
- * it logs the error and returns a 500 error response.
+ * This function extracts the `messageId` and `feedback` from the request body. It checks for the presence of these fields and logs the feedback if they are valid. If either field is missing, it returns a 400 error response. In case of an error during processing, it logs the error and returns a 500 error response.
  *
  * @param req - The NextRequest object containing the request data.
  */
