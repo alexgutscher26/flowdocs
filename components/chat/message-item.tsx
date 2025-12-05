@@ -36,11 +36,13 @@ interface MessageItemProps {
 /**
  * Render a message item with various interactive features.
  *
- * This function displays a message along with its user information, content, attachments, and reactions.
- * It handles hover states to show action buttons, and allows for replying, editing, deleting, and pinning messages.
- * The component also manages the display of read receipts and user presence based on the provided props.
+ * This function displays a message along with user information, content, attachments, and reactions.
+ * It manages hover states to show action buttons, allows for replying, editing, deleting, and pinning messages,
+ * and handles the display of read receipts and user presence based on the provided props.
+ * Additionally, it includes functionality for bookmarking messages and marking them as unread.
  *
  * @param message - The message object containing details such as user information, content, and attachments.
+ * @param workspaceId - The ID of the workspace to which the message belongs.
  * @param isGrouped - A boolean indicating if the message is part of a grouped conversation.
  * @param showAvatar - A boolean indicating if the user's avatar should be displayed.
  * @param currentUserId - The ID of the current user for comparison with the message sender.
@@ -50,7 +52,9 @@ interface MessageItemProps {
  * @param onReaction - Callback function to handle adding a reaction to the message.
  * @param onReactionRemove - Callback function to handle removing a reaction from the message.
  * @param onPin - Callback function to handle pinning or unpinning the message.
+ * @param onQuoteReply - Callback function to handle quoting a reply to the message.
  * @param totalChannelMembers - The total number of members in the channel for read receipts.
+ * @param isHighlighted - A boolean indicating if the message should be highlighted.
  */
 export function MessageItem({
   message,
@@ -85,6 +89,16 @@ export function MessageItem({
     setIsHovered(false);
   };
 
+  /**
+   * Toggles the bookmark status of a message.
+   *
+   * This function sends a request to either add or remove a bookmark for a message identified by messageId.
+   * It determines the HTTP method based on the currentlySaved status and updates the UI accordingly.
+   * In case of an error during the fetch operation, it logs the error and displays a toast notification to the user.
+   *
+   * @param {string} messageId - The ID of the message to be bookmarked or unbookmarked.
+   * @param {boolean} currentlySaved - Indicates whether the message is currently saved as a bookmark.
+   */
   const handleBookmark = async (messageId: string, currentlySaved: boolean) => {
     try {
       const method = currentlySaved ? "DELETE" : "POST";
@@ -115,6 +129,15 @@ export function MessageItem({
     setIsForwardDialogOpen(true);
   };
 
+  /**
+   * Marks a message as unread by sending a request to the server.
+   *
+   * This function takes a message ID and makes a POST request to update the read status of the message.
+   * If the request is successful, a toast notification is displayed to inform the user.
+   * In case of an error during the request, an error message is logged and a different toast notification is shown.
+   *
+   * @param {string} messageId - The ID of the message to be marked as unread.
+   */
   const handleMarkUnread = async (messageId: string) => {
     try {
       const response = await fetch(`/api/chat/${workspaceId}/messages/${messageId}/read-status`, {

@@ -45,6 +45,11 @@ export function SavedMessagesView({ workspaceId }: SavedMessagesViewProps) {
     fetchSavedMessages();
   }, [workspaceId]);
 
+  /**
+   * Fetches saved messages from the server.
+   *
+   * This asynchronous function sets the loading state to true, attempts to fetch saved messages from the specified API endpoint, and updates the state with the retrieved data if the response is successful. In case of an error during the fetch operation, it logs the error and displays a toast notification to inform the user of the failure. Finally, it resets the loading state to false.
+   */
   const fetchSavedMessages = async () => {
     setIsLoading(true);
     try {
@@ -65,6 +70,15 @@ export function SavedMessagesView({ workspaceId }: SavedMessagesViewProps) {
     }
   };
 
+  /**
+   * Handles the removal of a bookmark for a specific message.
+   *
+   * This function sends a DELETE request to the server to remove the bookmark associated with the given messageId.
+   * If the request is successful, it updates the saved messages state by filtering out the removed bookmark and displays a success toast notification.
+   * In case of an error during the fetch operation, it logs the error and shows a failure toast notification.
+   *
+   * @param {string} messageId - The ID of the message whose bookmark is to be removed.
+   */
   const handleRemoveBookmark = async (messageId: string) => {
     try {
       const response = await fetch(`/api/chat/${workspaceId}/messages/${messageId}/bookmark`, {
@@ -88,6 +102,9 @@ export function SavedMessagesView({ workspaceId }: SavedMessagesViewProps) {
     }
   };
 
+  /**
+   * Navigates to a specific message in a chat channel.
+   */
   const handleJumpToMessage = (channelId: string, messageId: string) => {
     router.push(`/dashboard/${workspaceId}/chat/${channelId}?message=${messageId}`);
   };

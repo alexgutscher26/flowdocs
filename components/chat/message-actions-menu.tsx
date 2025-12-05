@@ -37,6 +37,26 @@ interface MessageActionsMenuProps {
   onQuoteReply?: (quotedContent: string) => void;
 }
 
+/**
+ * Renders a menu for various actions that can be performed on a message.
+ *
+ * This component provides options to reply, quote reply, pin/unpin, bookmark/save, mark as unread, copy link, forward, edit, and delete a message.
+ * It utilizes state management to control the visibility of the menu and handles user interactions through callback functions passed as props.
+ *
+ * @param message - The message object containing details such as id, content, and user information.
+ * @param workspaceId - The ID of the workspace where the message resides.
+ * @param currentUserId - The ID of the current user interacting with the message.
+ * @param isOwnMessage - A boolean indicating if the message belongs to the current user.
+ * @param isSaved - A boolean indicating if the message is saved/bookmarked.
+ * @param onPin - Callback function to handle pinning/unpinning the message.
+ * @param onEdit - Callback function to handle editing the message.
+ * @param onDelete - Callback function to handle deleting the message.
+ * @param onReply - Callback function to handle replying to the message.
+ * @param onBookmark - Callback function to handle bookmarking the message.
+ * @param onForward - Callback function to handle forwarding the message.
+ * @param onMarkUnread - Callback function to handle marking the message as unread.
+ * @param onQuoteReply - Callback function to handle quoting the reply to the message.
+ */
 export function MessageActionsMenu({
   message,
   workspaceId,
@@ -80,6 +100,9 @@ export function MessageActionsMenu({
     setOpen(false);
   };
 
+  /**
+   * Executes the given action and closes the open state.
+   */
   const handleAction = (action: () => void) => {
     action();
     setOpen(false);

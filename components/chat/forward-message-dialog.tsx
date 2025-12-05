@@ -33,6 +33,17 @@ interface ForwardMessageDialogProps {
   currentChannelId: string;
 }
 
+/**
+ * Renders a dialog for forwarding a message to selected channels.
+ *
+ * This component fetches available channels when opened, allowing users to select one or more channels to forward a message. It manages the state for loading channels, selected channels, and user comments. Upon forwarding, it sends a request to the server and handles success or error responses, providing feedback through toast notifications.
+ *
+ * @param open - A boolean indicating whether the dialog is open.
+ * @param onOpenChange - A function to handle changes to the dialog's open state.
+ * @param message - The message object to be forwarded.
+ * @param workspaceId - The ID of the workspace containing the channels.
+ * @param currentChannelId - The ID of the current channel to exclude from the list.
+ */
 export function ForwardMessageDialog({
   open,
   onOpenChange,
@@ -79,12 +90,31 @@ export function ForwardMessageDialog({
     }
   };
 
+  /**
+   * Toggles the selection of a channel by its ID.
+   */
   const handleToggleChannel = (channelId: string) => {
     setSelectedChannelIds((prev) =>
       prev.includes(channelId) ? prev.filter((id) => id !== channelId) : [...prev, channelId]
     );
   };
 
+  /**
+   * Handles the forwarding of a message to selected channels.
+   *
+   * The function checks if a message exists and if any channels are selected. It then initiates a POST request to forward the message to the specified channels. Upon a successful response, it displays a success toast and resets the relevant state. If the request fails or an error occurs, it displays an error toast. Finally, it ensures that the forwarding state is reset.
+   *
+   * @param message - The message object to be forwarded.
+   * @param selectedChannelIds - An array of channel IDs to which the message will be forwarded.
+   * @param workspaceId - The ID of the workspace where the message exists.
+   * @param comment - An optional comment to include with the forwarded message.
+   * @param setIsForwarding - A function to set the forwarding state.
+   * @param toast - A function to display toast notifications.
+   * @param onOpenChange - A function to handle the opening state of a modal or dialog.
+   * @param setSelectedChannelIds - A function to reset the selected channel IDs.
+   * @param setComment - A function to reset the comment input.
+   * @param setSearchQuery - A function to reset the search query.
+   */
   const handleForward = async () => {
     if (!message || selectedChannelIds.length === 0) return;
 
