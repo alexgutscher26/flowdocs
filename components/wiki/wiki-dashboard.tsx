@@ -3,9 +3,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus, Clock, Star, FileText, Search } from "lucide-react";
+import { Plus, Clock, Star, FileText } from "lucide-react";
 import Link from "next/link";
-import { Input } from "@/components/ui/input";
+
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatDistanceToNow } from "date-fns";
 
@@ -50,11 +50,7 @@ export function WikiDashboard({ workspaceId }: WikiDashboardProps) {
                 </Button>
             </div>
 
-            {/* Search (Placeholder for now, could link to full search) */}
-            <div className="relative">
-                <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                <Input placeholder="Search documentation..." className="pl-9 h-10" />
-            </div>
+
 
             <div className="grid gap-6 md:grid-cols-2">
                 {/* Recent Pages */}
