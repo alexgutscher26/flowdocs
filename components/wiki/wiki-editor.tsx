@@ -36,7 +36,13 @@ export interface WikiEditorProps {
   initialContent?: string;
   initialTags?: string[];
   initialIsTemplate?: boolean;
-  onSave?: (data: { title: string; content: string; tags: string[]; published: boolean; isTemplate: boolean }) => void;
+  onSave?: (data: {
+    title: string;
+    content: string;
+    tags: string[];
+    published: boolean;
+    isTemplate: boolean;
+  }) => void;
   onCancel?: () => void;
   autoSave?: boolean;
   autoSaveInterval?: number; // milliseconds
@@ -351,8 +357,6 @@ export function WikiEditor({
         </div>
       </div>
 
-
-
       {/* Template Option */}
       <div className="flex items-center space-x-2">
         <input
@@ -385,6 +389,6 @@ export function WikiEditor({
           </Button>
         </div>
       </div>
-    </div >
+    </div>
   );
 }
