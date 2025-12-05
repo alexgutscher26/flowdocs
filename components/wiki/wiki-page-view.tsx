@@ -22,6 +22,7 @@ import {
   Hash,
   BookOpen,
   Trash2,
+  Star,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { VersionHistoryDialog, WikiVersion } from "./version-history";
@@ -160,12 +161,63 @@ export function WikiPageView({
   const [checkboxStates, setCheckboxStates] = useState<Record<string, boolean>>({});
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
 
   const router = useRouter();
   const { toast } = useToast();
 
   // Check if user can delete (author, admin, or owner)
   const canDelete = canEdit && currentUserId && workspaceId;
+
+  // Log visit on mount
+  useEffect(() => {
+    if (workspaceId && page.id) {
+      fetch(`/api/wiki/${workspaceId}/recent`, {
+        method: "POST",
+        body: JSON.stringify({ pageId: page.id }),
+      }).catch((err) => console.error("Failed to log visit", err));
+    }
+  }, [workspaceId, page.id]);
+
+  // Check favorite status on mount
+  useEffect(() => {
+    if (workspaceId && page.id) {
+      fetch(`/api/wiki/${workspaceId}/favorites`)
+        .then((res) => res.json())
+        .then((favorites: any[]) => {
+          const isFav = favorites.some((f: any) => f.id === page.id);
+          setIsFavorite(isFav);
+        })
+        .catch((err) => console.error("Failed to check favorite status", err));
+    }
+  }, [workspaceId, page.id]);
+
+  const toggleFavorite = async () => {
+    if (!workspaceId) return;
+
+    try {
+      const res = await fetch(`/api/wiki/${workspaceId}/favorites`, {
+        method: "POST",
+        body: JSON.stringify({ pageId: page.id }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setIsFavorite(data.isFavorite);
+        toast({
+          title: data.isFavorite ? "Added to favorites" : "Removed from favorites",
+          description: data.isFavorite ? "Page added to your favorites list" : "Page removed from your favorites list",
+        });
+      }
+    } catch (error) {
+      console.error("Failed to toggle favorite", error);
+      toast({
+        title: "Error",
+        description: "Failed to update favorite status",
+        variant: "destructive",
+      });
+    }
+  };
 
   // Load checkbox states from localStorage on mount
   useEffect(() => {
@@ -330,6 +382,20 @@ export function WikiPageView({
 
               {/* Action Toolbar */}
               <div className="flex items-center gap-2">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8"
+                  onClick={toggleFavorite}
+                  title={isFavorite ? "Remove from favorites" : "Add to favorites"}
+                >
+                  <Star
+                    className={cn(
+                      "h-4 w-4 transition-colors",
+                      isFavorite ? "fill-yellow-500 text-yellow-500" : "text-muted-foreground"
+                    )}
+                  />
+                </Button>
                 {canEdit && (onEdit || workspaceId) && (
                   <Button
                     onClick={onEdit}

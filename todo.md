@@ -370,15 +370,15 @@
 
 #### Wiki Organization
 
-- [ ] **File**: `components/wiki/wiki-navigation.tsx` (new)
-  - [ ] Hierarchical page tree navigation - Visual folder structure for pages.
-  - [ ] Wiki sidebar with collapsible folders - Expandable navigation menu.
-  - [ ] Breadcrumb navigation - Path tracking for deep pages.
-  - [ ] Recently viewed pages - Quick access to history.
-  - [ ] Favorited/starred pages - Bookmarks for important docs.
-  - [ ] Page templates system - Reusable layouts for new pages.
-  - [ ] Wiki homepage customization - Dashboard for knowledge base.
-  - [ ] Multi-level nested pages (unlimited depth) - Deep hierarchy support.
+- [x] **File**: `components/wiki/wiki-navigation.tsx` (new)
+  - [x] Hierarchical page tree navigation - Visual folder structure for pages.
+  - [x] Wiki sidebar with collapsible folders - Expandable navigation menu.
+  - [x] Breadcrumb navigation - Path tracking for deep pages.
+  - [x] Recently viewed pages - Quick access to history.
+  - [x] Favorited/starred pages - Bookmarks for important docs.
+  - [x] Page templates system - Reusable layouts for new pages.
+  - [x] Wiki homepage customization - Dashboard for knowledge base.
+  - [x] Multi-level nested pages (unlimited depth) - Deep hierarchy support.
   - **Acceptance**: Easy wiki navigation like Notion
 
 #### Advanced Wiki Editor

@@ -218,7 +218,7 @@ export async function PUT(
     }
 
     const body = await request.json();
-    const { title, content, excerpt, tags, published, changeNote } = body;
+    const { title, content, excerpt, tags, published, changeNote, isTemplate } = body;
 
     // Determine the new published state
     const newPublished = published ?? existingPage.published;
@@ -243,6 +243,7 @@ export async function PUT(
         excerpt: excerpt || existingPage.excerpt,
         published: newPublished,
         publishedAt,
+        isTemplate: isTemplate !== undefined ? isTemplate : existingPage.isTemplate,
       },
       include: {
         author: {

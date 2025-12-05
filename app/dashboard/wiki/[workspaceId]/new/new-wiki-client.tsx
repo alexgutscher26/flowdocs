@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { useQuery } from "@tanstack/react-query";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface NewWikiClientProps {
   workspaceId: string;
@@ -34,6 +35,9 @@ export function NewWikiClient({ workspaceId }: NewWikiClientProps) {
   const { toast } = useToast();
   const [saving, setSaving] = useState(false);
   const [parentId, setParentId] = useState<string | null>(null);
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
+  const [initialContent, setInitialContent] = useState("");
+  const [initialTitle, setInitialTitle] = useState("");
 
   const { data: tree } = useQuery<WikiPageNode[]>({
     queryKey: ["wiki-tree", workspaceId],
@@ -45,6 +49,29 @@ export function NewWikiClient({ workspaceId }: NewWikiClientProps) {
       return res.json();
     },
   });
+
+  const { data: templates } = useQuery<any[]>({
+    queryKey: ["wiki-templates", workspaceId],
+    queryFn: async () => {
+      const res = await fetch(`/api/wiki/${workspaceId}/templates`);
+      if (!res.ok) throw new Error("Failed to fetch templates");
+      return res.json();
+    },
+  });
+
+  const handleTemplateChange = (templateId: string) => {
+    setSelectedTemplateId(templateId);
+    if (templateId && templates) {
+      const template = templates.find((t) => t.id === templateId);
+      if (template) {
+        setInitialContent(template.content);
+        setInitialTitle(`Copy of ${template.title}`);
+      }
+    } else {
+      setInitialContent("");
+      setInitialTitle("");
+    }
+  };
 
   // Flatten tree for select options
   const flattenTree = (
@@ -69,7 +96,11 @@ export function NewWikiClient({ workspaceId }: NewWikiClientProps) {
     title: string;
     content: string;
     tags: string[];
+    title: string;
+    content: string;
+    tags: string[];
     published: boolean;
+    isTemplate: boolean;
   }) => {
     setSaving(true);
     try {
@@ -154,9 +185,30 @@ export function NewWikiClient({ workspaceId }: NewWikiClientProps) {
         </p>
       </div>
 
+      <div className="mb-6 max-w-md space-y-2">
+        <Label>Use Template (Optional)</Label>
+        <Select
+          value={selectedTemplateId || "none"}
+          onValueChange={(value) => handleTemplateChange(value === "none" ? "" : value)}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Select a template..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="none">No Template</SelectItem>
+            {templates?.map((template) => (
+              <SelectItem key={template.id} value={template.id}>
+                {template.title}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
       <WikiEditor
-        initialTitle=""
-        initialContent=""
+        key={selectedTemplateId} // Force re-render when template changes
+        initialTitle={initialTitle}
+        initialContent={initialContent}
         initialTags={[]}
         onSave={handleSave}
         onCancel={handleCancel}

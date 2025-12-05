@@ -35,7 +35,8 @@ export interface WikiEditorProps {
   initialTitle?: string;
   initialContent?: string;
   initialTags?: string[];
-  onSave?: (data: { title: string; content: string; tags: string[]; published: boolean }) => void;
+  initialIsTemplate?: boolean;
+  onSave?: (data: { title: string; content: string; tags: string[]; published: boolean; isTemplate: boolean }) => void;
   onCancel?: () => void;
   autoSave?: boolean;
   autoSaveInterval?: number; // milliseconds
@@ -64,6 +65,7 @@ export function WikiEditor({
   initialTitle = "",
   initialContent = "",
   initialTags = [],
+  initialIsTemplate = false,
   onSave,
   onCancel,
   autoSave = true,
@@ -73,6 +75,7 @@ export function WikiEditor({
   const [title, setTitle] = useState(initialTitle);
   const [content, setContent] = useState(initialContent);
   const [tags, setTags] = useState<string[]>(initialTags);
+  const [isTemplate, setIsTemplate] = useState(initialIsTemplate);
   const [newTag, setNewTag] = useState("");
   const [activeTab, setActiveTab] = useState<"edit" | "preview">("edit");
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
@@ -100,7 +103,7 @@ export function WikiEditor({
         clearTimeout(autoSaveTimerRef.current);
       }
     };
-  }, [title, content, tags, autoSave, autoSaveInterval]);
+  }, [title, content, tags, isTemplate, autoSave, autoSaveInterval]);
 
   const handleSave = useCallback(
     async (isAutoSave = false, published = false) => {
@@ -116,7 +119,7 @@ export function WikiEditor({
 
       setIsSaving(true);
       try {
-        await onSave({ title, content, tags, published });
+        await onSave({ title, content, tags, published, isTemplate });
         setLastSaved(new Date());
       } catch (error) {
         console.error("Error saving:", error);
@@ -124,7 +127,7 @@ export function WikiEditor({
         setIsSaving(false);
       }
     },
-    [title, content, tags, onSave]
+    [title, content, tags, isTemplate, onSave]
   );
 
   // Insert markdown formatting at cursor position
@@ -348,6 +351,20 @@ export function WikiEditor({
         </div>
       </div>
 
+
+
+      {/* Template Option */}
+      <div className="flex items-center space-x-2">
+        <input
+          type="checkbox"
+          id="isTemplate"
+          checked={isTemplate}
+          onChange={(e) => setIsTemplate(e.target.checked)}
+          className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+        />
+        <Label htmlFor="isTemplate">Save as Template</Label>
+      </div>
+
       {/* Action Buttons */}
       <div className="flex items-center justify-between border-t pt-4">
         <Button variant="outline" onClick={onCancel} disabled={isSaving}>
@@ -368,6 +385,6 @@ export function WikiEditor({
           </Button>
         </div>
       </div>
-    </div>
+    </div >
   );
 }

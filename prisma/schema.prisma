@@ -50,6 +50,8 @@ model User {
   // Wiki relations
   wikiPages          WikiPage[]
   wikiVersions       WikiVersion[]
+  favorites          WikiPageFavorite[]
+  wikiVisits         WikiPageVisit[]
 
   // File uploads
   uploadedFiles      File[]
@@ -126,6 +128,8 @@ model Workspace {
   channels    Channel[]
   wikiPages   WikiPage[]
   wikiTags    WikiTag[]
+  wikiFavorites WikiPageFavorite[]
+  wikiVisits    WikiPageVisit[]
   files       File[]
 
   // Storage quota (in bytes)
@@ -337,6 +341,7 @@ model WikiPage {
   
   // Metadata
   published   Boolean   @default(false)
+  isTemplate  Boolean   @default(false)
   viewCount   Int       @default(0)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -345,6 +350,8 @@ model WikiPage {
   // Relations
   versions    WikiVersion[]
   tags        WikiPageTag[]
+  favorites   WikiPageFavorite[]
+  visits      WikiPageVisit[]
   
   @@unique([workspaceId, slug])
   @@index([workspaceId])
@@ -352,6 +359,47 @@ model WikiPage {
   @@index([parentId])
   @@index([messageId])
   @@map("wiki_page")
+}
+
+model WikiPageFavorite {
+  id          String   @id @default(cuid())
+  
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  pageId      String
+  page        WikiPage @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  
+  createdAt   DateTime @default(now())
+  
+  @@unique([userId, pageId])
+  @@index([userId])
+  @@index([workspaceId])
+  @@map("wiki_page_favorite")
+}
+
+model WikiPageVisit {
+  id          String   @id @default(cuid())
+  
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  pageId      String
+  page        WikiPage @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  
+  lastVisitedAt DateTime @default(now())
+  
+  @@unique([userId, pageId])
+  @@index([userId])
+  @@index([workspaceId])
+  @@index([lastVisitedAt])
+  @@map("wiki_page_visit")
 }
 
 model WikiVersion {

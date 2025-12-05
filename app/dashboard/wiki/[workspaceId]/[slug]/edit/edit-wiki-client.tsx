@@ -24,6 +24,7 @@ export function EditWikiClient({ workspaceId, slug, page }: EditWikiClientProps)
     content: string;
     tags: string[];
     published: boolean;
+    isTemplate: boolean;
   }) => {
     setSaving(true);
     try {
@@ -81,6 +82,7 @@ export function EditWikiClient({ workspaceId, slug, page }: EditWikiClientProps)
         initialTitle={page.title}
         initialContent={page.content}
         initialTags={tags}
+        initialIsTemplate={page.isTemplate}
         onSave={handleSave}
         onCancel={handleCancel}
         autoSave={false}

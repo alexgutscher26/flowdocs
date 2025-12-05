@@ -158,7 +158,7 @@ export async function POST(
     }
 
     const body = await request.json();
-    const { title, content, excerpt, tags, published, parentId } = body;
+    const { title, content, excerpt, tags, published, parentId, isTemplate } = body;
 
     if (!title) {
       return NextResponse.json({ error: "Missing required field: title" }, { status: 400 });
@@ -208,6 +208,7 @@ export async function POST(
         published: willBePublished,
         publishedAt: willBePublished ? new Date() : null,
         parentId: parentId || null,
+        isTemplate: isTemplate || false,
       },
       include: {
         author: {
