@@ -387,7 +387,7 @@ export class WikiConverter {
   }
 
   /**
-   * Detect programming languages in content
+   * Detects programming languages present in the given content.
    */
   private detectLanguages(content: string): string[] {
     const languages: string[] = [];

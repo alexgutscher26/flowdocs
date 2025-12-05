@@ -156,8 +156,14 @@ Extract every actionable item from the text—anything that represents work to b
 - Maintain original specificity (dates, numbers, names)`;
 
 /**
- * Answer a question using RAG (Retrieval Augmented Generation)
- * based on team knowledge (messages and wiki pages).
+ * Answer a question using RAG (Retrieval Augmented Generation) based on team knowledge (messages and wiki pages).
+ *
+ * This function retrieves relevant context from Typesense for the given query and workspaceId, processes message and wiki results while respecting a maximum context length, and generates an answer using the FlowDocs context. It handles various error cases, including missing API keys, empty queries, and workspace IDs, and ensures that the response is concise and actionable.
+ *
+ * @param query - The question to be answered.
+ * @param workspaceId - The ID of the workspace from which to retrieve context.
+ * @returns An object containing the generated answer and sources of information.
+ * @throws Error If the OpenRouter API key is not configured, if the query is empty, or if the workspace ID is missing.
  */
 export async function answerQuestion(query: string, workspaceId: string) {
   if (!OPENROUTER_API_KEY) {
@@ -253,8 +259,15 @@ export async function answerQuestion(query: string, workspaceId: string) {
 
 /**
  * Summarize a conversation thread.
- * @param messages - Array of messages to summarize
- * @returns Summary text
+ *
+ * This function checks for the presence of the OpenRouter API key and validates the input messages.
+ * It constructs a transcript from the messages and calls the generateText function to obtain a summary,
+ * focusing on key points, decisions, and action items. If any errors occur during the process,
+ * they are logged and a failure message is thrown.
+ *
+ * @param messages - Array of messages to summarize.
+ * @returns Summary text of the conversation thread.
+ * @throws Error If the OpenRouter API key is not configured or if summarization fails.
  */
 export async function summarizeThread(messages: Message[]) {
   if (!OPENROUTER_API_KEY) {
@@ -350,6 +363,14 @@ export async function findRelatedConversations(query: string, workspaceId: strin
 
 /**
  * Extract action items from text.
+ *
+ * This function checks for the presence of the OPENROUTER_API_KEY and validates the input text.
+ * It then calls the generateObject function to extract action items, which are defined by a specific schema.
+ * If successful, it returns the extracted action items; otherwise, it handles errors appropriately.
+ *
+ * @param text - The input text from which action items will be extracted.
+ * @returns An array of action items extracted from the input text.
+ * @throws Error If the OpenRouter API key is not configured or if extraction fails.
  */
 export async function extractActionItems(text: string) {
   if (!OPENROUTER_API_KEY) {

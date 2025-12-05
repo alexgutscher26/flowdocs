@@ -21,6 +21,15 @@ interface AIChatWidgetProps {
   className?: string;
 }
 
+/**
+ * AIChatWidget component for interactive AI chat functionality.
+ *
+ * This component manages the state of the chat interface, including message history, user input, and loading status. It utilizes localStorage to persist messages across sessions and handles sending user queries to an AI service, processing responses, and displaying them. Feedback on assistant messages can also be submitted for analytics. The component features auto-scrolling and a toggle button for visibility.
+ *
+ * @param {Object} props - The properties for the AIChatWidget.
+ * @param {string} props.workspaceId - The unique identifier for the workspace.
+ * @param {string} props.className - Additional class names for styling the component.
+ */
 export function AIChatWidget({ workspaceId, className }: AIChatWidgetProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -55,6 +64,21 @@ export function AIChatWidget({ workspaceId, className }: AIChatWidgetProps) {
     }
   }, [messages]);
 
+  /**
+   * Handles sending a user message and receiving a response from the AI.
+   *
+   * The function checks if the input is valid and not currently loading. It constructs a user message and updates the message state.
+   * It then makes a POST request to the AI chat API with the user's input and workspace ID. If the response is successful, it constructs
+   * an assistant message and updates the message state. In case of an error, it logs the error and sends an error message to the user.
+   *
+   * @param input - The user's input message to be sent to the AI.
+   * @param isLoading - A boolean indicating whether a request is currently in progress.
+   * @param setMessages - A function to update the messages state.
+   * @param setInput - A function to reset the input state.
+   * @param setIsLoading - A function to update the loading state.
+   * @param workspaceId - The ID of the workspace associated with the user's request.
+   * @throws Error If the response from the AI chat API is not ok.
+   */
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
 
@@ -106,6 +130,16 @@ export function AIChatWidget({ workspaceId, className }: AIChatWidgetProps) {
     }
   };
 
+  /**
+   * Handles user feedback for a specific message.
+   *
+   * This function updates the local state of messages by setting the feedback for the message identified by messageId.
+   * It then attempts to send the feedback to the backend for analytics via a POST request.
+   * If the request fails, it logs an error to the console.
+   *
+   * @param messageId - The ID of the message for which feedback is being provided.
+   * @param feedback - The feedback type, which can be either "helpful" or "not-helpful".
+   */
   const handleFeedback = async (messageId: string, feedback: "helpful" | "not-helpful") => {
     setMessages((prev) => prev.map((m) => (m.id === messageId ? { ...m, feedback } : m)));
 
