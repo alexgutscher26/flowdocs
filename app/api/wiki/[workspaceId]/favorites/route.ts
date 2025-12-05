@@ -8,6 +8,16 @@ const toggleFavoriteSchema = z.object({
     pageId: z.string(),
 });
 
+/**
+ * Handles the GET request to retrieve favorite pages for a specific workspace.
+ *
+ * The function first awaits the parameters to extract the workspaceId. It then attempts to get the user session using the auth.api.getSession method. If the user is not authenticated, it returns a 401 Unauthorized response. If authenticated, it retrieves the favorite pages for the given workspaceId and user ID, returning the results as a JSON response. In case of any errors, it logs the error and returns a 500 Internal Error response.
+ *
+ * @param req - The NextRequest object representing the incoming request.
+ * @param props - An object containing a promise that resolves to the parameters, including workspaceId.
+ * @returns A JSON response containing the favorite pages or an error response.
+ * @throws Error If there is an issue retrieving the session or favorite pages.
+ */
 export async function GET(
     req: NextRequest,
     props: { params: Promise<{ workspaceId: string }> }
