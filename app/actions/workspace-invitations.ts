@@ -281,7 +281,13 @@ export async function cancelInvitation(input: CancelInvitationInput): Promise<Ac
 }
 
 /**
- * Accept a workspace invitation
+ * Accept a workspace invitation.
+ *
+ * This function validates the input invitation token, checks the user's session, and verifies the invitation's validity, including expiration and acceptance status. It then creates a workspace member, updates the invitation status, marks the user as onboarded, and adds the user to public channels. Finally, it revalidates the necessary paths to ensure the user's authentication state is up to date.
+ *
+ * @param input - The input data containing the invitation token.
+ * @returns A promise that resolves to an ActionResult containing the workspace ID if successful.
+ * @throws Error If there is an issue during the invitation acceptance process.
  */
 export async function acceptInvitation(
   input: AcceptInvitationInput

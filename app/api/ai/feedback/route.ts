@@ -1,5 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 
+/**
+ * Handles the POST request to process feedback for a message.
+ *
+ * This function extracts the `messageId` and `feedback` from the request body.
+ * It checks for the presence of these fields and logs the feedback if they are valid.
+ * In case of missing fields, it returns a 400 error response. If an error occurs during processing,
+ * it logs the error and returns a 500 error response.
+ *
+ * @param req - The NextRequest object containing the request data.
+ */
 export async function POST(req: NextRequest) {
   try {
     const { messageId, feedback } = await req.json();

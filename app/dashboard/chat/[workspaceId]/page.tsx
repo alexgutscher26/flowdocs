@@ -15,6 +15,18 @@ interface ChatPageProps {
   }>;
 }
 
+/**
+ * Renders the chat page for a specific workspace.
+ *
+ * This function retrieves the current user and workspace information based on the provided parameters.
+ * If the user is not authenticated, it redirects to the sign-in page. It attempts to find the workspace
+ * using either the ID or slug. If the workspace is not found, it displays an appropriate message.
+ * Finally, it renders the chat layout and AI chat widget if the workspace is valid.
+ *
+ * @param params - An object containing route parameters, including workspaceId.
+ * @param searchParams - An object containing search parameters, including channel, message, and thread.
+ * @returns A JSX element representing the chat page layout or an error message if the workspace is not found.
+ */
 export default async function ChatPage({ params, searchParams }: ChatPageProps) {
   const user = await getCurrentUser();
   const { workspaceId } = await params;

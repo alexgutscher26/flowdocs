@@ -69,6 +69,16 @@ export interface VirusScanResult {
 // Storage Client Factory
 // ============================================================================
 
+/**
+ * Retrieve the storage configuration based on the environment variables.
+ *
+ * The function checks the STORAGE_PROVIDER environment variable to determine the storage type.
+ * If the provider is "r2", it validates the presence of the R2_ACCOUNT_ID and constructs the configuration accordingly.
+ * If the provider is not "r2", it defaults to S3 configuration using the relevant environment variables.
+ *
+ * @returns The storage configuration object for the specified provider.
+ * @throws Error If R2_ACCOUNT_ID is not provided when the provider is "r2".
+ */
 function getStorageConfig(): StorageConfig {
   const provider = (process.env.STORAGE_PROVIDER || "s3") as StorageProvider;
 
@@ -142,6 +152,18 @@ const DEFAULT_ALLOWED_TYPES = [
   "video/quicktime",
 ];
 
+/**
+ * Validate a file's size and MIME type based on specified options.
+ *
+ * The function checks if the file size is within the allowed limits and validates the MIME type using magic numbers.
+ * If the MIME type cannot be determined, it checks for common text file extensions.
+ * The function returns an object indicating the validity of the file along with any error messages or the detected MIME type.
+ *
+ * @param buffer - The Buffer containing the file data to be validated.
+ * @param filename - The name of the file being validated.
+ * @param options - An optional object containing validation options such as allowedTypes, maxSize, and minSize.
+ * @returns An object indicating whether the file is valid, any error message, and the detected MIME type if valid.
+ */
 export async function validateFile(
   buffer: Buffer,
   filename: string,
@@ -200,6 +222,9 @@ export async function validateFile(
 // Filename Sanitization
 // ============================================================================
 
+/**
+ * Sanitizes a filename by appending a timestamp and a random string.
+ */
 export function sanitizeFilename(filename: string): string {
   const sanitized = sanitize(filename);
   const timestamp = Date.now();
@@ -318,6 +343,15 @@ export async function generateThumbnails(
 // Virus Scanning
 // ============================================================================
 
+/**
+ * Scan a file for viruses using a specified provider.
+ *
+ * The function checks if virus scanning is enabled via an environment variable. If enabled, it determines the scanning provider and calls the appropriate scanning function based on the provider. If an error occurs during scanning, it logs the error and returns a failure response indicating the scan failed.
+ *
+ * @param buffer - The buffer containing the file data to be scanned.
+ * @param filename - The name of the file being scanned.
+ * @returns A Promise that resolves to a VirusScanResult indicating whether the file is clean or if a threat was detected.
+ */
 export async function scanFileForViruses(
   buffer: Buffer,
   filename: string
@@ -351,6 +385,15 @@ export async function scanFileForViruses(
   }
 }
 
+/**
+ * Scans a buffer for viruses using ClamAV.
+ *
+ * This function establishes a TCP connection to a ClamAV server, sends the buffer data for scanning,
+ * and processes the response to determine if the buffer is clean or contains a threat. It handles
+ * connection errors and resolves with the scan result, including threat details if applicable.
+ *
+ * @param {Buffer} buffer - The buffer containing the data to be scanned for viruses.
+ */
 async function scanWithClamAV(buffer: Buffer): Promise<VirusScanResult> {
   // ClamAV integration via TCP socket
   const net = await import("net");
@@ -446,6 +489,15 @@ async function scanWithVirusTotal(buffer: Buffer, filename: string): Promise<Vir
 // Storage Operations
 // ============================================================================
 
+/**
+ * Uploads a buffer to storage and generates a public URL for the uploaded object.
+ *
+ * This function creates an S3 client and retrieves the storage configuration. It then uploads the provided buffer to the specified bucket using the given key and mimeType. Depending on the storage provider, it generates a public URL in the appropriate format for either R2 or S3.
+ *
+ * @param {Buffer} buffer - The data to be uploaded.
+ * @param {string} key - The key under which the data will be stored.
+ * @param {string} mimeType - The MIME type of the data being uploaded.
+ */
 export async function uploadToStorage(
   buffer: Buffer,
   key: string,
@@ -473,6 +525,9 @@ export async function uploadToStorage(
   return `https://${config.bucket}.s3.${config.region}.amazonaws.com/${key}`;
 }
 
+/**
+ * Deletes an object from storage using the specified key.
+ */
 export async function deleteFromStorage(key: string): Promise<void> {
   const client = createS3Client();
   const config = getStorageConfig();
@@ -497,6 +552,16 @@ export async function generatePresignedUrl(key: string, expiresIn = 3600): Promi
   return await getSignedUrl(client, command, { expiresIn });
 }
 
+/**
+ * Retrieves metadata for a specified file from S3 storage.
+ *
+ * This function creates an S3 client and retrieves the file's metadata using the HeadObjectCommand.
+ * It extracts the size, content type, and last modified date from the response, providing default values
+ * if the metadata is not available. The function relies on the createS3Client and getStorageConfig
+ * functions to configure the S3 client and access the correct bucket.
+ *
+ * @param key - The key of the file in the S3 bucket.
+ */
 export async function getFileMetadata(key: string): Promise<{
   size: number;
   contentType: string;
@@ -547,6 +612,9 @@ export async function checkStorageQuota(
   };
 }
 
+/**
+ * Updates the storage usage for a given workspace.
+ */
 export async function updateStorageUsage(workspaceId: string, sizeDelta: number): Promise<void> {
   await prisma.workspace.update({
     where: { id: workspaceId },
@@ -562,6 +630,21 @@ export async function updateStorageUsage(workspaceId: string, sizeDelta: number)
 // High-Level Upload Function
 // ============================================================================
 
+/**
+ * Upload a file to the storage after performing various validations and processing.
+ *
+ * This function validates the file, checks the storage quota, scans for viruses, processes the image if applicable,
+ * and finally uploads the file to the storage. It also updates the storage usage and may generate a thumbnail
+ * based on the provided options.
+ *
+ * @param buffer - The file data as a Buffer.
+ * @param filename - The name of the file being uploaded.
+ * @param workspaceId - The ID of the workspace where the file will be stored.
+ * @param userId - The ID of the user uploading the file.
+ * @param options - Optional settings for validation, image processing, and thumbnail generation.
+ * @returns A promise that resolves to an UploadResult containing the file's key, URL, thumbnail URL, size, and MIME type.
+ * @throws Error If the file validation fails, storage quota is exceeded, or the virus scan fails.
+ */
 export async function uploadFile(
   buffer: Buffer,
   filename: string,

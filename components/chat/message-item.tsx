@@ -5,12 +5,7 @@ import { ExtendedMessage, PresenceStatus } from "@/types/chat";
 import { formatMessageTime } from "@/lib/message-utils";
 import { UserPresence } from "./user-presence";
 import { Button } from "@/components/ui/button";
-import {
-  Reply,
-  File as FileIcon,
-  HardDrive,
-  ExternalLink,
-} from "lucide-react";
+import { Reply, File as FileIcon, HardDrive, ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatFileSize, isImageFile, isVideoFile } from "@/lib/message-utils";
 import { ReactionPicker } from "./reaction-picker";
@@ -41,11 +36,12 @@ interface MessageItemProps {
 /**
  * Render a message item with various interactive features.
  *
- * This function displays a message along with its user information, content, attachments, and reactions.
- * It handles hover states to show action buttons, and allows for replying, editing, deleting, and pinning messages.
- * The component also manages the display of read receipts and user presence based on the provided props.
+ * This function displays a message along with user information, content, attachments, and reactions.
+ * It manages hover states to show action buttons and allows for replying, editing, deleting, and pinning messages.
+ * Additionally, it handles the display of read receipts and user presence based on the provided props.
  *
  * @param message - The message object containing details such as user information, content, and attachments.
+ * @param workspaceId - The ID of the workspace to which the message belongs.
  * @param isGrouped - A boolean indicating if the message is part of a grouped conversation.
  * @param showAvatar - A boolean indicating if the user's avatar should be displayed.
  * @param currentUserId - The ID of the current user for comparison with the message sender.
@@ -93,10 +89,9 @@ export function MessageItem({
   const handleBookmark = async (messageId: string, currentlySaved: boolean) => {
     try {
       const method = currentlySaved ? "DELETE" : "POST";
-      const response = await fetch(
-        `/api/chat/${workspaceId}/messages/${messageId}/bookmark`,
-        { method }
-      );
+      const response = await fetch(`/api/chat/${workspaceId}/messages/${messageId}/bookmark`, {
+        method,
+      });
 
       if (response.ok) {
         setIsSaved(!currentlySaved);
@@ -123,14 +118,11 @@ export function MessageItem({
 
   const handleMarkUnread = async (messageId: string) => {
     try {
-      const response = await fetch(
-        `/api/chat/${workspaceId}/messages/${messageId}/read-status`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ markUnread: true }),
-        }
-      );
+      const response = await fetch(`/api/chat/${workspaceId}/messages/${messageId}/read-status`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ markUnread: true }),
+      });
 
       if (response.ok) {
         toast({
@@ -195,7 +187,11 @@ export function MessageItem({
           )}
 
           {/* Message text */}
-          <RichTextRenderer content={message.content} workspaceId={workspaceId} className="text-sm" />
+          <RichTextRenderer
+            content={message.content}
+            workspaceId={workspaceId}
+            className="text-sm"
+          />
 
           {/* Attachments */}
           {message.attachments && message.attachments.length > 0 && (

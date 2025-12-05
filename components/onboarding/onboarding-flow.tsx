@@ -53,6 +53,16 @@ const discoverySources = [
   { value: "other", label: "Other" },
 ];
 
+/**
+ * Manages the onboarding flow for new users, guiding them through multiple steps to create a workspace and invite teammates.
+ *
+ * The function maintains state for the current step, user details, workspace information, and loading/error states. It handles workspace creation and sending invitations asynchronously, updating the UI accordingly. The onboarding process includes user introduction, project description, workspace setup, and team invitations, with appropriate error handling and user feedback through toasts.
+ *
+ * @param {Object} props - The properties for onboarding flow.
+ * @param {string} props.userName - The name of the user.
+ * @param {string} props.userEmail - The email of the user.
+ * @returns {JSX.Element} The rendered onboarding flow component.
+ */
 export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const [firstName, setFirstName] = useState(userName || "");
@@ -262,10 +272,11 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
                           key={roleOption.value}
                           onClick={() => setRole(roleOption.value)}
                           type="button"
-                          className={`rounded-lg border-2 p-4 text-left transition-all ${role === roleOption.value
+                          className={`rounded-lg border-2 p-4 text-left transition-all ${
+                            role === roleOption.value
                               ? "border-primary bg-primary/5"
                               : "border-border hover:border-primary/50"
-                            }`}
+                          }`}
                         >
                           <span className="font-medium">{roleOption.label}</span>
                         </button>
@@ -320,10 +331,11 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
                           key={useCaseOption.value}
                           onClick={() => setUseCase(useCaseOption.value)}
                           type="button"
-                          className={`rounded-lg border-2 p-4 text-left transition-all ${useCase === useCaseOption.value
+                          className={`rounded-lg border-2 p-4 text-left transition-all ${
+                            useCase === useCaseOption.value
                               ? "border-primary bg-primary/5"
                               : "border-border hover:border-primary/50"
-                            }`}
+                          }`}
                         >
                           <span className="text-sm font-medium">{useCaseOption.label}</span>
                         </button>
@@ -339,10 +351,11 @@ export function OnboardingFlow({ userName, userEmail }: OnboardingFlowProps) {
                           key={source.value}
                           onClick={() => setDiscoverySource(source.value)}
                           type="button"
-                          className={`rounded-lg border-2 p-4 text-left transition-all ${discoverySource === source.value
+                          className={`rounded-lg border-2 p-4 text-left transition-all ${
+                            discoverySource === source.value
                               ? "border-primary bg-primary/5"
                               : "border-border hover:border-primary/50"
-                            }`}
+                          }`}
                         >
                           <span className="text-sm font-medium">{source.label}</span>
                         </button>
