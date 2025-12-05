@@ -45,6 +45,20 @@ interface MessageInputProps {
   workspaceId?: string;
 }
 
+/**
+ * Renders a message input component with file upload and mention support.
+ *
+ * This component manages the state for message content, file selections, and mentions. It handles user interactions such as typing, file uploads, and sending messages. The component also fetches wiki pages for mention suggestions and adjusts the textarea height dynamically. It includes drag-and-drop functionality for file uploads and provides a preview mode for the message content.
+ *
+ * @param onSend - Callback function to handle sending the message.
+ * @param onTypingStart - Callback function to indicate typing has started.
+ * @param onTypingStop - Callback function to indicate typing has stopped.
+ * @param placeholder - Placeholder text for the input area (default: "Type a message...").
+ * @param disabled - Flag to disable the input (default: false).
+ * @param threadId - Optional identifier for the thread (default: null).
+ * @param channelMembers - List of channel members for mention suggestions.
+ * @param workspaceId - Identifier for the workspace.
+ */
 export function MessageInput({
   onSend,
   onTypingStart,
@@ -116,6 +130,16 @@ export function MessageInput({
   }, [suggestions]);
 
   // Handle content change
+  /**
+   * Handles changes to the content and manages mention suggestions.
+   *
+   * This function updates the content state with the provided value, adjusts the textarea height,
+   * and checks for mention triggers by looking for the last '@' character. If a valid mention is detected,
+   * it updates the mention query and index accordingly. Additionally, it manages typing indicators by
+   * starting and stopping a typing timeout based on user input.
+   *
+   * @param value - The new content value to be processed.
+   */
   const handleContentChange = (value: string) => {
     setContent(value);
     adjustTextareaHeight();
