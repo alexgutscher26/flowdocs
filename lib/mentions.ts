@@ -32,13 +32,12 @@ export const SPECIAL_MENTIONS: MentionSuggestion[] = [
 ];
 
 /**
- * Parse content into parts (text and mentions)
- * Format for mentions in storage: @[display](type:id)
- * Example: "Hello @[Alice](user:123) check @[Docs](wiki:456)"
+ * Parse content into parts (text and mentions).
+ * This function processes a string to identify and separate mentions in both rich and simple formats.
+ * It uses a regular expression to match mentions, extracting relevant details such as display name, type, and ID.
+ * The resulting parts are returned as an array, including both text segments and mention objects.
  *
- * Supports both:
- * 1. Rich format: @[display](type:id) - precise
- * 2. Simple format: @username - legacy/simple input
+ * @param content - The input string containing text and mentions to be parsed.
  */
 export function parseMentions(content: string): MentionPart[] {
   const parts: MentionPart[] = [];
