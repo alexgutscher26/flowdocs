@@ -13,39 +13,36 @@ import { headers } from "next/headers";
  * @returns A JSON response containing the list of wiki templates for the specified workspace.
  * @throws Error If there is an issue with the session retrieval or database query.
  */
-export async function GET(
-    req: NextRequest,
-    props: { params: Promise<{ workspaceId: string }> }
-) {
-    const params = await props.params;
-    try {
-        const session = await auth.api.getSession({
-            headers: await headers(),
-        });
-        if (!session?.user) {
-            return new NextResponse("Unauthorized", { status: 401 });
-        }
-
-        const templates = await prisma.wikiPage.findMany({
-            where: {
-                workspaceId: params.workspaceId,
-                isTemplate: true,
-            },
-            select: {
-                id: true,
-                title: true,
-                content: true,
-                slug: true,
-                excerpt: true,
-            },
-            orderBy: {
-                title: "asc",
-            },
-        });
-
-        return NextResponse.json(templates);
-    } catch (error) {
-        console.error("[WIKI_TEMPLATES_GET]", error);
-        return new NextResponse("Internal Error", { status: 500 });
+export async function GET(req: NextRequest, props: { params: Promise<{ workspaceId: string }> }) {
+  const params = await props.params;
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+    if (!session?.user) {
+      return new NextResponse("Unauthorized", { status: 401 });
     }
+
+    const templates = await prisma.wikiPage.findMany({
+      where: {
+        workspaceId: params.workspaceId,
+        isTemplate: true,
+      },
+      select: {
+        id: true,
+        title: true,
+        content: true,
+        slug: true,
+        excerpt: true,
+      },
+      orderBy: {
+        title: "asc",
+      },
+    });
+
+    return NextResponse.json(templates);
+  } catch (error) {
+    console.error("[WIKI_TEMPLATES_GET]", error);
+    return new NextResponse("Internal Error", { status: 500 });
+  }
 }
