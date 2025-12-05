@@ -8,11 +8,17 @@ interface ChatPageProps {
   params: Promise<{
     workspaceId: string;
   }>;
+  searchParams: Promise<{
+    channel?: string;
+    message?: string;
+    thread?: string;
+  }>;
 }
 
-export default async function ChatPage({ params }: ChatPageProps) {
+export default async function ChatPage({ params, searchParams }: ChatPageProps) {
   const user = await getCurrentUser();
   const { workspaceId } = await params;
+  const { channel, message, thread } = await searchParams;
 
   if (!user) {
     redirect("/sign-in");
@@ -58,6 +64,9 @@ export default async function ChatPage({ params }: ChatPageProps) {
         workspaceId={workspace.id}
         userId={user.id}
         userName={user.name || user.email}
+        initialChannelId={channel}
+        initialMessageId={message}
+        initialThreadId={thread}
         className="h-full"
       />
       <AIChatWidget workspaceId={workspace.id} />

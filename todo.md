@@ -355,15 +355,15 @@
 
 #### Message Actions
 
-- [ ] **File**: `components/chat/message-actions-menu.tsx` (new)
-  - [ ] Pin/unpin messages to channel
-  - [ ] Save/bookmark messages for later
-  - [ ] Copy message link/permalink
-  - [ ] Forward message to another channel
-  - [ ] Remind me about this message (snooze)
-  - [ ] Mark as unread
-  - [ ] Quote reply functionality
-  - [ ] Share to other workspaces
+- [x] **File**: `components/chat/message-actions-menu.tsx` (new)
+  - [x] Pin/unpin messages to channel
+  - [x] Save/bookmark messages for later
+  - [x] Copy message link/permalink
+  - [x] Forward message to another channel
+  - [ ] Remind me about this message (snooze) - *Deferred (complex)*
+  - [x] Mark as unread
+  - [x] Quote reply functionality
+  - [ ] Share to other workspaces - *Deferred (complex)*
   - **Acceptance**: Comprehensive message interaction options
 
 ### Epic 9: Advanced Wiki Features

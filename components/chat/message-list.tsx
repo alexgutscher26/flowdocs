@@ -22,8 +22,10 @@ interface MessageListProps {
   onReaction?: (messageId: string, emoji: string) => void;
   onReactionRemove?: (reactionId: string) => void;
   onPin?: (messageId: string, isPinned: boolean) => void;
+  onQuoteReply?: (quotedContent: string) => void;
   totalChannelMembers?: number;
   messagesEndRef?: React.RefObject<HTMLDivElement>;
+  highlightMessageId?: string;
 }
 
 export function MessageList({
@@ -39,12 +41,24 @@ export function MessageList({
   onReaction,
   onReactionRemove,
   onPin,
+  onQuoteReply,
   totalChannelMembers,
   messagesEndRef,
+  highlightMessageId,
 }: MessageListProps) {
   const { ref: loadMoreRef, inView } = useInView({
     threshold: 0,
   });
+
+  // Scroll to highlighted message
+  useEffect(() => {
+    if (highlightMessageId) {
+      const element = document.getElementById(`message-${highlightMessageId}`);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    }
+  }, [highlightMessageId, messages]);
 
   // Trigger load more when scrolling to top
   useEffect(() => {
@@ -121,7 +135,9 @@ export function MessageList({
                     onReaction={onReaction}
                     onReactionRemove={onReactionRemove}
                     onPin={onPin}
+                    onQuoteReply={onQuoteReply}
                     totalChannelMembers={totalChannelMembers}
+                    isHighlighted={msg.id === highlightMessageId}
                   />
                 ))}
               </div>

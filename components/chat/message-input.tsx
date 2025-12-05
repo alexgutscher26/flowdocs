@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback, KeyboardEvent, useEffect } from "react";
+import { useState, useRef, useCallback, KeyboardEvent, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -65,7 +65,6 @@ export function MessageInput({
   // Mentions state
   const [mentionQuery, setMentionQuery] = useState<string | null>(null);
   const [mentionIndex, setMentionIndex] = useState<number>(-1);
-  const [suggestions, setSuggestions] = useState<MentionSuggestion[]>([]);
   const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(0);
   const [wikiPages, setWikiPages] = useState<{ id: string; title: string }[]>([]);
 
@@ -103,16 +102,18 @@ export function MessageInput({
     }
   }, []);
 
-  // Update suggestions when query changes
-  useEffect(() => {
+  // Calculate suggestions using useMemo to avoid infinite loops
+  const suggestions = useMemo(() => {
     if (mentionQuery !== null) {
-      const newSuggestions = getMentionSuggestions(mentionQuery, channelMembers, wikiPages);
-      setSuggestions(newSuggestions);
-      setActiveSuggestionIndex(0);
-    } else {
-      setSuggestions([]);
+      return getMentionSuggestions(mentionQuery, channelMembers, wikiPages);
     }
+    return [];
   }, [mentionQuery, channelMembers, wikiPages]);
+
+  // Reset active suggestion index when suggestions change
+  useEffect(() => {
+    setActiveSuggestionIndex(0);
+  }, [suggestions]);
 
   // Handle content change
   const handleContentChange = (value: string) => {
@@ -189,7 +190,6 @@ export function MessageInput({
     setContent(newContent);
     setMentionQuery(null);
     setMentionIndex(-1);
-    setSuggestions([]);
 
     setTimeout(() => {
       textareaRef.current?.focus();
@@ -327,7 +327,6 @@ export function MessageInput({
       }
       if (e.key === "Escape") {
         e.preventDefault();
-        setSuggestions([]);
         setMentionQuery(null);
         return;
       }
@@ -492,7 +491,7 @@ export function MessageInput({
           {isPreview ? (
             <div className="bg-muted/20 prose prose-sm dark:prose-invert max-h-[200px] min-h-[40px] overflow-y-auto rounded-md border p-2">
               {content ? (
-                <RichTextRenderer content={content} />
+                <RichTextRenderer content={content} workspaceId={workspaceId || ""} />
               ) : (
                 <span className="text-muted-foreground italic">Nothing to preview</span>
               )}

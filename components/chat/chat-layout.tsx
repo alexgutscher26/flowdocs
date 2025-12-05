@@ -20,30 +20,19 @@ interface ChatLayoutProps {
   userId: string;
   userName: string;
   initialChannelId?: string;
+  initialMessageId?: string;
+  initialThreadId?: string;
   onCreateChannel?: () => void;
   className?: string;
 }
 
-/**
- * Renders the chat layout component for a messaging application.
- *
- * This component manages the state of the active channel, handles WebSocket connections for real-time messaging,
- * and provides functionalities for sending messages, managing typing indicators, and displaying online users.
- * It fetches channel details, subscribes to typing and presence updates, and integrates various subcomponents for
- * a cohesive chat experience, including message input, message list, and channel sidebar.
- *
- * @param workspaceId - The ID of the workspace to which the chat belongs.
- * @param userId - The ID of the current user.
- * @param userName - The name of the current user.
- * @param initialChannelId - The ID of the channel to be initially active.
- * @param onCreateChannel - Callback function to be called when a new channel is created.
- * @param className - Additional CSS classes to apply to the component.
- */
 export function ChatLayout({
   workspaceId,
   userId,
   userName,
   initialChannelId,
+  initialMessageId,
+  initialThreadId,
   onCreateChannel,
   className,
 }: ChatLayoutProps) {
@@ -56,6 +45,13 @@ export function ChatLayout({
   const [channelRefreshTrigger, setChannelRefreshTrigger] = useState(0);
 
   const [onlineUsers, setOnlineUsers] = useState<Set<string>>(new Set());
+
+  // Sync active channel with prop
+  useEffect(() => {
+    if (initialChannelId) {
+      setActiveChannelId(initialChannelId);
+    }
+  }, [initialChannelId]);
 
   // WebSocket connection
   const {
@@ -109,6 +105,28 @@ export function ChatLayout({
 
     fetchChannel();
   }, [workspaceId, activeChannelId]);
+
+  // Handle initial thread
+  useEffect(() => {
+    if (!initialThreadId || !workspaceId) return;
+
+    const fetchThreadMessage = async () => {
+      try {
+        // We can reuse the message fetch endpoint or create a specific one
+        // For now, let's assume we can fetch a single message
+        // Note: You might need to add this endpoint if it doesn't exist
+        const response = await fetch(`/api/chat/${workspaceId}/messages/${initialThreadId}`);
+        if (response.ok) {
+          const message = await response.json();
+          setThreadMessage(message);
+        }
+      } catch (error) {
+        console.error("Error fetching thread message:", error);
+      }
+    };
+
+    fetchThreadMessage();
+  }, [workspaceId, initialThreadId]);
 
   // Join/leave channels via WebSocket
   useEffect(() => {
@@ -289,6 +307,7 @@ export function ChatLayout({
               onReactionRemove={handleRemoveReaction}
               totalChannelMembers={activeChannel._count.members}
               messagesEndRef={messagesEndRef as any}
+              highlightMessageId={initialMessageId}
             />
 
             {/* Typing indicator */}

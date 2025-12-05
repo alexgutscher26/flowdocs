@@ -44,6 +44,8 @@ model User {
   channelMemberships ChannelMember[]
   messages           Message[]
   reactions          MessageReaction[]
+  savedMessages      SavedMessage[]
+  messageReadStatus  MessageReadStatus[]
 
   // Wiki relations
   wikiPages          WikiPage[]
@@ -248,6 +250,8 @@ model Message {
   parent      Message?    @relation("Thread", fields: [threadId], references: [id], onDelete: SetNull)
   replies     Message[]   @relation("Thread")
   reactions   MessageReaction[]
+  savedBy     SavedMessage[]
+  readStatus  MessageReadStatus[]
   
   // Relationship to WikiPage conversion
   wikiPage    WikiPage?
@@ -273,6 +277,39 @@ model MessageReaction {
   @@index([userId])
   @@map("message_reaction")
 }
+
+model SavedMessage {
+  id        String   @id @default(cuid())
+  messageId String
+  userId    String
+  note      String?  // Optional note about why saved
+  createdAt DateTime @default(now())
+
+  message Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([messageId, userId])
+  @@index([userId])
+  @@index([messageId])
+  @@map("saved_message")
+}
+
+model MessageReadStatus {
+  id           String   @id @default(cuid())
+  messageId    String
+  userId       String
+  readAt       DateTime @default(now())
+  markedUnread Boolean  @default(false)
+
+  message Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([messageId, userId])
+  @@index([userId])
+  @@index([messageId])
+  @@map("message_read_status")
+}
+
 
 // Wiki Models
 

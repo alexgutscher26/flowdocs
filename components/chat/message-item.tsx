@@ -6,26 +6,20 @@ import { formatMessageTime } from "@/lib/message-utils";
 import { UserPresence } from "./user-presence";
 import { Button } from "@/components/ui/button";
 import {
-  MoreHorizontal,
   Reply,
-  Pencil,
-  Trash2,
   File as FileIcon,
   HardDrive,
   ExternalLink,
 } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { formatFileSize, isImageFile, isVideoFile } from "@/lib/message-utils";
 import { ReactionPicker } from "./reaction-picker";
 import { MessageReactions } from "./message-reactions";
 import { ReadReceipts } from "./read-receipts";
 import { RichTextRenderer } from "./rich-text-renderer";
+import { MessageActionsMenu } from "./message-actions-menu";
+import { ForwardMessageDialog } from "./forward-message-dialog";
+import { useToast } from "@/hooks/use-toast";
 
 interface MessageItemProps {
   message: ExtendedMessage;
@@ -39,7 +33,9 @@ interface MessageItemProps {
   onReaction?: (messageId: string, emoji: string) => void;
   onReactionRemove?: (reactionId: string) => void;
   onPin?: (messageId: string, isPinned: boolean) => void;
+  onQuoteReply?: (quotedContent: string) => void;
   totalChannelMembers?: number;
+  isHighlighted?: boolean;
 }
 
 /**
@@ -73,9 +69,14 @@ export function MessageItem({
   onReaction,
   onReactionRemove,
   onPin,
+  onQuoteReply,
   totalChannelMembers = 0,
+  isHighlighted = false,
 }: MessageItemProps) {
+  const { toast } = useToast();
   const [isHovered, setIsHovered] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
+  const [isForwardDialogOpen, setIsForwardDialogOpen] = useState(false);
   const isOwnMessage = message.userId === currentUserId;
   const hasReplies = (message._count?.replies || 0) > 0;
 
@@ -89,11 +90,71 @@ export function MessageItem({
     setIsHovered(false);
   };
 
+  const handleBookmark = async (messageId: string, currentlySaved: boolean) => {
+    try {
+      const method = currentlySaved ? "DELETE" : "POST";
+      const response = await fetch(
+        `/api/chat/${workspaceId}/messages/${messageId}/bookmark`,
+        { method }
+      );
+
+      if (response.ok) {
+        setIsSaved(!currentlySaved);
+        toast({
+          title: currentlySaved ? "Bookmark removed" : "Message saved",
+          description: currentlySaved
+            ? "Message removed from saved items"
+            : "Message saved for later",
+        });
+      }
+    } catch (error) {
+      console.error("Error toggling bookmark:", error);
+      toast({
+        title: "Error",
+        description: "Failed to update bookmark",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleForward = (message: ExtendedMessage) => {
+    setIsForwardDialogOpen(true);
+  };
+
+  const handleMarkUnread = async (messageId: string) => {
+    try {
+      const response = await fetch(
+        `/api/chat/${workspaceId}/messages/${messageId}/read-status`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ markUnread: true }),
+        }
+      );
+
+      if (response.ok) {
+        toast({
+          title: "Marked as unread",
+          description: "Message marked as unread",
+        });
+      }
+    } catch (error) {
+      console.error("Error marking as unread:", error);
+      toast({
+        title: "Error",
+        description: "Failed to mark as unread",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div
+      id={`message-${message.id}`}
       className={cn(
         "group hover:bg-muted/50 relative px-4 py-1 transition-colors",
-        isGrouped && "py-0.5"
+        isGrouped && "py-0.5",
+        isHighlighted && "bg-primary/10 hover:bg-primary/15 animate-pulse"
       )}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -253,43 +314,32 @@ export function MessageItem({
             </Button>
           )}
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="h-7 w-7 p-0" title="More actions">
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {onReply && (
-                <DropdownMenuItem onClick={() => onReply(message)}>
-                  <Reply className="mr-2 h-4 w-4" />
-                  Reply in thread
-                </DropdownMenuItem>
-              )}
-              {/* Pin/Unpin Option */}
-              {onPin && (
-                <DropdownMenuItem onClick={() => onPin(message.id, Boolean(message.isPinned))}>
-                  <span className="mr-2 h-4 w-4">📌</span>
-                  {message.isPinned ? "Unpin message" : "Pin message"}
-                </DropdownMenuItem>
-              )}
-
-              {isOwnMessage && onEdit && (
-                <DropdownMenuItem onClick={() => onEdit(message)}>
-                  <Pencil className="mr-2 h-4 w-4" />
-                  Edit message
-                </DropdownMenuItem>
-              )}
-              {isOwnMessage && onDelete && (
-                <DropdownMenuItem onClick={() => onDelete(message.id)} className="text-destructive">
-                  <Trash2 className="mr-2 h-4 w-4" />
-                  Delete message
-                </DropdownMenuItem>
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <MessageActionsMenu
+            message={message}
+            workspaceId={workspaceId}
+            currentUserId={currentUserId}
+            isOwnMessage={isOwnMessage}
+            isSaved={isSaved}
+            onPin={onPin}
+            onEdit={onEdit}
+            onDelete={onDelete}
+            onReply={onReply}
+            onBookmark={handleBookmark}
+            onForward={handleForward}
+            onMarkUnread={handleMarkUnread}
+            onQuoteReply={onQuoteReply}
+          />
         </div>
       )}
+
+      {/* Forward Message Dialog */}
+      <ForwardMessageDialog
+        open={isForwardDialogOpen}
+        onOpenChange={setIsForwardDialogOpen}
+        message={message}
+        workspaceId={workspaceId}
+        currentChannelId={message.channelId}
+      />
     </div>
   );
 }
