@@ -206,7 +206,9 @@ export function WikiPageView({
         setIsFavorite(data.isFavorite);
         toast({
           title: data.isFavorite ? "Added to favorites" : "Removed from favorites",
-          description: data.isFavorite ? "Page added to your favorites list" : "Page removed from your favorites list",
+          description: data.isFavorite
+            ? "Page added to your favorites list"
+            : "Page removed from your favorites list",
         });
       }
     } catch (error) {
