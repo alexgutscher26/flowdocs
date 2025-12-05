@@ -2,6 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 
+/**
+ * Handles the POST request to forward a message to specified target channels.
+ *
+ * This function first verifies the user's session and checks for necessary permissions, including access to the workspace and target channels. It retrieves the original message and constructs forwarded messages, which are then created in the specified channels. If any checks fail, appropriate error responses are returned.
+ *
+ * @param req - The NextRequest object containing the request data.
+ * @param params - An object containing a Promise that resolves to an object with workspaceId and messageId.
+ * @returns A JSON response indicating success or error details.
+ * @throws Error If an unexpected error occurs during message forwarding.
+ */
 export async function POST(
     req: NextRequest,
     { params }: { params: Promise<{ workspaceId: string; messageId: string }> }
