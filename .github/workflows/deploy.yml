@@ -1,5 +1,8 @@
 name: Deploy
 
+permissions:
+  contents: read
+
 on:
   push:
     branches: [main]
@@ -20,6 +23,9 @@ concurrency:
 jobs:
   deploy:
     name: Deploy to ${{ github.event.inputs.environment || 'production' }}
+    permissions:
+      contents: read
+      issues: write
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.event.inputs.environment || 'production' }}
