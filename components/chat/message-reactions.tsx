@@ -75,10 +75,12 @@ export function MessageReactions({
                     {emoji}
                   </span>
                   {count > 1 && (
-                    <span className={cn(
-                      "text-xs font-medium tabular-nums",
-                      hasReacted ? "text-primary" : "text-muted-foreground"
-                    )}>
+                    <span
+                      className={cn(
+                        "text-xs font-medium tabular-nums",
+                        hasReacted ? "text-primary" : "text-muted-foreground"
+                      )}
+                    >
                       {count}
                     </span>
                   )}
@@ -89,7 +91,8 @@ export function MessageReactions({
                   <p className="text-xs font-medium">
                     {reactionList.length === 1
                       ? "Reacted with"
-                      : `${reactionList.length} people reacted with`} {emoji}
+                      : `${reactionList.length} people reacted with`}{" "}
+                    {emoji}
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {reactionList.slice(0, 5).map((r) => (
