@@ -13,6 +13,15 @@ interface WikiDashboardProps {
     workspaceId: string;
 }
 
+/**
+ * Render the Wiki Dashboard component displaying recent and favorite pages.
+ *
+ * This component fetches recent and favorite wiki pages for a given workspaceId using the useQuery hook.
+ * It handles loading states and displays the fetched data in a structured layout.
+ * If the fetch fails, it throws an error indicating the failure reason.
+ *
+ * @param {WikiDashboardProps} props - The properties for the WikiDashboard component, including workspaceId.
+ */
 export function WikiDashboard({ workspaceId }: WikiDashboardProps) {
     const { data: recent, isLoading: isRecentLoading } = useQuery<any[]>({
         queryKey: ["wiki-recent", workspaceId],
