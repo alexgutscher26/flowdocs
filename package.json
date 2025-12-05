@@ -71,6 +71,7 @@
     "date-fns": "^4.1.0",
     "dotenv": "^17.2.3",
     "embla-carousel-react": "^8.6.0",
+    "emoji-picker-react": "^4.16.1",
     "file-type": "^21.1.1",
     "format": "^0.2.2",
     "fuse.js": "^7.1.0",

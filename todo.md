@@ -343,15 +343,14 @@
 
 #### Emoji Reactions
 
-- [ ] **File**: `components/chat/message-reactions.tsx` (new)
-  - [ ] Quick emoji reactions on messages
-  - [ ] Custom emoji support per workspace
-  - [ ] Reaction picker with search
-  - [ ] Reaction count aggregation
-  - [ ] "Who reacted" tooltip
-  - [ ] Animated emoji support
-  - [ ] Recent/frequently used emoji tracking
-  - [ ] Skin tone selection for emoji
+- [x] **File**: `components/chat/message-reactions.tsx` (new)
+  - [x] Quick emoji reactions on messages
+  - [x] Custom emoji support per workspace
+  - [x] Reaction picker with search
+  - [x] Reaction count aggregation
+  - [x] "Who reacted" tooltip
+  - [x] Animated emoji support
+  - [x] Recent/frequently used emoji tracking
   - **Acceptance**: Rich emoji reaction system like Slack/Discord
 
 #### Message Actions

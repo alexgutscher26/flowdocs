@@ -1,40 +1,37 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Smile } from "lucide-react";
+import type { EmojiClickData, Theme } from "emoji-picker-react";
+
+// Dynamically import EmojiPicker to avoid SSR issues
+const EmojiPicker = dynamic(() => import("emoji-picker-react"), { ssr: false });
 
 interface ReactionPickerProps {
   onSelect: (emoji: string) => void;
 }
 
-const COMMON_EMOJIS = [
-  "👍",
-  "❤️",
-  "😂",
-  "😮",
-  "😢",
-  "🙏",
-  "🎉",
-  "🔥",
-  "👏",
-  "✅",
-  "❌",
-  "👀",
-  "💯",
-  "🚀",
-  "💡",
-  "⭐",
-  "✨",
-  "💪",
-];
-
 export function ReactionPicker({ onSelect }: ReactionPickerProps) {
   const [open, setOpen] = useState(false);
+  const [theme, setTheme] = useState<Theme>("auto");
 
-  const handleSelect = (emoji: string) => {
-    onSelect(emoji);
+  // Detect theme from system/user preference
+  useEffect(() => {
+    const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    setTheme(isDark ? "dark" : "light");
+
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const handler = (e: MediaQueryListEvent) => setTheme(e.matches ? "dark" : "light");
+
+    mediaQuery.addEventListener("change", handler);
+    return () => mediaQuery.removeEventListener("change", handler);
+  }, []);
+
+  const handleEmojiClick = (emojiData: EmojiClickData) => {
+    onSelect(emojiData.emoji);
     setOpen(false);
   };
 
@@ -45,19 +42,20 @@ export function ReactionPicker({ onSelect }: ReactionPickerProps) {
           <Smile className="h-4 w-4" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-64 p-2" align="start">
-        <div className="grid grid-cols-6 gap-1">
-          {COMMON_EMOJIS.map((emoji) => (
-            <button
-              key={emoji}
-              onClick={() => handleSelect(emoji)}
-              className="hover:bg-muted flex h-10 w-10 items-center justify-center rounded text-2xl transition-colors"
-              title={`React with ${emoji}`}
-            >
-              {emoji}
-            </button>
-          ))}
-        </div>
+      <PopoverContent className="w-auto p-0 border-0" align="start">
+        <EmojiPicker
+          onEmojiClick={handleEmojiClick}
+          theme={theme}
+          searchPlaceHolder="Search emoji..."
+          width={350}
+          height={450}
+          previewConfig={{
+            showPreview: true,
+          }}
+          skinTonesDisabled={false}
+          autoFocusSearch={true}
+          lazyLoadEmojis={true}
+        />
       </PopoverContent>
     </Popover>
   );
